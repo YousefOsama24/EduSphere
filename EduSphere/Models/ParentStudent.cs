@@ -1,8 +1,13 @@
 ﻿namespace EduSphere.Models
 {
+    public enum ParentRelationship
+    {
+        Father,
+        Mother,
+        Guardian
+    }
 
-   
-        public class ParentStudent
+    public class ParentStudent
         {
             public int ParentStudentId { get; set; }
 
@@ -14,6 +19,6 @@
 
             public Student? Student { get; set; }
 
-            public string Relationship { get; set; } = string.Empty;
+            public ParentRelationship Relationship { get; set; } = ParentRelationship.Father;
         }
     }

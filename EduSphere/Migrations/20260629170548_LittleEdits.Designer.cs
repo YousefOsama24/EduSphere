@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduSphere.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260627161500_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260629170548_LittleEdits")]
+    partial class LittleEdits
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -294,6 +294,7 @@ namespace EduSphere.Migrations
                         .HasColumnType("bit");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("TeacherId")
@@ -397,6 +398,7 @@ namespace EduSphere.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Score")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("StartTime")
@@ -608,9 +610,8 @@ namespace EduSphere.Migrations
                     b.Property<int>("ParentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Relationship")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Relationship")
+                        .HasColumnType("int");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
@@ -633,6 +634,7 @@ namespace EduSphere.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
 
                     b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("PaymentDate")
@@ -771,6 +773,7 @@ namespace EduSphere.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("MarksAwarded")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("QuestionId")
@@ -848,6 +851,7 @@ namespace EduSphere.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Tier")
@@ -1099,13 +1103,13 @@ namespace EduSphere.Migrations
                     b.HasOne("EduSphere.Models.Center", "Center")
                         .WithMany("Courses")
                         .HasForeignKey("CenterId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EduSphere.Models.Teacher", "Teacher")
                         .WithMany("Courses")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Center");
@@ -1167,13 +1171,13 @@ namespace EduSphere.Migrations
                     b.HasOne("EduSphere.Models.Course", "Course")
                         .WithMany("Groups")
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EduSphere.Models.Teacher", "Teacher")
                         .WithMany("Groups")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Course");
@@ -1290,7 +1294,7 @@ namespace EduSphere.Migrations
                     b.HasOne("EduSphere.Models.Center", "Center")
                         .WithMany("Students")
                         .HasForeignKey("CenterId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EduSphere.Models.ApplicationUser", "User")
@@ -1315,7 +1319,7 @@ namespace EduSphere.Migrations
                     b.HasOne("EduSphere.Models.Question", "Question")
                         .WithMany("StudentAnswers")
                         .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EduSphere.Models.Choice", "SelectedChoice")
@@ -1354,7 +1358,7 @@ namespace EduSphere.Migrations
                     b.HasOne("EduSphere.Models.Center", "Center")
                         .WithMany("Teachers")
                         .HasForeignKey("CenterId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EduSphere.Models.ApplicationUser", "User")

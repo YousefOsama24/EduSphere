@@ -133,6 +133,73 @@ namespace EduSphere.Data
                 .WithMany(u => u.Conversations)
                 .HasForeignKey(cp => cp.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Center -> Teacher
+            builder.Entity<Teacher>()
+                .HasOne(t => t.Center)
+                .WithMany(c => c.Teachers)
+                .HasForeignKey(t => t.CenterId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Center -> Student
+            builder.Entity<Student>()
+                .HasOne(s => s.Center)
+                .WithMany(c => c.Students)
+                .HasForeignKey(s => s.CenterId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Center -> Course
+            builder.Entity<Course>()
+                .HasOne(c => c.Center)
+                .WithMany(cn => cn.Courses)
+                .HasForeignKey(c => c.CenterId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Teacher -> Course
+            builder.Entity<Course>()
+                .HasOne(c => c.Teacher)
+                .WithMany(t => t.Courses)
+                .HasForeignKey(c => c.TeacherId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Teacher -> Group
+            builder.Entity<Group>()
+                .HasOne(g => g.Teacher)
+                .WithMany(t => t.Groups)
+                .HasForeignKey(g => g.TeacherId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Course -> Group
+            builder.Entity<Group>()
+                .HasOne(g => g.Course)
+                .WithMany(c => c.Groups)
+                .HasForeignKey(g => g.CourseId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Course>()
+                .Property(c => c.Price)
+                .HasPrecision(18, 2);
+
+            builder.Entity<SubscriptionPlan>()
+                .Property(p => p.Price)
+                .HasPrecision(18, 2);
+
+            builder.Entity<Payment>()
+                .Property(p => p.Amount)
+                .HasPrecision(18, 2);
+
+            builder.Entity<ExamAttempt>()
+                .Property(e => e.Score)
+                .HasPrecision(18, 2);
+
+            builder.Entity<StudentAnswer>()
+                .Property(a => a.MarksAwarded)
+                .HasPrecision(18, 2);
+            builder.Entity<StudentAnswer>()
+    .HasOne(sa => sa.Question)
+    .WithMany(q => q.StudentAnswers)
+    .HasForeignKey(sa => sa.QuestionId)
+    .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

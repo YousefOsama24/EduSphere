@@ -96,7 +96,7 @@ namespace EduSphere.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Tier = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     DurationInMonths = table.Column<int>(type: "int", nullable: false),
                     MaxTeachers = table.Column<int>(type: "int", nullable: false),
                     MaxStudents = table.Column<int>(type: "int", nullable: false),
@@ -284,7 +284,7 @@ namespace EduSphere.Migrations
                         column: x => x.CenterId,
                         principalTable: "Centers",
                         principalColumn: "CenterId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -313,7 +313,7 @@ namespace EduSphere.Migrations
                         column: x => x.CenterId,
                         principalTable: "Centers",
                         principalColumn: "CenterId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -439,7 +439,7 @@ namespace EduSphere.Migrations
                     TeacherId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     ThumbnailUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsPublished = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -453,13 +453,13 @@ namespace EduSphere.Migrations
                         column: x => x.CenterId,
                         principalTable: "Centers",
                         principalColumn: "CenterId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Courses_Teachers_TeacherId",
                         column: x => x.TeacherId,
                         principalTable: "Teachers",
                         principalColumn: "TeacherId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -469,7 +469,7 @@ namespace EduSphere.Migrations
                     PaymentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SubscriptionId = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     PaymentMethod = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     TransactionReference = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -532,13 +532,13 @@ namespace EduSphere.Migrations
                         column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "CourseId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Groups_Teachers_TeacherId",
                         column: x => x.TeacherId,
                         principalTable: "Teachers",
                         principalColumn: "TeacherId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -577,7 +577,7 @@ namespace EduSphere.Migrations
                     StudentId = table.Column<int>(type: "int", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SubmitTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Score = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Score = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -757,7 +757,7 @@ namespace EduSphere.Migrations
                     QuestionId = table.Column<int>(type: "int", nullable: false),
                     SelectedChoiceId = table.Column<int>(type: "int", nullable: true),
                     EssayAnswer = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MarksAwarded = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    MarksAwarded = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -779,7 +779,7 @@ namespace EduSphere.Migrations
                         column: x => x.QuestionId,
                         principalTable: "Questions",
                         principalColumn: "QuestionId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

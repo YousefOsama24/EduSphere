@@ -11,6 +11,7 @@
     {
         public int ExamAttemptId { get; set; }
 
+
         public int ExamId { get; set; }
         public Exam? Exam { get; set; }
 
