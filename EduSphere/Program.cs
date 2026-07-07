@@ -1,12 +1,14 @@
 using EduSphere.Data;
 using EduSphere.Models;
+using EduSphere.Repositories;
 using EduSphere.Repositories.Implementations;
 using EduSphere.Repositories.Interfaces;
+using EduSphere.Repositories.IRepositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 #region Database
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -89,7 +91,7 @@ using (var scope = app.Services.CreateScope())
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area=Admin}/{controller=Student}/{action=Index}/{id?}");
 
 #endregion
 
