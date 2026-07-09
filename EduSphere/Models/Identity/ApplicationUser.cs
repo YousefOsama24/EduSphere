@@ -2,6 +2,14 @@
 
 namespace EduSphere.Models
 {
+    public enum UserType
+    {
+        SuperAdmin,
+        CenterManager,
+        Teacher,
+        Student,
+        Parent
+    }
     public class ApplicationUser : IdentityUser
     {
         public string FullName { get; set; } = string.Empty;
@@ -11,6 +19,7 @@ namespace EduSphere.Models
         public string? ProfileImage { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public UserType UserType { get; set; }
 
         // Navigation Properties
         public Teacher? Teacher { get; set; }

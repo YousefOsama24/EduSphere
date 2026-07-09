@@ -1,0 +1,360 @@
+﻿@model EduSphere.Areas.Identity.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-11">
+
+        <div class="text-center mb-5">
+
+            <div class="display-4 text-primary mb-3">
+
+                <i class="bi bi-person-plus-fill"></i>
+
+            </div>
+
+            <h2 class="page-title">
+
+                Create Your Account
+
+            </h2>
+
+            <p class="page-subtitle">
+
+                Join EduSphere and start your educational journey.
+
+            </p>
+
+        </div>
+
+        <form asp-action="Register"
+              method="post"
+              autocomplete="off">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger">
+            </div>
+
+            <div class="row">
+
+                <!-- Full Name -->
+
+                <div class="col-md-6">
+
+                    <div class="input-wrapper">
+
+                        <span class="input-group-text">
+
+                            <i class="bi bi-person-fill"></i>
+
+                        </span>
+
+                        <input asp-for="FullName"
+                               class="form-control"
+                               placeholder="Full Name" />
+
+                        <span asp-validation-for="FullName"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- Email -->
+
+                <div class="col-md-6">
+
+                    <div class="input-wrapper">
+
+                        <span class="input-group-text">
+
+                            <i class="bi bi-envelope-fill"></i>
+
+                        </span>
+
+                        <input asp-for="Email"
+                               class="form-control"
+                               placeholder="Email Address" />
+
+                        <span asp-validation-for="Email"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- Phone -->
+
+                <div class="col-md-6">
+
+                    <div class="input-wrapper">
+
+                        <span class="input-group-text">
+
+                            <i class="bi bi-telephone-fill"></i>
+
+                        </span>
+
+                        <input asp-for="PhoneNumber"
+                               class="form-control"
+                               placeholder="Phone Number" />
+
+                        <span asp-validation-for="PhoneNumber"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- User Type -->
+
+                <div class="col-md-6">
+
+                    <div class="input-wrapper">
+
+                        <span class="input-group-text">
+
+                            <i class="bi bi-people-fill"></i>
+
+                        </span>
+
+                        <select asp-for="UserType"
+                                class="form-select form-control">
+
+                            <option value="">Select Account Type</option>
+
+                            <option value="CenterManager">Center Manager</option>
+
+                            <option value="Teacher">Teacher</option>
+
+                            <option value="Student">Student</option>
+
+                            <option value="Parent">Parent</option>
+
+                        </select>
+
+                        <span asp-validation-for="UserType"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+                </div>
+                <!-- Password -->
+
+                <div class="col-md-6">
+
+                    <div class="input-wrapper">
+
+                        <span class="input-group-text">
+
+                            <i class="bi bi-lock-fill"></i>
+
+                        </span>
+
+                        <input asp-for="Password"
+                               id="Password"
+                               class="form-control"
+                               placeholder="Password" />
+
+                        <i class="bi bi-eye password-toggle toggle-password"
+                               data-target="Password">
+                        </i>
+
+                        <span asp-validation-for="Password"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+                    <!-- Password Strength -->
+
+                    <div class="progress mb-3"
+                         style="height:8px;">
+
+                        <div id="passwordStrength"
+                             class="progress-bar"
+                             style="width:0%">
+                        </div>
+
+                    </div>
+
+                    <small id="passwordText"
+                           class="text-muted">
+                        Password Strength
+                    </small>
+
+                </div>
+
+                <!-- Confirm Password -->
+
+                <div class="col-md-6">
+
+                    <div class="input-wrapper">
+
+                        <span class="input-group-text">
+
+                            <i class="bi bi-shield-lock-fill"></i>
+
+                        </span>
+
+                        <input asp-for="ConfirmPassword"
+                               id="ConfirmPassword"
+                               class="form-control"
+                               placeholder="Confirm Password" />
+
+                        <i class="bi bi-eye password-toggle toggle-password"
+                               data-target="ConfirmPassword">
+                        </i>
+
+                        <span asp-validation-for="ConfirmPassword"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Terms -->
+
+            <div class="form-check mt-2 mb-4">
+
+                <input asp-for="AcceptTerms"
+                       class="form-check-input" />
+
+                <label asp-for="AcceptTerms"
+                       class="form-check-label">
+                </label>
+
+                <br />
+
+                <span asp-validation-for="AcceptTerms"
+                      class="text-danger small">
+                </span>
+
+            </div>
+
+            <!-- Register Button -->
+
+            <div class="d-grid">
+
+                <button type="submit"
+                        class="btn btn-primary btn-auth">
+
+                    <i class="bi bi-person-check-fill me-2"></i>
+
+                    Create Account
+
+                </button>
+
+            </div>
+
+            <hr class="my-4" />
+
+            <div class="text-center">
+
+                <span class="text-muted">
+
+                    Already have an account?
+
+                </span>
+
+                <a asp-area="Identity"
+                       asp-controller="Account"
+                       asp-action="Login"
+                       class="auth-link ms-1">
+
+                    Login
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        const password =
+            document.getElementById("Password");
+
+        const bar =
+            document.getElementById("passwordStrength");
+
+        const text =
+            document.getElementById("passwordText");
+
+        password.addEventListener("keyup", function () {
+
+            let value = password.value;
+
+            let score = 0;
+
+            if (value.length >= 8)
+                score++;
+
+            if (/[A-Z]/.test(value))
+                score++;
+
+            if (/[a-z]/.test(value))
+                score++;
+
+            if (/[0-9]/.test(value))
+                score++;
+
+            switch (score) {
+
+                case 0:
+                case 1:
+
+                    bar.style.width = "25%";
+                    bar.className = "progress-bar bg-danger";
+                    text.innerHTML = "Weak Password";
+                    break;
+
+                case 2:
+
+                    bar.style.width = "50%";
+                    bar.className = "progress-bar bg-warning";
+                    text.innerHTML = "Medium Password";
+                    break;
+
+                case 3:
+
+                    bar.style.width = "75%";
+                    bar.className = "progress-bar bg-info";
+                    text.innerHTML = "Good Password";
+                    break;
+
+                case 4:
+
+                    bar.style.width = "100%";
+                    bar.className = "progress-bar bg-success";
+                    text.innerHTML = "Strong Password";
+                    break;
+            }
+
+        });
+
+    </script>
+
+}

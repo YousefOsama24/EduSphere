@@ -14,6 +14,9 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+		<PackageReference Include="Serilog.Expressions" Version="5.0.0" />
+		<PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -21,13 +24,17 @@
 	  <Folder Include="Areas\Parent\Controllers\" />
 	  <Folder Include="Areas\SuperAdmin\Controllers\" />
 	  <Folder Include="Areas\SuperAdmin\ViewModels\" />
-	  <Folder Include="Areas\Identity\Controllers\" />
 	  <Folder Include="Areas\Parent\ViewModels\" />
 	  <Folder Include="Areas\Student\Controllers\" />
 	  <Folder Include="Areas\Student\ViewModels\" />
 	  <Folder Include="Areas\Teacher\Controllers\" />
 	  <Folder Include="Areas\Center\Controllers\" />
 	  <Folder Include="Areas\Teacher\ViewModels\" />
+	  <Folder Include="wwwroot\images\centers\" />
+	  <Folder Include="wwwroot\images\courses\" />
+	  <Folder Include="wwwroot\images\students\" />
+	  <Folder Include="wwwroot\images\teachers\" />
+	  <Folder Include="wwwroot\images\profiles\" />
 	</ItemGroup>
 
 </Project>

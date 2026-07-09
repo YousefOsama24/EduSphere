@@ -1,0 +1,218 @@
+﻿@model EduSphere.Areas.Identity.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-10">
+
+        <div class="text-center mb-5">
+
+            <div class="display-4 text-primary mb-3">
+
+                <i class="bi bi-mortarboard-fill"></i>
+
+            </div>
+
+            <h2 class="page-title">
+
+                Welcome Back
+
+            </h2>
+
+            <p class="page-subtitle">
+
+                Sign in to continue to EduSphere
+
+            </p>
+
+        </div>
+
+        <form asp-action="Login"
+              method="post"
+              autocomplete="off">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger">
+            </div>
+
+            <!-- Email -->
+
+            <div class="input-wrapper">
+
+                <span class="input-group-text">
+
+                    <i class="bi bi-envelope-fill"></i>
+
+                </span>
+
+                <input asp-for="Email"
+                       class="form-control"
+                       placeholder="Email Address" />
+
+                <span asp-validation-for="Email"
+                      class="text-danger small">
+                </span>
+
+            </div>
+
+            <!-- Password -->
+
+            <div class="input-wrapper">
+
+                <span class="input-group-text">
+
+                    <i class="bi bi-lock-fill"></i>
+
+                </span>
+
+                <input asp-for="Password"
+                       id="Password"
+                       class="form-control"
+                       placeholder="Password" />
+
+                <i class="bi bi-eye toggle-password password-toggle"
+                       data-target="Password">
+                </i>
+
+                <span asp-validation-for="Password"
+                      class="text-danger small">
+                </span>
+
+            </div>
+            <!-- Remember Me & Forgot Password -->
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <div class="form-check">
+
+                    <input asp-for="RememberMe"
+                           class="form-check-input" />
+
+                    <label asp-for="RememberMe"
+                           class="form-check-label">
+                    </label>
+
+                </div>
+
+                <a asp-area="Identity"
+                       asp-controller="Account"
+                       asp-action="ForgotPassword"
+                       class="auth-link">
+
+                    Forgot Password?
+
+                </a>
+
+            </div>
+
+            <!-- Login Button -->
+
+            <div class="d-grid mb-4">
+
+                <button type="submit"
+                        class="btn btn-primary btn-auth">
+
+                    <i class="bi bi-box-arrow-in-right me-2"></i>
+
+                    Login
+
+                </button>
+
+            </div>
+
+            <hr class="my-4" />
+
+            <!-- Register -->
+
+            <div class="text-center">
+
+                <span class="text-muted">
+
+                    Don't have an account?
+
+                </span>
+
+                <a asp-area="Identity"
+                       asp-controller="Account"
+                       asp-action="Register"
+                       class="auth-link ms-1">
+
+                    Create Account
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const passwordInput =
+                document.getElementById("Password");
+
+            const toggle =
+                document.querySelector(".toggle-password");
+
+            if (toggle && passwordInput) {
+
+                toggle.addEventListener("click", function () {
+
+                    if (passwordInput.type === "password") {
+
+                        passwordInput.type = "text";
+
+                        toggle.classList.remove("bi-eye");
+
+                        toggle.classList.add("bi-eye-slash");
+
+                    }
+                    else {
+
+                        passwordInput.type = "password";
+
+                        toggle.classList.remove("bi-eye-slash");
+
+                        toggle.classList.add("bi-eye");
+
+                    }
+
+                });
+
+            }
+
+            const form = document.querySelector("form");
+
+            form.addEventListener("submit", function () {
+
+                const btn =
+                    form.querySelector("button[type='submit']");
+
+                btn.disabled = true;
+
+                btn.innerHTML =
+                    "<span class='spinner-border spinner-border-sm me-2'></span>Signing In...";
+
+            });
+
+        });
+
+    </script>
+
+}

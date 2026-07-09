@@ -4,8 +4,69 @@ using EduSphere.Repositories.Implementations;
 using EduSphere.Repositories.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using EduSphere.Services.Interfaces;
+using EduSphere.Services.Implementations;
+using Serilog;
+using Serilog.Events;
+
+
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+
+
+
+#region Serilog
+Log.Logger = new LoggerConfiguration()
+
+    .MinimumLevel.Information()
+
+    .Enrich.FromLogContext()
+
+    // Console
+    .WriteTo.Console()
+
+    // Authentication Logs
+    .WriteTo.Logger(lc => lc
+        .Filter.ByIncludingOnly("@l = 'Information'")
+        .WriteTo.File(
+            "Logs/Authentication/auth-.txt",
+            rollingInterval: RollingInterval.Day,
+            retainedFileCountLimit: 30))
+
+    // Error Logs
+    .WriteTo.Logger(lc => lc
+        .MinimumLevel.Error()
+        .WriteTo.File(
+            "Logs/Errors/error-.txt",
+            rollingInterval: RollingInterval.Day,
+            retainedFileCountLimit: 30))
+
+    // Warning Logs
+    .WriteTo.Logger(lc => lc
+        .MinimumLevel.Warning()
+        .WriteTo.File(
+            "Logs/Warnings/warning-.txt",
+            rollingInterval: RollingInterval.Day,
+            retainedFileCountLimit: 30))
+
+    // All Logs
+    .WriteTo.File(
+        "Logs/System/system-.txt",
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 30,
+        shared: true,
+        outputTemplate:
+        "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}")
+
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
+#endregion
+
 
 #region Database
 
@@ -25,6 +86,9 @@ builder.Services
         options.Password.RequireUppercase = true;
         options.Password.RequireLowercase = true;
         options.Password.RequireNonAlphanumeric = false;
+        options.Lockout.MaxFailedAccessAttempts = 5;
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+        options.Lockout.AllowedForNewUsers = true;
 
         options.User.RequireUniqueEmail = true;
     })
@@ -32,6 +96,28 @@ builder.Services
     .AddDefaultTokenProviders();
 
 #endregion
+#region Services
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Identity/Account/Login";
+
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+
+    options.LogoutPath = "/Identity/Account/Logout";
+
+    options.ExpireTimeSpan = TimeSpan.FromDays(7);
+
+    options.SlidingExpiration = true;
+});
+
+builder.Services.AddAuthorization();
+builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+
+#endregion
+
+
 
 #region Dependency Injection
 
@@ -86,11 +172,14 @@ using (var scope = app.Services.CreateScope())
 #endregion
 
 #region Routing
-
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 #endregion
-
+Log.Information("EduSphere Application Started.");
 app.Run();
+Log.CloseAndFlush();
