@@ -1,0 +1,336 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Parent Dashboard · Brightleaf Learning Center</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="~/css/style.css" rel="stylesheet">
+</head>
+<body data-role="parent">
+
+    <div class="app-shell">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="appSidebar">
+            <div class="sidebar-brand">
+                <div class="mark">B</div>
+                <div>
+                    <div class="name">Brightleaf</div>
+                    <div class="sub">Learning Center</div>
+                </div>
+            </div>
+            <div class="sidebar-role-tab"><i class="bi bi-people me-1"></i> Parent portal</div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">Main</div>
+                <a class="nav-link active" href="parent.html"><i class="bi bi-grid-1x2"></i> Overview</a>
+                <a class="nav-link" href="#exams"><i class="bi bi-journal-text"></i> Exams</a>
+                <a class="nav-link" href="#assignments"><i class="bi bi-clipboard-check"></i> Assignments</a>
+                <a class="nav-link" href="#grades"><i class="bi bi-bar-chart-steps"></i> Report card</a>
+                <a class="nav-link" href="#attendance"><i class="bi bi-calendar2-week"></i> Attendance</a>
+
+                <div class="nav-section">School</div>
+                <a class="nav-link" href="#"><i class="bi bi-cash-coin"></i> Fees &amp; billing</a>
+                <a class="nav-link" href="#"><i class="bi bi-calendar-event"></i> School calendar</a>
+                <a class="nav-link" href="#"><i class="bi bi-person-lines-fill"></i> Teacher contacts</a>
+
+                <div class="nav-section">Account</div>
+                <a class="nav-link" href="#">
+                    <i class="bi bi-chat-dots"></i> Messages
+                    <span class="badge rounded-pill ms-auto" style="background:var(--pen-red); font-size:.65rem;">2</span>
+                </a>
+                <a class="nav-link" href="#"><i class="bi bi-gear"></i> Settings</a>
+                <a class="nav-link" href="index.html"><i class="bi bi-box-arrow-left"></i> Sign out</a>
+            </nav>
+
+            <div class="sidebar-foot">
+                <div class="id-badge">JM</div>
+                <div class="who">
+                    Jordan Michaels<br>
+                    <small>Parent of Amara M.</small>
+                </div>
+            </div>
+        </aside>
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+        <!-- Main -->
+        <div class="main">
+            <header class="topbar">
+                <button class="btn-icon sidebar-toggle" data-toggle="sidebar" aria-label="Open menu"><i class="bi bi-list fs-5"></i></button>
+                <div>
+                    <div class="page-kicker">Parent portal</div>
+                    <h1 class="page-title">Amara's progress</h1>
+                </div>
+                <div class="spacer"></div>
+                <div class="dropdown d-none d-md-block me-2">
+                    <button class="btn btn-outline-ink btn-sm dropdown-toggle d-flex align-items-center gap-2" data-bs-toggle="dropdown">
+                        <div class="id-photo sm">AM</div> Amara Michaels
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><div class="id-photo sm d-inline-flex me-2">AM</div>Amara Michaels — Grade 10</a></li>
+                    </ul>
+                </div>
+                <button class="btn-icon" aria-label="Notifications"><i class="bi bi-bell"></i><span class="dot"></span></button>
+                <div class="id-photo sm">JM</div>
+            </header>
+
+            <div class="content">
+
+                <!-- KPI row -->
+                <div class="row g-3 mb-4">
+                    <div class="col-6 col-lg-3">
+                        <div class="stat-card">
+                            <div class="label">Overall average</div>
+                            <div class="value">87.4<span style="font-size:1rem; color:var(--graphite-soft);">%</span></div>
+                            <div class="foot up"><i class="bi bi-arrow-up-short"></i> improving this term</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="stat-card" style="--accent:var(--pen-red);">
+                            <div class="label">Assignments due</div>
+                            <div class="value">4</div>
+                            <div class="foot">next due in 2 days</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="stat-card" style="--accent:var(--chalk-green);">
+                            <div class="label">Attendance</div>
+                            <div class="value">96<span style="font-size:1rem; color:var(--graphite-soft);">%</span></div>
+                            <div class="foot">3 absences this term</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="stat-card" style="--accent:var(--gold);">
+                            <div class="label">Fees balance</div>
+                            <div class="value">$0</div>
+                            <div class="foot">paid in full for Term 3</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <!-- Upcoming exams -->
+                    <div class="col-lg-7" id="exams">
+                        <div class="paper h-100">
+                            <div class="ledger-head">
+                                <span class="tab"></span>
+                                <h2>Upcoming exams</h2>
+                                <span class="spacer"></span>
+                                <a href="#" class="small">Full schedule</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-ledger">
+                                    <thead><tr><th>Subject</th><th>Date</th><th>Weight</th><th>Status</th></tr></thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Chemistry</strong> — Midterm</td>
+                                            <td class="data">Jul 06, 9:00 AM</td>
+                                            <td class="data">25%</td>
+                                            <td><span class="pill pill-due">Coming up</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>World History</strong> — Unit test</td>
+                                            <td class="data">Jul 09, 11:00 AM</td>
+                                            <td class="data">15%</td>
+                                            <td><span class="pill pill-warn">This week</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Algebra II</strong> — Final</td>
+                                            <td class="data">Jul 21, 9:00 AM</td>
+                                            <td class="data">40%</td>
+                                            <td><span class="pill pill-info">Scheduled</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Assignments -->
+                    <div class="col-lg-5" id="assignments">
+                        <div class="paper h-100">
+                            <div class="ledger-head">
+                                <span class="tab"></span>
+                                <h2>Assignments</h2>
+                                <span class="spacer"></span>
+                                <a href="#" class="small">All</a>
+                            </div>
+                            <div class="paper-body pt-2">
+                                <div class="due-row">
+                                    <div class="due-date"><div class="d">05</div><div class="m">Jul</div></div>
+                                    <div class="flex-grow-1">
+                                        <div class="fw-semibold" style="color:var(--ink); font-size:.9rem;">Lab report — Titration curves</div>
+                                        <div class="small text-muted">Chemistry · Mrs. Ferrara</div>
+                                    </div>
+                                    <span class="pill pill-due">Due soon</span>
+                                </div>
+                                <div class="due-row">
+                                    <div class="due-date"><div class="d">08</div><div class="m">Jul</div></div>
+                                    <div class="flex-grow-1">
+                                        <div class="fw-semibold" style="color:var(--ink); font-size:.9rem;">Essay — Causes of the war</div>
+                                        <div class="small text-muted">World History · Mr. Odell</div>
+                                    </div>
+                                    <span class="pill pill-warn">Drafting</span>
+                                </div>
+                                <div class="due-row">
+                                    <div class="due-date"><div class="d">14</div><div class="m">Jul</div></div>
+                                    <div class="flex-grow-1">
+                                        <div class="fw-semibold" style="color:var(--ink); font-size:.9rem;">Reading response 4</div>
+                                        <div class="small text-muted">English · Mr. Bates</div>
+                                    </div>
+                                    <span class="pill pill-good">Submitted</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <!-- Report card -->
+                    <div class="col-lg-7" id="grades">
+                        <div class="paper h-100">
+                            <div class="ledger-head">
+                                <span class="tab"></span>
+                                <h2>Report card — Term 3</h2>
+                                <span class="spacer"></span>
+                                <a href="#" class="small"><i class="bi bi-download"></i> Download PDF</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-ledger align-middle">
+                                    <thead><tr><th>Subject</th><th>Teacher</th><th>Trend</th><th class="text-end">Grade</th></tr></thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Chemistry</td>
+                                            <td class="text-muted">Mrs. Ferrara</td>
+                                            <td><div class="ledger-progress" style="width:110px;"><span style="width:82%;"></span></div></td>
+                                            <td class="text-end"><span class="score-mark good">A-</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Algebra II</td>
+                                            <td class="text-muted">Ms. Okafor</td>
+                                            <td><div class="ledger-progress" style="width:110px;"><span style="width:74%;"></span></div></td>
+                                            <td class="text-end"><span class="score-mark mid">B</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>World History</td>
+                                            <td class="text-muted">Mr. Odell</td>
+                                            <td><div class="ledger-progress" style="width:110px;"><span style="width:90%;"></span></div></td>
+                                            <td class="text-end"><span class="score-mark good">A</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>English Literature</td>
+                                            <td class="text-muted">Mr. Bates</td>
+                                            <td><div class="ledger-progress" style="width:110px;"><span style="width:68%;"></span></div></td>
+                                            <td class="text-end"><span class="score-mark mid">B-</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Attendance -->
+                    <div class="col-lg-5" id="attendance">
+                        <div class="paper h-100">
+                            <div class="ledger-head">
+                                <span class="tab"></span>
+                                <h2>Attendance — this term</h2>
+                            </div>
+                            <div class="paper-body">
+                                <canvas id="attendanceChartP" height="170"></canvas>
+                                <div class="d-flex justify-content-between mt-3 small">
+                                    <div><span class="pill pill-good">Present 58</span></div>
+                                    <div><span class="pill pill-warn">Late 2</span></div>
+                                    <div><span class="pill pill-due">Absent 3</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Teacher contacts + announcements -->
+                <div class="row g-3">
+                    <div class="col-lg-7">
+                        <div class="paper h-100">
+                            <div class="ledger-head"><span class="tab"></span><h2>Teacher contacts</h2></div>
+                            <div class="paper-body pt-2">
+                                <div class="due-row">
+                                    <div class="id-photo sm me-0">LF</div>
+                                    <div class="flex-grow-1 ms-2">
+                                        <div class="fw-semibold" style="color:var(--ink); font-size:.9rem;">Mrs. Ferrara</div>
+                                        <div class="small text-muted">Chemistry</div>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-ink"><i class="bi bi-envelope"></i> Message</button>
+                                </div>
+                                <div class="due-row">
+                                    <div class="id-photo sm me-0">MO</div>
+                                    <div class="flex-grow-1 ms-2">
+                                        <div class="fw-semibold" style="color:var(--ink); font-size:.9rem;">Ms. Okafor</div>
+                                        <div class="small text-muted">Algebra II</div>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-ink"><i class="bi bi-envelope"></i> Message</button>
+                                </div>
+                                <div class="due-row">
+                                    <div class="id-photo sm me-0">DO</div>
+                                    <div class="flex-grow-1 ms-2">
+                                        <div class="fw-semibold" style="color:var(--ink); font-size:.9rem;">Mr. Odell</div>
+                                        <div class="small text-muted">World History</div>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-ink"><i class="bi bi-envelope"></i> Message</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-5">
+                        <div class="paper h-100">
+                            <div class="ledger-head"><span class="tab"></span><h2>School announcements</h2></div>
+                            <div class="paper-body pt-2">
+                                <div class="mb-3 pb-3" style="border-bottom:1px dashed var(--rule);">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="fw-semibold small" style="color:var(--ink);">Report cards released</span>
+                                        <span class="small text-muted mono">Jul 02</span>
+                                    </div>
+                                    <p class="small text-muted mb-0">Term 2 report cards are now available for download.</p>
+                                </div>
+                                <div>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="fw-semibold small" style="color:var(--ink);">Parent-teacher conferences</span>
+                                        <span class="small text-muted mono">Jun 25</span>
+                                    </div>
+                                    <p class="small text-muted mb-0">Book a slot for the week of Jul 20 via the front office.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="~/js/script.js"></script>
+    <script>
+        new Chart(document.getElementById('attendanceChartP'), {
+          type: 'doughnut',
+          data: {
+            labels: ['Present', 'Late', 'Absent'],
+            datasets: [{
+              data: [58, 2, 3],
+              backgroundColor: ['#2F5D3A', '#B8860B', '#B7472A'],
+              borderColor: '#FFFEFB',
+              borderWidth: 3
+            }]
+          },
+          options: { cutout: '68%', plugins: { legend: { display: false } } }
+        });
+    </script>
+</body>
+</html>

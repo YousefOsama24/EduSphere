@@ -7,25 +7,25 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Areas\Center\ViewModels\**" />
+	  <Compile Remove="Areas\Admin\ViewModels\**" />
 	  <Compile Remove="Areas\Parent\ViewModels\**" />
 	  <Compile Remove="Areas\Student\ViewModels\**" />
-	  <Compile Remove="Areas\Admin\ViewModels\**" />
+	  <Compile Remove="Areas\SuperAdmin\ViewModels\**" />
 	  <Compile Remove="Areas\Teacher\ViewModels\**" />
-	  <Content Remove="Areas\Center\ViewModels\**" />
+	  <Content Remove="Areas\Admin\ViewModels\**" />
 	  <Content Remove="Areas\Parent\ViewModels\**" />
 	  <Content Remove="Areas\Student\ViewModels\**" />
-	  <Content Remove="Areas\Admin\ViewModels\**" />
+	  <Content Remove="Areas\SuperAdmin\ViewModels\**" />
 	  <Content Remove="Areas\Teacher\ViewModels\**" />
-	  <EmbeddedResource Remove="Areas\Center\ViewModels\**" />
+	  <EmbeddedResource Remove="Areas\Admin\ViewModels\**" />
 	  <EmbeddedResource Remove="Areas\Parent\ViewModels\**" />
 	  <EmbeddedResource Remove="Areas\Student\ViewModels\**" />
-	  <EmbeddedResource Remove="Areas\Admin\ViewModels\**" />
+	  <EmbeddedResource Remove="Areas\SuperAdmin\ViewModels\**" />
 	  <EmbeddedResource Remove="Areas\Teacher\ViewModels\**" />
-	  <None Remove="Areas\Center\ViewModels\**" />
+	  <None Remove="Areas\Admin\ViewModels\**" />
 	  <None Remove="Areas\Parent\ViewModels\**" />
 	  <None Remove="Areas\Student\ViewModels\**" />
-	  <None Remove="Areas\Admin\ViewModels\**" />
+	  <None Remove="Areas\SuperAdmin\ViewModels\**" />
 	  <None Remove="Areas\Teacher\ViewModels\**" />
 	</ItemGroup>
 
@@ -43,6 +43,7 @@
 	  <Folder Include="Areas\Center\Controllers\" />
 	  <Folder Include="Areas\Parent\Controllers\" />
 	  <Folder Include="Areas\Student\Controllers\" />
+	  <Folder Include="Areas\SuperAdmin\Controllers\" />
 	  <Folder Include="Areas\Teacher\Controllers\" />
 	</ItemGroup>
 
