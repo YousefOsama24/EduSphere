@@ -1,6 +1,6 @@
 ﻿namespace EduSphere.Models
 {
-    
+
         public class Parent
         {
             public int ParentId { get; set; }
@@ -13,6 +13,6 @@
 
             // Navigation
 
-            public ICollection<ParentStudent> ParentStudents { get; set; }  = new List<ParentStudent>();
+            public ICollection<ParentStudent> ParentStudents { get; set; } = new List<ParentStudent>();
         }
     }

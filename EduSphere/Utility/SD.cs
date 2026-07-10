@@ -7,7 +7,6 @@
         public const string IDENTITY_AREA = "Identity";
         public const string SUPER_ADMIN_AREA = "SuperAdmin";
         public const string PAERNT_AREA = "Parent";
-        public const string STUDENT_AREA = "Student";
         public const string TEACHER_AREA = "Teacher";
         public const string CENTER_AREA = "Center";
 

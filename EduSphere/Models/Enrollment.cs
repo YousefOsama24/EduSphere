@@ -22,7 +22,6 @@
 
         public DateTime EnrollmentDate { get; set; } = DateTime.Now;
 
-        public EnrollmentStatus Status { get; set; } =
-            EnrollmentStatus.Active;
+        public EnrollmentStatus Status { get; set; } = EnrollmentStatus.Active;
     }
 }

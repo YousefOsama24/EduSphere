@@ -1,14 +1,23 @@
-﻿using EduSphere.Utility;
-using Microsoft.AspNetCore.Mvc;
+/*<<<<<<< HEAD*/
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace EduSphere.Areas.SuperAdmin.Controllers
+namespace EduSphere.Areas.Admin.Controllers
 {
+
+    /*=======*/
     
-    public class HomeController : Controller
+    using Microsoft.AspNetCore.Mvc;
+
+    namespace EduSphere.Areas.Admin.Controllers
     {
-        public IActionResult Index()
+        [Area(SD.ADMIN_AREA)]
+        /*63136018870be45dc2405bf3e6adb076a1d1e3b8*/
+        public class HomeController : Controller
         {
-            return View();
+            public IActionResult Index()
+            {
+                return View();
+            }
         }
     }
 }

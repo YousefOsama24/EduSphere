@@ -1,0 +1,47 @@
+﻿@model AttendanceSession
+<div class="container">
+    <div class="row mb-3 align-items-center my-3">
+        <div class="col-md-6">
+            <h2 class="display-6">Create new AttendanceSession</h2>
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <div class="col-12">
+            <form method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="Name" class="form-label">AttendanceSessionId</label>
+                    <input class="form-control" placeholder="AttendanceSessionId" asp-for="AttendanceSessionId">
+                    <span asp-validation-for="AttendanceSessionId" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">TeacherId</label>
+                    <input class="form-control" placeholder="TeacherId" asp-for="TeacherId">
+                    <span asp-validation-for="TeacherId" class="text-danger"></span>
+                    
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">GroupId</label>
+                    <input class="form-control" placeholder="GroupId" asp-for="GroupId">
+                    <span asp-validation-for="GroupId" class="text-danger"></span>
+                    
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">Title</label>
+                    <input class="form-control" placeholder="Title" asp-for="Title">
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                    
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">SessionDate</label>
+                    <input class="form-control" placeholder="SessionDate" asp-for="SessionDate">
+                    <span asp-validation-for="SessionDate" class="text-danger"></span>
+                    
+                </div>
+                
+                
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>

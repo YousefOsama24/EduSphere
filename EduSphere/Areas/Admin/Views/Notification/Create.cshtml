@@ -1,0 +1,59 @@
+﻿@model Notification
+<div class="container">
+    <div class="row mb-3 align-items-center my-3">
+        <div class="col-md-6">
+            <h2 class="display-6">Create new Notification</h2>
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <div class="col-12">
+            <form method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="Name" class="form-label">NotificationId</label>
+                    <input class="form-control" placeholder="NotificationId" asp-for="NotificationId">
+                    <span asp-validation-for="NotificationId" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">UserId</label>
+                    <input class="form-control" placeholder="UserId" asp-for="UserId">
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                    
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">Title</label>
+                    <input class="form-control" placeholder="Title" asp-for="Title">
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                    
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">Message</label>
+                    <input class="form-control" placeholder="Message" asp-for="Message">
+                    <span asp-validation-for="Message" class="text-danger"></span>
+                    
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">Type</label>
+                    <input class="form-control" placeholder="Type" asp-for="Type">
+                    <span asp-validation-for="Type" class="text-danger"></span>
+
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">IsRead</label>
+                    <input class="form-control" placeholder="IsRead" asp-for="IsRead">
+                    <span asp-validation-for="IsRead" class="text-danger"></span>
+
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">CreatedAt</label>
+                    <input class="form-control" placeholder="CreatedAt" asp-for="CreatedAt">
+                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
+
+                </div>
+                
+                
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,14 +1,14 @@
-﻿@model StudentsVM
+﻿@model StudentAnswersVM
 
 <div class="container">
     <div class="row mb-3 align-items-center my-3">
         <div class="col-md-6">
-            <h2 class="display-6">All Students</h2>
+            <h2 class="display-6">All StudentAnswers</h2>
         </div>
         @*if (User.IsInRole(SD.SUPER_ADMIN_ROLE) || User.IsInRole(SD.ADMIN_ROLE))
         {*@
             <div class="col-md-6 text-md-end text-start mt-2 mt-md-0">
-                <a href="/Admin/Student/Create" class="btn btn-success"><i class="bi bi-plus-circle"></i> Create</a>
+                <a href="/Admin/StudentAnswer/Create" class="btn btn-success"><i class="bi bi-plus-circle"></i> Create</a>
             </div>
         @* } *@
     </div>
@@ -20,7 +20,7 @@
                 <div class="col-12">
                     <form>
                         <div class="row">
-                            <!-- Student Name -->
+                            <!-- StudentAnswer Name -->
                             <div class="col-md-3">
                                 <input type="text" class="form-control" placeholder="Name" name="query" value="@ViewBag.Query">
                             </div>
@@ -41,34 +41,27 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Gender</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">DateOfBirth</th>
-                        <th scope="col">AcademicLevel</th>
-                        <th scope="col">CenterId</th>
-                        <th scope="col">CreatedAt</th>
-                        
+                        <th scope="col">StudentAnswerId</th>
+                        <th scope="col">ExamAttemptId</th>
+                        <th scope="col">QuestionId</th>
+                        <th scope="col">SelectedChoiceId</th>
+                        <th scope="col">EssayAnswer</th>
+                        <th scope="col">MarksAwarded</th> 
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.Students)
+                    @foreach (var item in Model.StudentAnswers)
                     {
                         <tr>
-                            <th scope="row">@item.StudentId</th>
-                            <td>@item.User.FullName</td>
-                            <td>@item.Gender</td>
-                            <td>@item.User.Email</td>
-                            <td>@item.DateOfBirth</td>
-                            <td>@item.AcademicLevel</td>
-                            <td>@item.CenterId</td>
-                            <td>@item.CreatedAt</td>
-
-                            
+                            <th scope="row">@item.StudentAnswerId</th>
+                            <td>@item.ExamAttemptId</td>
+                            <td>@item.QuestionId</td>
+                            <td>@item.SelectedChoiceId</td>
+                            <td>@item.EssayAnswer</td>
+                            <td>@item.MarksAwarded</td>
                             <td>
-                                <a href="/Admin/Student/Update/@item.StudentId" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i> Edit</a>
-                                <a href="/Admin/Student/Delete/@item.StudentId" class="btn btn-danger btn-delete"><i class="bi bi-trash"></i> Delete</a>
+                                <a href="/Admin/StudentAnswer/Update/@item.StudentAnswerId" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i> Edit</a>
+                                <a href="/Admin/StudentAnswer/Delete/@item.StudentAnswerId" class="btn btn-danger btn-delete"><i class="bi bi-trash"></i> Delete</a>
                                @* @if (User.IsInRole(SD.SUPER_ADMIN_ROLE) || User.IsInRole(SD.ADMIN_ROLE))
                                 {
                                    
@@ -91,22 +84,22 @@
                 <ul class="pagination justify-content-center">
                     @if (Model.CurrentPage > 1)
                     {
-                        <li class="page-item"><a class="page-link" href="/Admin/Student/Index?page=@(Model.CurrentPage - 1)">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="/Admin/StudentAnswer/Index?page=@(Model.CurrentPage - 1)">Previous</a></li>
                     }
                     @for (var i = 1; i <= Model.TotalPages; i++)
                     {
                         @if (i == Model.CurrentPage)
                         {
-                            <li class="page-item active"><a class="page-link" href="/Admin/Student/Index?page=@i">@i</a></li>
+                            <li class="page-item active"><a class="page-link" href="/Admin/StudentAnswer/Index?page=@i">@i</a></li>
                         }
                         else
                         {
-                            <li class="page-item"><a class="page-link" href="/Admin/Student/Index?page=@i">@i</a></li>
+                            <li class="page-item"><a class="page-link" href="/Admin/StudentAnswer/Index?page=@i">@i</a></li>
                         }
                     }
                     @if (Model.CurrentPage != Model.TotalPages)
                     {
-                        <li class="page-item"><a class="page-link" href="/Admin/Student/Index?page=@(Model.CurrentPage + 1)">Next</a></li>
+                        <li class="page-item"><a class="page-link" href="/Admin/StudentAnswer/Index?page=@(Model.CurrentPage + 1)">Next</a></li>
                     }
                 </ul>
             </nav>
