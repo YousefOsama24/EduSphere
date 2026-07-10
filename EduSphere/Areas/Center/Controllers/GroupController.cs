@@ -1,11 +1,8 @@
-﻿using EduSphere.Utility;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace EduSphere.Areas.Teacher.Controllers
+namespace EduSphere.Areas.Center.Controllers
 {
-
-    [Area(SD.TEACHER_AREA)]
-    public class HomeController : Controller
+    public class GroupController : Controller
     {
         public IActionResult Index()
         {
@@ -23,6 +20,5 @@ namespace EduSphere.Areas.Teacher.Controllers
         {
             return View();
         }
-
     }
 }

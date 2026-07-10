@@ -1,16 +1,14 @@
-﻿using EduSphere.Utility;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace EduSphere.Areas.Teacher.Controllers
+namespace EduSphere.Areas.Center.Controllers
 {
-
-    [Area(SD.TEACHER_AREA)]
-    public class HomeController : Controller
+    public class StudentController : Controller
     {
         public IActionResult Index()
         {
             return View();
         }
+
         public IActionResult Create()
         {
             return View();

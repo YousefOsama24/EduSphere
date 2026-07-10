@@ -8,20 +8,12 @@
 
 	<ItemGroup>
 	  <Compile Remove="Areas\Admin\ViewModels\**" />
-	  <Compile Remove="Areas\Parent\ViewModels\**" />
-	  <Compile Remove="Areas\Student\ViewModels\**" />
 	  <Compile Remove="Areas\Teacher\ViewModels\**" />
 	  <Content Remove="Areas\Admin\ViewModels\**" />
-	  <Content Remove="Areas\Parent\ViewModels\**" />
-	  <Content Remove="Areas\Student\ViewModels\**" />
 	  <Content Remove="Areas\Teacher\ViewModels\**" />
 	  <EmbeddedResource Remove="Areas\Admin\ViewModels\**" />
-	  <EmbeddedResource Remove="Areas\Parent\ViewModels\**" />
-	  <EmbeddedResource Remove="Areas\Student\ViewModels\**" />
 	  <EmbeddedResource Remove="Areas\Teacher\ViewModels\**" />
 	  <None Remove="Areas\Admin\ViewModels\**" />
-	  <None Remove="Areas\Parent\ViewModels\**" />
-	  <None Remove="Areas\Student\ViewModels\**" />
 	  <None Remove="Areas\Teacher\ViewModels\**" />
 	</ItemGroup>
 
@@ -33,10 +25,6 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Areas\Center\Controllers\" />
 	</ItemGroup>
 
 </Project>

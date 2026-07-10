@@ -1,0 +1,195 @@
+﻿
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] EduSphere</title>
+    <link rel="stylesheet" href="~/css/admin-dashboard.css" />
+</head>
+<body class="admin-page">
+
+    <div class="admin-shell">
+
+        <!-- ===== Sidebar ===== -->
+        <aside class="admin-sidebar">
+            <div class="brand">
+                <span class="mark">AK</span>
+                Center Dashpord 
+            </div>
+
+            <div class="section-label">Overview</div>
+            <ul class="admin-nav">
+                <li><a href="#" class="active"><span class="dot"></span> Home</a></li>
+                <li><a href="#"><span class="dot"></span> Reports</a></li>
+            </ul>
+
+            <div class="section-label">Management</div>
+            <ul class="admin-nav">
+                <li><a href="#"><span class="dot"></span> Total Active Enrollments/Subscriptions </a></li>
+                <li><a href="#"><span class="dot"></span> Display recent activities </a></li>
+                <li><a href="#"><span class="dot"></span> Display recent notifications </a></li>
+                <li><a href="#"><span class="dot"></span> Teachers</a></li>
+                <li><a href="#"><span class="dot"></span> Students</a></li>
+                <li><a href="#"><span class="dot"></span> Courses</a></li>
+                <li><a href="#"><span class="dot"></span> Groups</a></li>
+                <li><a href="#"><span class="dot"></span> Exams</a></li>
+                <li><a href="#"><span class="dot"></span> Payments</a></li>
+            </ul>
+
+            <div class="section-label">النظام</div>
+            <ul class="admin-nav">
+                <li><a href="#"><span class="dot"></span> User Permissions</a></li>
+                <li><a href="#"><span class="dot"></span> Site Settings</a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                System Version 3.2.1<br />
+                Last Backup: 2 hours ago
+            </div>
+        </aside>
+
+        <!-- ===== Main column ===== -->
+        <div class="admin-main">
+
+            <header class="admin-topbar">
+                <div>
+                    <div class="page-title">Main Dashboard</div>
+                    <div class="page-sub">Overview of platform performance today</div>
+                </div>
+
+                <div class="search-box">
+                    <input type="text" id="admin-search" placeholder="Search activity log..." />
+                </div>
+
+                <div class="admin-profile">
+                    <div class="avatar"></div>
+                    <div>
+                        <div class="name"></div>
+                        <div class="role">Admin the Center </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="admin-content">
+
+                <!-- KPI ledger -->
+                <div class="kpi-ledger">
+                    <div class="kpi">
+                        <div class="label">Total Teachers</div>
+                        <div class="value"></div>
+                        <div class="delta up">▲ % this month</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="label">Total Courses</div>
+                        <div class="value"></div>
+                        <div class="delta up">▲ % this month</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="label">Registered Students</div>
+                        <div class="value"></div>
+                        <div class="delta up">▲% this month</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="label">Monthly Revenue</div>
+                        <div class="value"> EGP</div>
+                        <div class="delta down">▼ % compared to last month</div>
+                    </div>
+                </div>
+
+                <div class="admin-grid">
+
+                    <!-- Activity / approval log -->
+                    <section class="panel">
+                        <div class="panel-heading">
+                            <h3>Recent Activity Log</h3>
+                            <a href="#" class="view-all">View All</a>
+                        </div>
+
+                        <table class="registry-log" id="activity-log">
+                            <thead>
+                                <tr>
+                                    <th>Courses</th>
+                                    <th>Teacher</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @* @foreach (var item in Model.RecentSubmissions)
+                                {
+                                    <tr>
+                                        <td>@item.CourseTitle</td>
+                                        <td>@item.InstructorName</td>
+                                        <td class="mono-cell">@item.SubmittedOn.ToString("yyyy-MM-dd")</td>
+                                        <td>
+                                            <span class="status-pill @item.StatusCssClass">@item.StatusLabel</span>
+                                        </td>
+                                        <td>
+                                            @if (item.StatusCssClass == "pending")
+                                            {
+                                                <button data-action="approve" title="اعتماد">✔</button>
+                                                <button data-action="reject" title="رفض">✕</button>
+                                            }
+                                            else
+                                            {
+                                                <button data-action="view" title="عرض">↗</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                } *@
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <!-- Right column: system health + quick actions -->
+                    <div style="display:flex; flex-direction:column; gap:24px;">
+
+                        <section class="panel">
+                            <div class="panel-heading">
+                                <h3>System Health</h3>
+                            </div>
+
+                            <div class="health-item">
+                                <div class="row"><span>Server Usage</span><span class="val">%</span></div>
+                                <div class="health-bar"><div class="fill" style="width:10%"></div></div>
+                            </div>
+                            <div class="health-item">
+                                <div class="row"><span>Storage Space</span><span class="val">%</span></div>
+                                <div class="health-bar"><div class="fill warn" style="width:10%"></div></div>
+                            </div>
+                            <div class="health-item">
+                                <div class="row"><span>Error Rate</span><span class="val">%</span></div>
+                                <div class="health-bar"><div class="fill crit" style="width:10%"></div></div>
+                            </div>
+                        </section>
+
+                        <section class="panel">
+                            <div class="panel-heading">
+                                <h3>Quick Actions</h3>
+                            </div>
+                            <div class="quick-actions">
+                                <button data-quick-action="تصدير تقرير الشهر">
+                                    Export Monthly Report <span>↓</span>
+                                </button>
+                                <button data-quick-action="مسح الذاكرة المؤقتة">
+                                    Clear Cache <span>⟳</span>
+                                </button>
+                                <button data-quick-action="إرسال إشعار عام">
+                                    Send General Notification <span>➜</span>
+                                </button>
+                            </div>
+                        </section>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div class="admin-toast" id="admin-toast"></div>
+
+    <script src="~/js/admin-dashboard.js"></script>
+</body>
+</html>

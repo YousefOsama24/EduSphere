@@ -1,0 +1,350 @@
+/* ==========================================================================
+   Super Admin Dashboard — same "Registry" identity as courses.css
+   Reuses the palette/type tokens so both pages read as one product.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+:root {
+  --ink-navy: #10213B;
+  --ink-navy-soft: #17294a;
+  --sidebar-navy: #0C1A30;
+  --ledger-white: #F6F5F1;
+  --card-white: #FFFFFF;
+  --slate: #3E4759;
+  --slate-soft: #6b7386;
+  --brass: #B08D3F;
+  --deep-teal: #1F5F5B;
+  --rule: #E1DCCE;
+  --danger: #A5402E;
+  --success: #2F6B4F;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+
+body.admin-page {
+  margin: 0;
+  background: var(--ledger-white);
+  color: var(--slate);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+.admin-page a { text-decoration: none; color: inherit; }
+
+.admin-shell {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  min-height: 100vh;
+}
+
+/* ---------- Sidebar ---------- */
+.admin-sidebar {
+  background: var(--sidebar-navy);
+  color: #C7CCDA;
+  padding: 26px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-sidebar .brand {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 34px;
+}
+.admin-sidebar .brand .mark {
+  width: 24px; height: 24px;
+  border: 1.5px solid var(--brass);
+  border-radius: 3px;
+  color: var(--brass);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-sidebar .section-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: #5C6478;
+  margin: 18px 0 8px 4px;
+}
+
+.admin-nav { list-style: none; margin: 0; padding: 0; }
+.admin-nav li a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 5px;
+  font-size: 14px;
+  margin-bottom: 2px;
+  transition: background .15s ease, color .15s ease;
+}
+.admin-nav li a .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: .5;
+}
+.admin-nav li a:hover { background: rgba(255,255,255,.06); color: #fff; }
+.admin-nav li a.active {
+  background: rgba(176,141,63,.15);
+  color: var(--brass);
+  font-weight: 600;
+}
+
+.admin-sidebar .sidebar-footer {
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  font-size: 12px;
+  color: #6b7386;
+}
+
+/* ---------- Main column ---------- */
+.admin-main { display: flex; flex-direction: column; min-height: 100vh; }
+
+.admin-topbar {
+  background: var(--card-white);
+  border-bottom: 1px solid var(--rule);
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-topbar .page-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--ink-navy);
+  font-weight: 600;
+}
+.admin-topbar .page-sub {
+  font-size: 12.5px;
+  color: var(--slate-soft);
+  margin-top: 2px;
+}
+
+.admin-topbar .search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ledger-white);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  padding: 8px 14px;
+  min-width: 260px;
+}
+.admin-topbar .search-box input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 13.5px;
+  width: 100%;
+  color: var(--slate);
+  font-family: var(--font-body);
+}
+
+.admin-topbar .admin-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.admin-topbar .admin-profile .avatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--ink-navy);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.admin-topbar .admin-profile .name { font-size: 13px; font-weight: 600; color: var(--ink-navy); }
+.admin-topbar .admin-profile .role { font-size: 11px; color: var(--slate-soft); }
+
+.admin-content { padding: 28px 32px 60px; flex: 1; }
+
+/* ---------- KPI ledger row (signature element shared with courses page) ---------- */
+.kpi-ledger {
+  background: var(--ink-navy);
+  border-radius: 6px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+.kpi-ledger .kpi {
+  padding: 22px 24px;
+  border-left: 1px solid rgba(255,255,255,.12);
+}
+.kpi-ledger .kpi:first-child { border-left: none; }
+.kpi-ledger .kpi .label {
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: #9AA3B8;
+  margin-bottom: 8px;
+}
+.kpi-ledger .kpi .value {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: 600;
+  color: #fff;
+}
+.kpi-ledger .kpi .delta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  margin-top: 6px;
+}
+.kpi-ledger .kpi .delta.up { color: #6FCF97; }
+.kpi-ledger .kpi .delta.down { color: #E08B7D; }
+
+/* ---------- Panels ---------- */
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 24px;
+}
+
+.panel {
+  background: var(--card-white);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 22px 24px;
+}
+.panel-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.panel-heading h3 {
+  font-family: var(--font-display);
+  font-size: 17px;
+  color: var(--ink-navy);
+  margin: 0;
+}
+.panel-heading .view-all { font-size: 12.5px; color: var(--deep-teal); font-weight: 600; }
+
+/* Activity / registry log table */
+.registry-log { width: 100%; border-collapse: collapse; }
+.registry-log th {
+  text-align: right;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--slate-soft);
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--rule);
+}
+.registry-log td {
+  padding: 12px 6px;
+  border-bottom: 1px solid var(--rule);
+  font-size: 13.5px;
+  vertical-align: middle;
+}
+.registry-log tr:last-child td { border-bottom: none; }
+
+.status-pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.status-pill.approved { background: rgba(47,107,79,.12); color: var(--success); }
+.status-pill.pending { background: rgba(176,141,63,.15); color: var(--brass); }
+.status-pill.rejected { background: rgba(165,64,46,.12); color: var(--danger); }
+
+.mono-cell { font-family: var(--font-mono); font-size: 12.5px; color: var(--slate-soft); }
+
+/* System health bars — lightweight CSS-only visualization, no chart lib */
+.health-item { margin-bottom: 16px; }
+.health-item:last-child { margin-bottom: 0; }
+.health-item .row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+.health-item .row .val { font-family: var(--font-mono); color: var(--ink-navy); font-weight: 600; }
+.health-bar {
+  height: 6px;
+  background: var(--ledger-white);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.health-bar .fill { height: 100%; background: var(--deep-teal); border-radius: 3px; }
+.health-bar .fill.warn { background: var(--brass); }
+.health-bar .fill.crit { background: var(--danger); }
+
+/* Quick actions */
+.quick-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+.quick-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: var(--ledger-white);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: var(--ink-navy);
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+}
+.quick-actions button:hover { background: #fff; border-color: var(--brass); }
+
+/* Toast (used by admin-dashboard.js) */
+.admin-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--ink-navy);
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 6px;
+  font-size: 13.5px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+  z-index: 100;
+}
+.admin-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1080px) {
+  .admin-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 860px) {
+  .admin-shell { grid-template-columns: 1fr; }
+  .admin-sidebar { display: none; }
+  .kpi-ledger { grid-template-columns: repeat(2, 1fr); }
+  .kpi-ledger .kpi:nth-child(3) { border-left: none; }
+}
+
+/* ---------- Accessibility ---------- */
+.admin-page a:focus-visible,
+.admin-page button:focus-visible,
+.admin-page input:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
