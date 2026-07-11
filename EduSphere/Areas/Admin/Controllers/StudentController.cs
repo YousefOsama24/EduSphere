@@ -65,7 +65,59 @@ namespace EduSphere.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        [HttpGet]
+        public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
+        {
+            var Student = await _context.GetOneAsync(
+                a => a.StudentId == id,
+                includes: new Expression<Func<StudentModel, object>>[]
+                {
+                    a => a.User,
+                    
+                },
+                cancellationToken: cancellationToken);
 
+            if (Student == null)
+                return NotFound();
+
+            return View(Student);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(StudentModel Student, CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+                return View(Student);
+
+            var oldStudent = await _context.GetOneAsync(
+                a => a.StudentId == Student.StudentId,
+                includes: new Expression<Func<StudentModel, object>>[]
+                {
+                    a => a.User,
+                },
+                tracked: true,
+                cancellationToken: cancellationToken);
+
+            if (oldStudent == null)
+                return NotFound();   
+           // oldStudent.StudentId = Student.StudentId;
+            oldStudent.User.FullName = Student.User.FullName;
+            oldStudent.Gender = Student.Gender;
+            oldStudent.User.Email = Student.User.Email;
+            oldStudent.DateOfBirth = Student.DateOfBirth;
+            oldStudent.AcademicLevel = Student.AcademicLevel;
+            oldStudent.CenterId = Student.CenterId;
+            oldStudent.CreatedAt = Student.CreatedAt;
+            
+            
+
+            await _context.CommitAsync(cancellationToken);
+
+            TempData["success-notification"] = "Attendance Record updated successfully.";
+
+            return RedirectToAction(nameof(Index));
+        }
         [HttpPost]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {

@@ -14,12 +14,12 @@
                     <input class="form-control" placeholder="NotificationId" asp-for="NotificationId">
                     <span asp-validation-for="NotificationId" class="text-danger"></span>
                 </div> *@
-                <div class="mb-3">
+               @*  <div class="mb-3">
                     <label for="Img" class="form-label">UserId</label>
                     <input class="form-control" placeholder="UserId" asp-for="UserId">
                     <span asp-validation-for="UserId" class="text-danger"></span>
                     
-                </div>
+                </div> *@
                 <div class="mb-3">
                     <label for="Img" class="form-label">Title</label>
                     <input class="form-control" placeholder="Title" asp-for="Title">
@@ -38,12 +38,11 @@
                     <span asp-validation-for="Type" class="text-danger"></span>
 
                 </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">IsRead</label>
-                    <input class="form-control" placeholder="IsRead" asp-for="IsRead">
-                    <span asp-validation-for="IsRead" class="text-danger"></span>
-
+                <div class="form-check mb-3">
+                    <input class="form-check-input" asp-for="IsRead" />
+                    <label class="form-check-label" asp-for="IsRead"></label>
                 </div>
+
                 <div class="mb-3">
                     <label for="Img" class="form-label">CreatedAt</label>
                     <input class="form-control" placeholder="CreatedAt" asp-for="CreatedAt">

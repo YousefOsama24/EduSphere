@@ -65,6 +65,50 @@ namespace EduSphere.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        [HttpGet]
+        public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
+        {
+            var AttendanceSession = await _context.GetOneAsync(
+                a => a.AttendanceSessionId == id,
+                includes: new Expression<Func<AttendanceSessionModel, object>>[]
+                {
+                    a => a.Group,
+                    a => a.Teacher
+                },
+                cancellationToken: cancellationToken);
+
+            if (AttendanceSession == null)
+                return NotFound();
+
+            return View(AttendanceSession);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(AttendanceSessionModel AttendanceSession, CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+                return View(AttendanceSession);
+
+            var oldAttendanceSession = await _context.GetOneAsync(
+                a => a.AttendanceSessionId == AttendanceSession.AttendanceSessionId,
+                tracked: true,
+                cancellationToken: cancellationToken);
+
+            if (oldAttendanceSession == null)
+                return NotFound();
+
+            oldAttendanceSession.GroupId = AttendanceSession.GroupId;
+            oldAttendanceSession.TeacherId = AttendanceSession.TeacherId;
+            oldAttendanceSession.Title = AttendanceSession.Title;
+            oldAttendanceSession.SessionDate = AttendanceSession.SessionDate;
+
+            await _context.CommitAsync(cancellationToken);
+
+            TempData["success-notification"] = "Attendance Record updated successfully.";
+
+            return RedirectToAction(nameof(Index));
+        }
         [HttpPost]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {

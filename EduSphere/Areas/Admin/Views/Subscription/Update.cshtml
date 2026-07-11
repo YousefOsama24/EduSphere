@@ -11,6 +11,7 @@
         <div class="col-12">
             <form method="post" enctype="multipart/form-data">
                 <!-- Ensure the Edit form posts the id -->
+                <input type="hidden" asp-for="SubscriptionId" />
                @*  <div class="mb-3">
                     <label for="Name" class="form-label">SubscriptionId</label>
                     <input class="form-control" placeholder="SubscriptionId" asp-for="SubscriptionId">

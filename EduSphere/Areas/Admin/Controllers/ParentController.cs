@@ -65,6 +65,47 @@ namespace EduSphere.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        [HttpGet]
+        public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
+        {
+            var Parent = await _context.GetOneAsync(
+                a => a.ParentId == id,
+                includes: new Expression<Func<ParentModel, object>>[]
+                {
+                    a => a.User,
+                   
+                },
+                cancellationToken: cancellationToken);
+
+            if (Parent == null)
+                return NotFound();
+
+            return View(Parent);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(ParentModel Parent, CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+                return View(Parent);
+
+            var oldParent = await _context.GetOneAsync(
+                a => a.ParentId == Parent.ParentId,
+                tracked: true,
+                cancellationToken: cancellationToken);
+
+            if (oldParent == null)
+                return NotFound();
+
+            oldParent.Occupation = Parent.Occupation;
+           
+            await _context.CommitAsync(cancellationToken);
+
+            TempData["success-notification"] = "Attendance Record updated successfully.";
+
+            return RedirectToAction(nameof(Index));
+        }
         [HttpPost]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {

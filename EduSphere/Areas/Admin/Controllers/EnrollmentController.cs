@@ -56,8 +56,6 @@ namespace EduSphere.Areas.Admin.Controllers
             if (!ModelState.IsValid)
                 return View(Enrollment);
 
-
-
             await _context.CreateAsync(Enrollment, cancellationToken);
             await _context.CommitAsync(cancellationToken);
 
@@ -65,11 +63,55 @@ namespace EduSphere.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        [HttpGet]
+        public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
+        {
+            var Enrollment = await _context.GetOneAsync(
+                a => a.EnrollmentId == id,
+                includes: new Expression<Func<EnrollmentModel, object>>[]
+                {
+                    a => a.Student,
+                    a => a.Group
+                },
+                cancellationToken: cancellationToken);
+
+            if (Enrollment == null)
+                return NotFound();
+
+            return View(Enrollment);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(EnrollmentModel Enrollment, CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+                return View(Enrollment);
+
+            var oldEnrollment = await _context.GetOneAsync(
+                a => a.EnrollmentId == Enrollment.EnrollmentId,
+                tracked: true,
+                cancellationToken: cancellationToken);
+
+            if (oldEnrollment == null)
+                return NotFound();
+
+            oldEnrollment.GroupId = Enrollment.GroupId;
+            oldEnrollment.StudentId = Enrollment.StudentId;
+            oldEnrollment.Status = Enrollment.Status;
+            oldEnrollment.EnrollmentDate = Enrollment.EnrollmentDate;
+
+            await _context.CommitAsync(cancellationToken);
+
+            TempData["success-notification"] = "Attendance Record updated successfully.";
+
+            return RedirectToAction(nameof(Index));
+        }
         [HttpPost]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var Student = await _context.GetOneAsync(
-                c => c.StudentId == id,
+                c => c.EnrollmentId == id,
                 cancellationToken: cancellationToken);
 
             if (Student == null)
