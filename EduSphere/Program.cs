@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
 #region Database
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -43,6 +43,7 @@ builder.Services.AddScoped(typeof(IGenericRepository<>),
 builder.Services.AddScoped<ICourseRepository,
                            CourseRepository>();
 
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 #endregion
 
 
@@ -91,7 +92,7 @@ using (var scope = app.Services.CreateScope())
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{area=Admin}/{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area=Admin}/{controller=Choice}/{action=Index}/{id?}");
 
 #endregion
 

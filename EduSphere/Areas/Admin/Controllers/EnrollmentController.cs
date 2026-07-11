@@ -65,5 +65,22 @@ namespace EduSphere.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
+        {
+            var Student = await _context.GetOneAsync(
+                c => c.StudentId == id,
+                cancellationToken: cancellationToken);
+
+            if (Student == null)
+                return NotFound();
+
+            _context.Delete(Student);
+            await _context.CommitAsync(cancellationToken);
+
+            TempData["success-notification"] = "Student deleted successfully.";
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

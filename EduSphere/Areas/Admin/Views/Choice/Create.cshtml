@@ -9,11 +9,11 @@
     <div class="row my-3">
         <div class="col-12">
             <form method="post" enctype="multipart/form-data">
-                <div class="mb-3">
+                @* <div class="mb-3">
                     <label for="Name" class="form-label">ChoiceId</label>
                     <input class="form-control" placeholder="ChoiceId" asp-for="ChoiceId">
                     <span asp-validation-for="ChoiceId" class="text-danger"></span>
-                </div>
+                </div> *@
                 <div class="mb-3">
                     <label for="Img" class="form-label">QuestionId</label>
                     <input class="form-control" placeholder="QuestionId" asp-for="QuestionId">
@@ -26,11 +26,9 @@
                     <span asp-validation-for="Content" class="text-danger"></span>
                     
                 </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">IsCorrect</label>
-                    <input class="form-control" placeholder="IsCorrect" asp-for="IsCorrect">
-                    <span asp-validation-for="IsCorrect" class="text-danger"></span>
-                    
+                <div class="form-check mb-3">
+                     <input class="form-check-input" asp-for="IsCorrect" />
+                     <label class="form-check-label" asp-for="IsCorrect"></label>
                 </div>
                 
                 

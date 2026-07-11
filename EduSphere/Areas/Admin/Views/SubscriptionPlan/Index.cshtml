@@ -67,7 +67,16 @@
 
                             <td>
                                 <a href="/Admin/SubscriptionPlan/Update/@item.SubscriptionPlanId" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i> Edit</a>
-                                <a href="/Admin/SubscriptionPlan/Delete/@item.SubscriptionPlanId" class="btn btn-danger btn-delete"><i class="bi bi-trash"></i> Delete</a>
+                                <form asp-action="Delete"
+                                      asp-route-id="@item.SubscriptionPlanId"
+                                      method="post"
+                                      style="display:inline">
+
+                                    <button type="submit" class="btn btn-danger"
+                                            onclick="return confirm('Are you sure you want to delete this choice?')">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </button>
+                                </form>
                                @* @if (User.IsInRole(SD.SUPER_ADMIN_ROLE) || User.IsInRole(SD.ADMIN_ROLE))
                                 {
                                    
