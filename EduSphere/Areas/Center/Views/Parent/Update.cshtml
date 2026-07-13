@@ -1,0 +1,53 @@
+﻿@model Parent
+
+<div class="container">
+    <div class="row mb-3 align-items-center my-3">
+        <div class="col-md-6">
+            <h2 class="display-6">Update Parent</h2>
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <div class="col-12">
+            <form method="post" enctype="multipart/form-data">
+                <!-- Ensure the Edit form posts the id -->
+                <input type="hidden" asp-for="ParentId" />
+                @*  <div class="mb-3">
+                    <label for="Name" class="form-label">ParentId</label>
+                    <input class="form-control" placeholder="ParentId" asp-for="ParentId">
+                    <span asp-validation-for="ParentId" class="text-danger"></span>
+                </div> *@
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Name</label>
+                    <input class="form-control" placeholder="Name" asp-for="User.FullName">
+                    <span asp-validation-for="User.FullName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">Occupation</label>
+                    <input class="form-control" placeholder="Occupation" asp-for="Occupation">
+                    <span asp-validation-for="Occupation" class="text-danger"></span>
+
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@* <script>
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById("preview");
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result; // الصورة الجديدة
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script> *@
+
+

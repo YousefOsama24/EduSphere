@@ -2,6 +2,7 @@
 
 namespace EduSphere.Areas.Center.Controllers
 {
+    [Area(SD.CENTER_AREA)]
     public class GroupController : Controller
     {
         public IActionResult Index()

@@ -10,12 +10,11 @@
 <body class="admin-page">
 
     <div class="admin-shell">
-
         <!-- ===== Sidebar ===== -->
         <aside class="admin-sidebar">
             <div class="brand">
                 <span class="mark">AK</span>
-                Center Dashpord 
+                Center Dashpord
             </div>
 
             <div class="section-label">Overview</div>
@@ -26,15 +25,17 @@
 
             <div class="section-label">Management</div>
             <ul class="admin-nav">
-                <li><a href="#"><span class="dot"></span> Total Active Enrollments/Subscriptions </a></li>
-                <li><a href="#"><span class="dot"></span> Display recent activities </a></li>
-                <li><a href="#"><span class="dot"></span> Display recent notifications </a></li>
-                <li><a href="#"><span class="dot"></span> Teachers</a></li>
-                <li><a href="#"><span class="dot"></span> Students</a></li>
-                <li><a href="#"><span class="dot"></span> Courses</a></li>
-                <li><a href="#"><span class="dot"></span> Groups</a></li>
-                <li><a href="#"><span class="dot"></span> Exams</a></li>
-                <li><a href="#"><span class="dot"></span> Payments</a></li>
+                <li><a href="/Center/Enrollment/Index"><span class="dot"></span> Enrollments</a></li>
+                <li><a href="/Center/AttendanceRecord/Index"><span class="dot"></span> AttendanceRecord </a></li>
+                <li><a href="/Center/AttendanceSession/Index"><span class="dot"></span>AttendanceSession</a></li>
+                <li><a href="/Center/Teachers/Index"><span class="dot"></span> Teachers</a></li>
+                <li><a href="/Center/Choice/Index"><span class="dot"></span> Choice</a></li>
+                <li><a href="~/Center/Student/Index"><span class="dot"></span> Students</a></li>
+                <li><a href="/Center/Courses/Index"><span class="dot"></span> Courses</a></li>
+                <li><a href="/Center/Groups/Index"><span class="dot"></span> Groups</a></li>
+                <li><a href="/Center/Exams/Index"><span class="dot"></span> Exams</a></li>
+                <li><a href="/Center/Payments/Index"><span class="dot"></span> Payments</a></li>
+                <li><a href="/Center/Parent/Index"><span class="dot"></span> Parent</a></li>
             </ul>
 
             <div class="section-label">النظام</div>
@@ -66,7 +67,7 @@
                     <div class="avatar"></div>
                     <div>
                         <div class="name"></div>
-                        <div class="role">Admin the Center </div>
+                        <div class="role">Center the Center </div>
                     </div>
                 </div>
             </header>
@@ -186,6 +187,8 @@
                 </div>
             </main>
         </div>
+
+
     </div>
 
     <div class="admin-toast" id="admin-toast"></div>

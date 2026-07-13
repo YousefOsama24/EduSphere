@@ -1,7 +1,9 @@
 using EduSphere.Data;
 using EduSphere.Models;
+using EduSphere.Repositories;
 using EduSphere.Repositories.Implementations;
 using EduSphere.Repositories.Interfaces;
+using EduSphere.Repositories.IRepositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,12 +37,19 @@ builder.Services
 
 #region Dependency Injection
 
-builder.Services.AddScoped(typeof(IGenericRepository<>),
-                           typeof(GenericRepository<>));
+builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
 
-builder.Services.AddScoped<ICourseRepository,
-                           CourseRepository>();
+builder.Services.AddScoped<ICourseRepository,CourseRepository>();
 
+builder.Services.AddScoped<IRepository<Center>, Repository<Center>>();
+builder.Services.AddScoped<IRepository<Student>,Repository<Student>>();
+builder.Services.AddScoped<IRepository<Teacher>,Repository<Teacher>>();
+builder.Services.AddScoped<IRepository<Parent>, Repository<Parent>>();
+builder.Services.AddScoped<IRepository<Enrollment>, Repository<Enrollment>>();
+builder.Services.AddScoped<IRepository<AttendanceSession>, Repository<AttendanceSession>>();
+builder.Services.AddScoped<IRepository<AttendanceRecord>, Repository<AttendanceRecord>>();
+builder.Services.AddScoped<IRepository<Choice>, Repository<Choice>>();
+builder.Services.AddScoped<IRepository<ParentStudent>, Repository<ParentStudent>>();
 #endregion
 
 
