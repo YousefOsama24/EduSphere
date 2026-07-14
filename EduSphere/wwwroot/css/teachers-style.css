@@ -1,0 +1,160 @@
+/* تحسينات عامة للصفحة والخطوط */
+body {
+    background-color: #f4f6f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ستايل الكروت المودرن */
+.card {
+    border-radius: 16px !important;
+    overflow: hidden;
+    border: none !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ألوان الهيدر الصريحة */
+.bg-primary {
+    background: linear-gradient(135deg, #4e73df, #224abe) !important;
+    color: #ffffff !important;
+}
+
+.bg-warning {
+    background: linear-gradient(135deg, #f6c23e, #f4b619) !important;
+    color: #333333 !important;
+}
+
+/* تنسيق الجدول المودرن */
+.table {
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    width: 100%;
+}
+
+    .table thead th {
+        background-color: #f8f9fc !important;
+        color: #4e73df !important;
+        font-weight: 700;
+        border: none !important;
+        padding: 15px !important;
+    }
+
+    .table tbody tr {
+        background-color: #ffffff !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        transition: all 0.2s ease-in-out;
+    }
+
+        .table tbody tr:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            background-color: #f8f9fc !important;
+        }
+
+    .table td {
+        padding: 16px 12px !important;
+        vertical-align: middle;
+        color: #5a5c69 !important;
+        border-top: 1px solid #e3e6f0 !important;
+        border-bottom: 1px solid #e3e6f0 !important;
+    }
+
+        .table td:first-child {
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+            border-right: 1px solid #e3e6f0 !important;
+        }
+
+        .table td:last-child {
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+            border-left: 1px solid #e3e6f0 !important;
+        }
+
+/* تلوين الأزرار بشكل صريح وممتاز */
+.btn-primary {
+    background-color: #4e73df !important;
+    border-color: #4e73df !important;
+    color: #fff !important;
+}
+
+    .btn-primary:hover {
+        background-color: #2e59d9 !important;
+    }
+
+/* أزرار الإجراءات جوه الجدول */
+.btn-outline-warning {
+    color: #f6c23e !important;
+    border: 1px solid #f6c23e !important;
+    background-color: transparent !important;
+}
+
+    .btn-outline-warning:hover {
+        background-color: #f6c23e !important;
+        color: #fff !important;
+    }
+
+.btn-outline-info {
+    color: #36b9cc !important;
+    border: 1px solid #36b9cc !important;
+    background-color: transparent !important;
+}
+
+    .btn-outline-info:hover {
+        background-color: #36b9cc !important;
+        color: #fff !important;
+    }
+
+.btn-outline-danger {
+    color: #e74a3b !important;
+    border: 1px solid #e74a3b !important;
+    background-color: transparent !important;
+}
+
+    .btn-outline-danger:hover {
+        background-color: #e74a3b !important;
+        color: #fff !important;
+    }
+
+.btn-light {
+    background-color: #eaecf4 !important;
+    color: #5a5c69 !important;
+    border: none !important;
+}
+
+/* الـ Badges الملونة (نشط / غير نشط) */
+.badge-success-custom {
+    background-color: #d1e7dd !important;
+    color: #0f5132 !important;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    display: inline-block;
+    font-weight: 600;
+}
+
+.badge-danger-custom {
+    background-color: #f8d7da !important;
+    color: #842029 !important;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    display: inline-block;
+    font-weight: 600;
+}
+
+/* أنيميشن */
+.animate-page {
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

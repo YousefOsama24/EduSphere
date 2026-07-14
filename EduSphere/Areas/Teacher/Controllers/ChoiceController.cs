@@ -1,25 +1,25 @@
 ﻿using EduSphere.Repositories.IRepositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
+using ChoiceModel = EduSphere.Models.Choice;
 
-
-namespace EduSphere.Areas.Admin.Controllers
+namespace EduSphere.Areas.Teacher.Controllers
 {
-    [Area(SD.CENTER_AREA)]
+    [Area(SD.TEACHER_AREA)]
     public class ChoiceController : Controller
     {
 
-        private readonly IRepository<Choice> _ChoiceRepository;
+        private readonly IRepository<ChoiceModel> _context;
 
-        public ChoiceController(IRepository<Choice> ChoiceRepository)
+        public ChoiceController(IRepository<ChoiceModel> context)
         {
-            _ChoiceRepository = ChoiceRepository;
+            _context = context;
         }
 
         public async Task<IActionResult> Index(int page = 1, string? query = null, CancellationToken cancellationToken = default)
         {
-            var Choices = await _ChoiceRepository.GetAsync(
-                includes: new Expression<Func<Choice, object>>[]
+            var Choices = await _context.GetAsync(
+                includes: new Expression<Func<ChoiceModel, object>>[]
                 {
                     s => s.Question
                 },
@@ -47,18 +47,18 @@ namespace EduSphere.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new Choice());
+            return View(new ChoiceModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Choice choice, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Create(ChoiceModel choice, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return View(choice);
 
-            await _ChoiceRepository.CreateAsync(choice, cancellationToken);
-            await _ChoiceRepository.CommitAsync(cancellationToken);
+            await _context.CreateAsync(choice, cancellationToken);
+            await _context.CommitAsync(cancellationToken);
 
             TempData["success-notification"] = "Choice added successfully.";
 
@@ -67,7 +67,7 @@ namespace EduSphere.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
-            var choice = await _ChoiceRepository.GetOneAsync(
+            var choice = await _context.GetOneAsync(
                 c => c.ChoiceId == id,
                 cancellationToken: cancellationToken);
 
@@ -83,7 +83,7 @@ namespace EduSphere.Areas.Admin.Controllers
             if (!ModelState.IsValid)
                 return View(choice);
 
-            var oldChoice = await _ChoiceRepository.GetOneAsync(
+            var oldChoice = await _context.GetOneAsync(
                 c => c.ChoiceId == choice.ChoiceId,
                 tracked: true,
                 cancellationToken: cancellationToken);
@@ -95,7 +95,7 @@ namespace EduSphere.Areas.Admin.Controllers
             oldChoice.Content = choice.Content;
             oldChoice.IsCorrect = choice.IsCorrect;
 
-            await _ChoiceRepository.CommitAsync(cancellationToken);
+            await _context.CommitAsync(cancellationToken);
 
             TempData["success-notification"] = "Choice updated successfully.";
 
@@ -104,15 +104,15 @@ namespace EduSphere.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
-            var choice = await _ChoiceRepository.GetOneAsync(
+            var choice = await _context.GetOneAsync(
                 c => c.ChoiceId == id,
                 cancellationToken: cancellationToken);
 
             if (choice == null)
                 return NotFound();
 
-            _ChoiceRepository.Delete(choice);
-            await _ChoiceRepository.CommitAsync(cancellationToken);
+            _context.Delete(choice);
+            await _context.CommitAsync(cancellationToken);
 
             TempData["success-notification"] = "Choice deleted successfully.";
 

@@ -1,25 +1,25 @@
 ﻿using EduSphere.Repositories.IRepositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
-using ExamModel = EduSphere.Models.Exam;
+using GroupModel = EduSphere.Models.Group;
 
 namespace EduSphere.Areas.Teacher.Controllers
 {
     [Area(SD.TEACHER_AREA)]
-    public class ExamController : Controller
+    public class GroupController : Controller
     {
 
-        private readonly IRepository<ExamModel> _context;
+        private readonly IRepository<GroupModel> _context;
 
-        public ExamController(IRepository<ExamModel> context)
+        public GroupController(IRepository<GroupModel> context)
         {
             _context = context;
         }
 
         public async Task<IActionResult> Index(int page = 1, string? query = null, CancellationToken cancellationToken = default)
         {
-            var Exams = await _context.GetAsync(
-                includes: new Expression<Func<ExamModel, object>>[]
+            var Groups = await _context.GetAsync(
+                includes: new Expression<Func<GroupModel, object>>[]
                 {
                     s => s.Course
                 },
@@ -29,17 +29,17 @@ namespace EduSphere.Areas.Teacher.Controllers
             if (!string.IsNullOrWhiteSpace(query))
             {
                 var q = query.Trim().ToLower();
-                Exams = Exams.Where(e => (e.Title).ToLower().Contains(q));
+                Groups = Groups.Where(e => (e.Name).ToLower().Contains(q));
                 ViewBag.Query = query;
             }
 
 
-            double totalPages = System.Math.Ceiling(Exams.Count() / 3.0);
-            Exams = Exams.Skip((page - 1) * 3).Take(3);
+            double totalPages = System.Math.Ceiling(Groups.Count() / 10.0);
+            Groups = Groups.Skip((page - 1) * 10).Take(10);
 
-            return View(new ExamsVM()
+            return View(new GroupsVM()
             {
-                Exams = Exams.AsEnumerable(),
+                Groups = Groups.AsEnumerable(),
                 TotalPages = totalPages,
                 CurrentPage = page,
             });
@@ -47,78 +47,77 @@ namespace EduSphere.Areas.Teacher.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new ExamModel());
+            return View(new GroupModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ExamModel Exam, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Create(GroupModel Group, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
-                return View(Exam);
+                return View(Group);
 
-            await _context.CreateAsync(Exam, cancellationToken);
+            await _context.CreateAsync(Group, cancellationToken);
             await _context.CommitAsync(cancellationToken);
 
-            TempData["success-notification"] = "Exam added successfully.";
+            TempData["success-notification"] = "Group added successfully.";
 
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]
         public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
-            var Exam = await _context.GetOneAsync(
-                c => c.ExamId == id,
+            var Group = await _context.GetOneAsync(
+                c => c.GroupId == id,
                 cancellationToken: cancellationToken);
 
-            if (Exam == null)
+            if (Group == null)
                 return NotFound();
 
-            return View(Exam);
+            return View(Group);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(Exam Exam, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Update(Group Group, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
-                return View(Exam);
+                return View(Group);
 
-            var oldExam = await _context.GetOneAsync(
-                c => c.ExamId == Exam.ExamId,
+            var oldGroup = await _context.GetOneAsync(
+                c => c.GroupId == Group.GroupId,
                 tracked: true,
                 cancellationToken: cancellationToken);
 
-            if (oldExam == null)
+            if (oldGroup == null)
                 return NotFound();
 
-            oldExam.CourseId = Exam.CourseId;
-            oldExam.Description = Exam.Description;
-            oldExam.Title = Exam.Title;
-            oldExam.DurationMinutes = Exam.DurationMinutes;
-            oldExam.TotalMarks = Exam.TotalMarks;
-            oldExam.StartDate = Exam.StartDate;
-            oldExam.EndDate = Exam.EndDate;
+            oldGroup.Name = Group.Name;
+            oldGroup.CourseId = Group.CourseId;
+            oldGroup.TeacherId = Group.TeacherId;
+            oldGroup.Capacity = Group.Capacity;
+            oldGroup.StartDate = Group.StartDate;
+            oldGroup.EndDate = Group.EndDate;
 
             await _context.CommitAsync(cancellationToken);
 
-            TempData["success-notification"] = "Exam updated successfully.";
+            TempData["success-notification"] = "Group updated successfully.";
 
             return RedirectToAction(nameof(Index));
         }
         [HttpPost]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
-            var Exam = await _context.GetOneAsync(
-                c => c.ExamId == id,
+            var Group = await _context.GetOneAsync(
+                c => c.GroupId == id,
                 cancellationToken: cancellationToken);
 
-            if (Exam == null)
+            if (Group == null)
                 return NotFound();
 
-            _context.Delete(Exam);
+            _context.Delete(Group);
             await _context.CommitAsync(cancellationToken);
 
-            TempData["success-notification"] = "Exam deleted successfully.";
+            TempData["success-notification"] = "Group deleted successfully.";
 
             return RedirectToAction(nameof(Index));
         }

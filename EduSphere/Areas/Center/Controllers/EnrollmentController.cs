@@ -1,24 +1,25 @@
 ﻿using EduSphere.Repositories.IRepositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
+using EnrollmentModel = EduSphere.Models.Enrollment;
 
-namespace EduSphere.Areas.Admin.Controllers
+namespace EduSphere.Areas.Center.Controllers
 {
     [Area(SD.CENTER_AREA)]
     public class EnrollmentController : Controller
     {
 
-        private readonly IRepository<Enrollment> _enrollmentRepository;
+        private readonly IRepository<EnrollmentModel> _context;
 
-        public EnrollmentController(IRepository<Enrollment> enrollmentRepository)
+        public EnrollmentController(IRepository<EnrollmentModel> context)
         {
-            _enrollmentRepository = enrollmentRepository;
+            _context = context;
         }
 
         public async Task<IActionResult> Index(int page = 1, string? query = null, CancellationToken cancellationToken = default)
         {
-            var Enrollments = await _enrollmentRepository.GetAsync(
-                includes: new Expression<Func<Enrollment, object>>[]
+            var Enrollments = await _context.GetAsync(
+                includes: new Expression<Func<EnrollmentModel, object>>[]
                 {
                     s => s.Student
                 },
@@ -46,43 +47,78 @@ namespace EduSphere.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new Enrollment());
+            return View(new EnrollmentModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Enrollment Enrollment, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Create(EnrollmentModel Enrollment, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return View(Enrollment);
 
-
-
-            await _enrollmentRepository.CreateAsync(Enrollment, cancellationToken);
-            await _enrollmentRepository.CommitAsync(cancellationToken);
+            await _context.CreateAsync(Enrollment, cancellationToken);
+            await _context.CommitAsync(cancellationToken);
 
             TempData["success-notification"] = "Add Enrollment Successfully";
 
             return RedirectToAction(nameof(Index));
         }
-
         [HttpGet]
-        public IActionResult Update()
+        public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
-            return View(new Enrollment());
+            var Enrollment = await _context.GetOneAsync(
+                a => a.EnrollmentId == id,
+                includes: new Expression<Func<EnrollmentModel, object>>[]
+                {
+                    a => a.Student,
+                    a => a.Group
+                },
+                cancellationToken: cancellationToken);
+
+            if (Enrollment == null)
+                return NotFound();
+
+            return View(Enrollment);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(EnrollmentModel Enrollment, CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+                return View(Enrollment);
+
+            var oldEnrollment = await _context.GetOneAsync(
+                a => a.EnrollmentId == Enrollment.EnrollmentId,
+                tracked: true,
+                cancellationToken: cancellationToken);
+
+            if (oldEnrollment == null)
+                return NotFound();
+
+            oldEnrollment.GroupId = Enrollment.GroupId;
+            oldEnrollment.StudentId = Enrollment.StudentId;
+            oldEnrollment.Status = Enrollment.Status;
+            oldEnrollment.EnrollmentDate = Enrollment.EnrollmentDate;
+
+            await _context.CommitAsync(cancellationToken);
+
+            TempData["success-notification"] = "Attendance Record updated successfully.";
+
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
-            var Student = await _enrollmentRepository.GetOneAsync(
-                c => c.StudentId == id,
+            var Student = await _context.GetOneAsync(
+                c => c.EnrollmentId == id,
                 cancellationToken: cancellationToken);
 
             if (Student == null)
                 return NotFound();
 
-            _enrollmentRepository.Delete(Student);
-            await _enrollmentRepository.CommitAsync(cancellationToken);
+            _context.Delete(Student);
+            await _context.CommitAsync(cancellationToken);
 
             TempData["success-notification"] = "Student deleted successfully.";
 

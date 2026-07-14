@@ -1,0 +1,73 @@
+﻿@model Schedule
+
+<div class="container">
+    <div class="row mb-3 align-items-center my-3">
+        <div class="col-md-6">
+            <h2 class="display-6">Update Schedule</h2>
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <div class="col-12">
+            <form method="post" enctype="multipart/form-data">
+                <!-- Ensure the Edit form posts the id -->
+                <input type="hidden" asp-for="ScheduleId" />
+               @*  <div class="mb-3">
+                    <label for="Name" class="form-label">ScheduleId</label>
+                    <input class="form-control" placeholder="ScheduleId" asp-for="ScheduleId">
+                    <span asp-validation-for="ScheduleId" class="text-danger"></span>
+                </div> *@
+               
+                <div class="mb-3">
+                    <label for="Img" class="form-label">GroupId</label>
+                    <input class="form-control" placeholder="GroupId" asp-for="GroupId">
+                    <span asp-validation-for="GroupId" class="text-danger"></span>
+
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">Day</label>
+                    <input class="form-control" placeholder="Day" asp-for="Day">
+                    <span asp-validation-for="Day" class="text-danger"></span>
+
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">Room</label>
+                    <input class="form-control" placeholder="Room" asp-for="Room">
+                    <span asp-validation-for="Room" class="text-danger"></span>
+
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">StartTime</label>
+                    <input class="form-control" placeholder="StartTime" asp-for="StartTime">
+                    <span asp-validation-for="StartTime" class="text-danger"></span>
+
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">EndTime</label>
+                    <input class="form-control" placeholder="EndTime" asp-for="EndTime">
+                    <span asp-validation-for="EndTime" class="text-danger"></span>
+
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@* <script>
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById("preview");
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result; // الصورة الجديدة
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script> *@
+
+

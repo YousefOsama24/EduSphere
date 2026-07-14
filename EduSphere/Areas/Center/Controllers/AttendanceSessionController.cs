@@ -1,25 +1,25 @@
 ﻿using EduSphere.Repositories.IRepositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
+using AttendanceSessionModel = EduSphere.Models.AttendanceSession;
 
-
-namespace EduSphere.Areas.Admin.Controllers
+namespace EduSphere.Areas.Center.Controllers
 {
     [Area(SD.CENTER_AREA)]
     public class AttendanceSessionController : Controller
     {
 
-        private readonly IRepository<AttendanceSession> _attendanceSessionRepository;
+        private readonly IRepository<AttendanceSessionModel> _context;
 
-        public AttendanceSessionController(IRepository<AttendanceSession> attendanceSessionRepository)
+        public AttendanceSessionController(IRepository<AttendanceSessionModel> context)
         {
-            _attendanceSessionRepository = attendanceSessionRepository;
+            _context = context;
         }
 
         public async Task<IActionResult> Index(int page = 1, string? query = null, CancellationToken cancellationToken = default)
         {
-            var AttendanceSessions = await _attendanceSessionRepository.GetAsync(
-                includes: new Expression<Func<AttendanceSession, object>>[]
+            var AttendanceSessions = await _context.GetAsync(
+                includes: new Expression<Func<AttendanceSessionModel, object>>[]
                 {
                     s => s.Teacher
                 },
@@ -47,44 +47,80 @@ namespace EduSphere.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new AttendanceSession());
+            return View(new AttendanceSessionModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(AttendanceSession AttendanceSession, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Create(AttendanceSessionModel AttendanceSession, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return View(AttendanceSession);
 
 
 
-            await _attendanceSessionRepository.CreateAsync(AttendanceSession, cancellationToken);
-            await _attendanceSessionRepository.CommitAsync(cancellationToken);
+            await _context.CreateAsync(AttendanceSession, cancellationToken);
+            await _context.CommitAsync(cancellationToken);
 
             TempData["success-notification"] = "Add AttendanceSession Successfully";
 
             return RedirectToAction(nameof(Index));
         }
-
         [HttpGet]
-        public IActionResult Update()
+        public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
-            return View(new AttendanceSession());
+            var AttendanceSession = await _context.GetOneAsync(
+                a => a.AttendanceSessionId == id,
+                includes: new Expression<Func<AttendanceSessionModel, object>>[]
+                {
+                    a => a.Group,
+                    a => a.Teacher
+                },
+                cancellationToken: cancellationToken);
+
+            if (AttendanceSession == null)
+                return NotFound();
+
+            return View(AttendanceSession);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(AttendanceSessionModel AttendanceSession, CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+                return View(AttendanceSession);
 
+            var oldAttendanceSession = await _context.GetOneAsync(
+                a => a.AttendanceSessionId == AttendanceSession.AttendanceSessionId,
+                tracked: true,
+                cancellationToken: cancellationToken);
+
+            if (oldAttendanceSession == null)
+                return NotFound();
+
+            oldAttendanceSession.GroupId = AttendanceSession.GroupId;
+            oldAttendanceSession.TeacherId = AttendanceSession.TeacherId;
+            oldAttendanceSession.Title = AttendanceSession.Title;
+            oldAttendanceSession.SessionDate = AttendanceSession.SessionDate;
+
+            await _context.CommitAsync(cancellationToken);
+
+            TempData["success-notification"] = "Attendance Record updated successfully.";
+
+            return RedirectToAction(nameof(Index));
+        }
         [HttpPost]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
-            var AttendanceSession = await _attendanceSessionRepository.GetOneAsync(
+            var AttendanceSession = await _context.GetOneAsync(
                 c => c.AttendanceSessionId == id,
                 cancellationToken: cancellationToken);
 
             if (AttendanceSession == null)
                 return NotFound();
 
-            _attendanceSessionRepository.Delete(AttendanceSession);
-            await _attendanceSessionRepository.CommitAsync(cancellationToken);
+            _context.Delete(AttendanceSession);
+            await _context.CommitAsync(cancellationToken);
 
             TempData["success-notification"] = "AttendanceSession deleted successfully.";
 

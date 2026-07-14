@@ -1,0 +1,94 @@
+﻿@model Course
+
+<div class="container">
+    <div class="row mb-3 align-items-Course my-3">
+        <div class="col-md-6">
+            <h2 class="display-6">Update Course</h2>
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <div class="col-12">
+            <form method="post" enctype="multipart/form-data">
+                <!-- Ensure the Edit form posts the id -->
+                <input type="hidden" asp-for="CourseId" />
+               @*  <div class="mb-3">
+                    <label for="Name" class="form-label">CourseId</label>
+                    <input class="form-control" placeholder="CourseId" asp-for="CourseId">
+                    <span asp-validation-for="CourseId" class="text-danger"></span>
+                </div> *@
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Title</label>
+                    <input class="form-control" placeholder="Title" asp-for="Title">
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">CenterId</label>
+                    <input class="form-control" placeholder="CenterId" asp-for="CenterId">
+                    <span asp-validation-for="CenterId" class="text-danger"></span>
+
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">TeacherId</label>
+                    <input class="form-control" placeholder="TeacherId" asp-for="TeacherId">
+                    <span asp-validation-for="TeacherId" class="text-danger"></span>
+
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">Description</label>
+                    <input class="form-control" placeholder="Description" asp-for="Description">
+                    <span asp-validation-for="Description" class="text-danger"></span>
+
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">Price</label>
+                    <input class="form-control" placeholder="Price" asp-for="Price">
+                    <span asp-validation-for="Price" class="text-danger"></span>
+
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">ThumbnailUrl</label>
+                    <input class="form-control" placeholder="ThumbnailUrl" asp-for="ThumbnailUrl">
+                    <span asp-validation-for="ThumbnailUrl" class="text-danger"></span>
+
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">CreatedAt</label>
+                    <input class="form-control" placeholder="CreatedAt" asp-for="CreatedAt">
+                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
+
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">UpdatedAt</label>
+                    <input class="form-control" placeholder="UpdatedAt" asp-for="UpdatedAt">
+                    <span asp-validation-for="UpdatedAt" class="text-danger"></span>
+
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" asp-for="IsPublished" />
+                    <label class="form-check-label" asp-for="IsPublished"></label>
+                </div>
+               
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@* <script>
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById("preview");
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result; // الصورة الجديدة
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script> *@
+
+

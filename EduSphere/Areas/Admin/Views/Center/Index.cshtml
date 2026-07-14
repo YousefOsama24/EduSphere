@@ -1,15 +1,15 @@
-﻿@model ChoicesVM
+﻿@model CentersVM
 
 <div class="container">
     <div class="row mb-3 align-items-center my-3">
         <div class="col-md-6">
-            <h2 class="display-6">All Choices</h2>
+            <h2 class="display-6">All Centers</h2>
         </div>
         @*if (User.IsInRole(SD.SUPER_ADMIN_ROLE) || User.IsInRole(SD.ADMIN_ROLE))
         {*@
-        <div class="col-md-6 text-md-end text-start mt-2 mt-md-0">
-            <a href="/Center/Choice/Create" class="btn btn-success"><i class="bi bi-plus-circle"></i> Create</a>
-        </div>
+            <div class="col-md-6 text-md-end text-start mt-2 mt-md-0">
+                <a href="/Admin/Center/Create" class="btn btn-success"><i class="bi bi-plus-circle"></i> Create</a>
+            </div>
         @* } *@
     </div>
 
@@ -20,7 +20,7 @@
                 <div class="col-12">
                     <form>
                         <div class="row">
-                            <!-- Choice Name -->
+                            <!-- Center Name -->
                             <div class="col-md-3">
                                 <input type="text" class="form-control" placeholder="Name" name="query" value="@ViewBag.Query">
                             </div>
@@ -41,26 +41,39 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th scope="col">ChoiceId</th>
-                        <th scope="col">QuestionId</th>
-                        <th scope="col">Content</th>
-                        <th scope="col">IsCorrect</th>
-
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">LogoUrl</th>
+                        <th scope="col">CreatedAt</th>
+                        <th scope="col">UpdatedAt</th>
+                        <th scope="col">IsDeleted</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.Choices)
+                    @foreach (var item in Model.Centers)
                     {
                         <tr>
-                            <th scope="row">@item.ChoiceId</th>
-                            <td>@item.QuestionId</td>
-                            <td>@item.Content</td>
-                            <td>@item.IsCorrect</td>
+                            <th scope="row">@item.CenterId</th>
+                            <td>@item.Name</td>
+                            <td>@item.Description</td>
+                            <td>@item.Email</td>
+                            <td>@item.Address</td>
+                            <td>@item.Phone</td>
+                            <td>@item.LogoUrl</td>
+                            <td>@item.CreatedAt</td>
+                            <td>@item.UpdatedAt</td>
+                            <td>@item.IsDeleted</td>
 
+                            
                             <td>
-                                <a href="/Center/Choice/Update/@item.ChoiceId" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i> Edit</a>
+                                <a href="/Admin/Center/Update/@item.CenterId" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i> Edit</a>
                                 <form asp-action="Delete"
-                                      asp-route-id="@item.ChoiceId"
+                                      asp-route-id="@item.CenterId"
                                       method="post"
                                       style="display:inline">
 
@@ -69,7 +82,7 @@
                                         <i class="bi bi-trash"></i> Delete
                                     </button>
                                 </form>
-                                @* @if (User.IsInRole(SD.SUPER_ADMIN_ROLE) || User.IsInRole(SD.ADMIN_ROLE))
+                               @* @if (User.IsInRole(SD.SUPER_ADMIN_ROLE) || User.IsInRole(SD.ADMIN_ROLE))
                                 {
                                    
                                 }
@@ -91,22 +104,22 @@
                 <ul class="pagination justify-content-center">
                     @if (Model.CurrentPage > 1)
                     {
-                        <li class="page-item"><a class="page-link" href="/Center/Choice/Index?page=@(Model.CurrentPage - 1)">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="/Admin/Center/Index?page=@(Model.CurrentPage - 1)">Previous</a></li>
                     }
                     @for (var i = 1; i <= Model.TotalPages; i++)
                     {
                         @if (i == Model.CurrentPage)
                         {
-                            <li class="page-item active"><a class="page-link" href="/Center/Choice/Index?page=@i">@i</a></li>
+                            <li class="page-item active"><a class="page-link" href="/Admin/Center/Index?page=@i">@i</a></li>
                         }
                         else
                         {
-                            <li class="page-item"><a class="page-link" href="/Center/Choice/Index?page=@i">@i</a></li>
+                            <li class="page-item"><a class="page-link" href="/Admin/Center/Index?page=@i">@i</a></li>
                         }
                     }
                     @if (Model.CurrentPage != Model.TotalPages)
                     {
-                        <li class="page-item"><a class="page-link" href="/Center/Choice/Index?page=@(Model.CurrentPage + 1)">Next</a></li>
+                        <li class="page-item"><a class="page-link" href="/Admin/Center/Index?page=@(Model.CurrentPage + 1)">Next</a></li>
                     }
                 </ul>
             </nav>

@@ -9,24 +9,24 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using AttendanceRecordModel = EduSphere.Models.AttendanceRecord;
 
-
-namespace EduSphere.Areas.Admin.Controllers
+namespace EduSphere.Areas.Center.Controllers
 {
     [Area(SD.CENTER_AREA)]
     public class AttendanceRecordController : Controller
     {
-        private readonly IRepository<AttendanceRecord> _attendanceRecordRepository;
+        private readonly IRepository<AttendanceRecordModel> _context;
 
-        public AttendanceRecordController(IRepository<AttendanceRecord> attendanceRecordRepository)
+        public AttendanceRecordController(IRepository<AttendanceRecordModel> context)
         {
-            _attendanceRecordRepository = attendanceRecordRepository;
+            _context = context;
         }
 
         public async Task<IActionResult> Index(int page = 1, string? query = null, CancellationToken cancellationToken = default)
         {
-            var AttendanceRecords = await _attendanceRecordRepository.GetAsync(
-                includes: new Expression<Func<AttendanceRecord, object>>[]
+            var AttendanceRecords = await _context.GetAsync(
+                includes: new Expression<Func<AttendanceRecordModel, object>>[]
                 {
                     s => s.Student
                 },
@@ -54,42 +54,80 @@ namespace EduSphere.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new AttendanceRecord());
+            return View(new AttendanceRecordModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(AttendanceRecord AttendanceRecord, CancellationToken cancellationToken = default)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(AttendanceRecordModel AttendanceRecord, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return View(AttendanceRecord);
 
+            await _context.CreateAsync(AttendanceRecord, cancellationToken);
+            await _context.CommitAsync(cancellationToken);
 
-
-            await _attendanceRecordRepository.CreateAsync(AttendanceRecord, cancellationToken);
-            await _attendanceRecordRepository.CommitAsync(cancellationToken);
-
-            TempData["success-notification"] = "Add AttendanceRecord Successfully";
+            TempData["success-notification"] = "AttendanceRecord added successfully.";
 
             return RedirectToAction(nameof(Index));
         }
         // Controller GET: return a tracked entity
-        public IActionResult Update()
+        [HttpGet]
+        public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
-            return View();
+            var attendanceRecord = await _context.GetOneAsync(
+                a => a.AttendanceRecordId == id,
+                includes: new Expression<Func<AttendanceRecordModel, object>>[]
+                {
+                    a => a.Student,
+                    a => a.AttendanceSession
+                },
+                cancellationToken: cancellationToken);
+
+            if (attendanceRecord == null)
+                return NotFound();
+
+            return View(attendanceRecord);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(AttendanceRecordModel attendanceRecord, CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+                return View(attendanceRecord);
+
+            var oldAttendanceRecord = await _context.GetOneAsync(
+                a => a.AttendanceRecordId == attendanceRecord.AttendanceRecordId,
+                tracked: true,
+                cancellationToken: cancellationToken);
+
+            if (oldAttendanceRecord == null)
+                return NotFound();
+
+            oldAttendanceRecord.AttendanceSessionId = attendanceRecord.AttendanceSessionId;
+            oldAttendanceRecord.StudentId = attendanceRecord.StudentId;
+            oldAttendanceRecord.Status = attendanceRecord.Status;
+            oldAttendanceRecord.Notes = attendanceRecord.Notes;
+
+            await _context.CommitAsync(cancellationToken);
+
+            TempData["success-notification"] = "Attendance Record updated successfully.";
+
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
-            var AttendanceRecord = await _attendanceRecordRepository.GetOneAsync(
+            var AttendanceRecord = await _context.GetOneAsync(
                 c => c.AttendanceRecordId == id,
                 cancellationToken: cancellationToken);
 
             if (AttendanceRecord == null)
                 return NotFound();
 
-            _attendanceRecordRepository.Delete(AttendanceRecord);
-            await _attendanceRecordRepository.CommitAsync(cancellationToken);
+            _context.Delete(AttendanceRecord);
+            await _context.CommitAsync(cancellationToken);
 
             TempData["success-notification"] = "AttendanceRecord deleted successfully.";
 
