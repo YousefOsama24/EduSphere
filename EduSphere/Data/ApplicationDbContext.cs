@@ -1,6 +1,7 @@
 ﻿using EduSphere.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace EduSphere.Data
 {
@@ -200,6 +201,11 @@ namespace EduSphere.Data
     .WithMany(q => q.StudentAnswers)
     .HasForeignKey(sa => sa.QuestionId)
     .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Student>()
+    .HasOne(s => s.Parent)
+    .WithMany(p => p.Students)
+    .HasForeignKey(s => s.ParentId)
+    .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

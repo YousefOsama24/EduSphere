@@ -1,8 +1,578 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model EduSphere.ViewModel.DashboardVM
+
+@{
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container-fluid">
+
+    <!-- Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                Center Dashboard
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Welcome back 👋
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <span class="badge bg-success fs-6">
+
+                @DateTime.Now.ToString("dddd, dd MMM yyyy")
+
+            </span>
+
+        </div>
+
+    </div>
+
+    <!-- Statistics -->
+
+    <div class="row g-4">
+
+        <div class="col-xl-3 col-lg-4 col-md-6">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Students
+
+                    </h6>
+
+                    <h2 class="fw-bold">
+
+                        @Model.TotalStudents
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-xl-3 col-lg-4 col-md-6">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Teachers
+
+                    </h6>
+
+                    <h2 class="fw-bold">
+
+                        @Model.TotalTeachers
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-xl-3 col-lg-4 col-md-6">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Courses
+
+                    </h6>
+
+                    <h2 class="fw-bold">
+
+                        @Model.TotalCourses
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-xl-3 col-lg-4 col-md-6">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Groups
+
+                    </h6>
+
+                    <h2 class="fw-bold">
+
+                        @Model.TotalGroups
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-xl-3 col-lg-4 col-md-6">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Parents
+
+                    </h6>
+
+                    <h2 class="fw-bold">
+
+                        @Model.TotalParents
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-xl-3 col-lg-4 col-md-6">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Attendance Sessions
+
+                    </h6>
+
+                    <h2 class="fw-bold">
+
+                        @Model.TotalAttendanceSessions
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-xl-3 col-lg-4 col-md-6">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Today's Attendance
+
+                    </h6>
+
+                    <h2 class="fw-bold">
+
+                        @Model.TodayAttendance
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-xl-3 col-lg-4 col-md-6">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Active Subscriptions
+
+                    </h6>
+
+                    <h2 class="fw-bold">
+
+                        @Model.ActiveSubscriptions
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Quick Actions -->
+
+    <div class="card shadow border-0 mt-5">
+
+        <div class="card-header bg-white">
+
+            <h4 class="mb-0">
+
+                Quick Actions
+
+            </h4>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <div class="col-lg-3">
+
+                    <a asp-controller="Student"
+                           asp-action="Create"
+                           class="btn btn-primary w-100">
+
+                        Add Student
+
+                    </a>
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <a asp-controller="Teacher"
+                           asp-action="Create"
+                           class="btn btn-success w-100">
+
+                        Add Teacher
+
+                    </a>
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <a asp-controller="Enrollment"
+                           asp-action="Create"
+                           class="btn btn-warning w-100">
+
+                        New Enrollment
+
+                    </a>
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <a asp-controller="AttendanceRecord"
+                           asp-action="Create"
+                           class="btn btn-danger w-100">
+
+                        Attendance
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- Latest Students & Teachers -->
+
+<div class="row mt-4">
+
+    <!-- Latest Students -->
+
+    <div class="col-lg-6">
+
+        <div class="card shadow border-0 h-100">
+
+            <div class="card-header bg-white">
+
+                <h5 class="mb-0">
+
+                    Latest Students
+
+                </h5>
+
+            </div>
+
+            <div class="card-body p-0">
+
+                <table class="table table-hover mb-0">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th>Name</th>
+
+                            <th>Parent</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var student in Model.LatestStudents)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    @student.User?.FullName
+
+                                </td>
+
+                                <td>
+
+                                    @(student.Parent?.User?.FullName ?? "-")
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Latest Teachers -->
+
+    <div class="col-lg-6">
+
+        <div class="card shadow border-0 h-100">
+
+            <div class="card-header bg-white">
+
+                <h5 class="mb-0">
+
+                    Latest Teachers
+
+                </h5>
+
+            </div>
+
+            <div class="card-body p-0">
+
+                <table class="table table-hover mb-0">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th>Name</th>
+
+                            <th>Specialization</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var teacher in Model.LatestTeachers)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    @teacher.User?.FullName
+
+                                </td>
+
+                                <td>
+
+                                    @teacher.Specialization
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<div class="card shadow border-0 mt-4">
+
+    <div class="card-header bg-white">
+
+        <h5 class="mb-0">
+
+            Latest Enrollments
+
+        </h5>
+
+    </div>
+
+    <div class="card-body p-0">
+
+        <table class="table table-striped table-hover mb-0">
+
+            <thead class="table-light">
+
+                <tr>
+
+                    <th>Student</th>
+
+                    <th>Course</th>
+
+                    <th>Date</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var enrollment in Model.LatestEnrollments)
+                {
+                    <tr>
+
+                        <td>
+
+                            @enrollment.Student?.User?.FullName
+
+                        </td>
+
+                        <td>
+
+                            @enrollment.Course?.Title
+
+                        </td>
+
+                        <td>
+
+                            @enrollment.EnrollmentDate.ToString("dd MMM yyyy")
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+<div class="card shadow border-0 mt-4">
+
+    <div class="card-header bg-white">
+
+        <h5 class="mb-0">
+
+            Today's Sessions
+
+        </h5>
+
+    </div>
+
+    <div class="card-body p-0">
+
+        <table class="table table-hover mb-0">
+
+            <thead class="table-light">
+
+                <tr>
+
+                    <th>Title</th>
+
+                    <th>Teacher</th>
+
+                    <th>Group</th>
+
+                    <th>Date</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var session in Model.TodaySessions)
+                {
+                    <tr>
+
+                        <td>
+
+                            @session.Title
+
+                        </td>
+
+                        <td>
+
+                            @session.Teacher?.User?.FullName
+
+                        </td>
+
+                        <td>
+
+                            @session.Group?.Name
+
+                        </td>
+
+                        <td>
+
+                            @session.SessionDate.ToString("dd MMM yyyy HH:mm")
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
 </div>

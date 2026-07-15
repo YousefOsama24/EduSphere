@@ -19,6 +19,9 @@
         public int GroupId { get; set; }
 
         public Group? Group { get; set; }
+        public int CourseId { get; set; }
+
+        public Course? Course { get; set; }
 
         public DateTime EnrollmentDate { get; set; } = DateTime.Now;
 

@@ -1,0 +1,62 @@
+﻿@model Lecture
+<div class="container">
+    <div class="row mb-3 align-items-Lecture my-3">
+        <div class="col-md-6">
+            <h2 class="display-6">Create new Lecture</h2>
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <div class="col-12">
+            <form method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Title</label>
+                    <input class="form-control" placeholder="Title" asp-for="Title">
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">CourseId</label>
+                    <input class="form-control" placeholder="CourseId" asp-for="CourseId">
+                    <span asp-validation-for="CourseId" class="text-danger"></span>
+                    
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">VideoUrl</label>
+                    <input class="form-control" placeholder="VideoUrl" asp-for="VideoUrl">
+                    <span asp-validation-for="VideoUrl" class="text-danger"></span>
+                    
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">Description</label>
+                    <input class="form-control" placeholder="Description" asp-for="Description">
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                    
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">PdfUrl</label>
+                    <input class="form-control" placeholder="PdfUrl" asp-for="PdfUrl">
+                    <span asp-validation-for="PdfUrl" class="text-danger"></span>
+                    
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">Order</label>
+                    <input class="form-control" placeholder="Order" asp-for="Order">
+                    <span asp-validation-for="Order" class="text-danger"></span>
+                    
+                </div>
+                <div class="mb-3">
+                    <label for="Img" class="form-label">CreatedAt</label>
+                    <input class="form-control" placeholder="CreatedAt" asp-for="CreatedAt">
+                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                    
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" asp-for="IsPreview" />
+                    <label class="form-check-label" asp-for="IsPreview"></label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>

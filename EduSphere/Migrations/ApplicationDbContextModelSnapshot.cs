@@ -327,6 +327,9 @@ namespace EduSphere.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EnrollmentId"));
 
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("EnrollmentDate")
                         .HasColumnType("datetime2");
 
@@ -340,6 +343,8 @@ namespace EduSphere.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("EnrollmentId");
+
+                    b.HasIndex("CourseId");
 
                     b.HasIndex("GroupId");
 
@@ -744,6 +749,9 @@ namespace EduSphere.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -751,6 +759,8 @@ namespace EduSphere.Migrations
                     b.HasKey("StudentId");
 
                     b.HasIndex("CenterId");
+
+                    b.HasIndex("ParentId");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -1119,6 +1129,12 @@ namespace EduSphere.Migrations
 
             modelBuilder.Entity("EduSphere.Models.Enrollment", b =>
                 {
+                    b.HasOne("EduSphere.Models.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("EduSphere.Models.Group", "Group")
                         .WithMany("Enrollments")
                         .HasForeignKey("GroupId")
@@ -1130,6 +1146,8 @@ namespace EduSphere.Migrations
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Course");
 
                     b.Navigation("Group");
 
@@ -1297,6 +1315,12 @@ namespace EduSphere.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("EduSphere.Models.Parent", "Parent")
+                        .WithMany("Students")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("EduSphere.Models.ApplicationUser", "User")
                         .WithOne("Student")
                         .HasForeignKey("EduSphere.Models.Student", "UserId")
@@ -1304,6 +1328,8 @@ namespace EduSphere.Migrations
                         .IsRequired();
 
                     b.Navigation("Center");
+
+                    b.Navigation("Parent");
 
                     b.Navigation("User");
                 });
@@ -1494,6 +1520,8 @@ namespace EduSphere.Migrations
             modelBuilder.Entity("EduSphere.Models.Parent", b =>
                 {
                     b.Navigation("ParentStudents");
+
+                    b.Navigation("Students");
                 });
 
             modelBuilder.Entity("EduSphere.Models.Question", b =>

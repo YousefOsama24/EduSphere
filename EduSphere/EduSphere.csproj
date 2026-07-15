@@ -20,15 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Areas\Center\ViewModels\" />
-	  <Folder Include="Areas\Parent\Controllers\" />
-	  <Folder Include="Areas\SuperAdmin\Controllers\" />
 	  <Folder Include="Areas\SuperAdmin\ViewModels\" />
-	  <Folder Include="Areas\Parent\ViewModels\" />
-	  <Folder Include="Areas\Student\Controllers\" />
-	  <Folder Include="Areas\Student\ViewModels\" />
-	  <Folder Include="Areas\Teacher\Controllers\" />
-	  <Folder Include="Areas\Center\Controllers\" />
 	  <Folder Include="Areas\Teacher\ViewModels\" />
 	  <Folder Include="wwwroot\images\centers\" />
 	  <Folder Include="wwwroot\images\courses\" />

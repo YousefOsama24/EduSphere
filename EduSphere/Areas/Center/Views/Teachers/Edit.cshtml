@@ -1,0 +1,72 @@
+﻿@model EduSphere.Models.Teacher
+
+@{
+    ViewData["Title"] = "تعديل بيانات المدرس";
+}
+
+<div class="container mt-4" dir="rtl">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-warning text-dark py-3">
+                    <h4 class="mb-0 fw-bold">تعديل بيانات: @Model.User?.UserName</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        
+                        <!-- الـ ID المخفي المهم جداً للـ Update -->
+                        <input type="hidden" asp-for="TeacherId" />
+
+                        <div class="row g-3">
+                            <!-- تعديل الحساب -->
+                            <div class="col-md-6">
+                                <label asp-for="UserId" class="form-label fw-semibold">تغيير حساب المستخدم</label>
+                                <select asp-for="UserId" class="form-select" asp-items="ViewBag.UserId"></select>
+                                <span asp-validation-for="UserId" class="text-danger small"></span>
+                            </div>
+
+                            <!-- تعديل السنتر -->
+                            <div class="col-md-6">
+                                <label asp-for="CenterId" class="form-label fw-semibold">تغيير السنتر</label>
+                                <select asp-for="CenterId" class="form-select" asp-items="ViewBag.CenterId"></select>
+                                <span asp-validation-for="CenterId" class="text-danger small"></span>
+                            </div>
+
+                            <!-- التخصص -->
+                            <div class="col-md-6">
+                                <label asp-for="Specialization" class="form-label fw-semibold">التخصص / المادة</label>
+                                <input asp-for="Specialization" class="form-control" />
+                                <span asp-validation-for="Specialization" class="text-danger small"></span>
+                            </div>
+
+                            <!-- تاريخ التعيين -->
+                            <div class="col-md-6">
+                                <label asp-for="HireDate" class="form-label fw-semibold">تاريخ التعيين</label>
+                                <input asp-for="HireDate" class="form-control" type="date" />
+                                <span asp-validation-for="HireDate" class="text-danger small"></span>
+                            </div>
+
+                            <!-- تغيير حالة النشاط -->
+                            <div class="col-12 my-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" asp-for="IsActive" />
+                                    <label class="form-check-label fw-semibold me-4" asp-for="IsActive">المدرس نشط حالياً بالسنتر</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-top d-flex gap-2">
+                            <button type="submit" class="btn btn-warning px-4 fw-semibold">حفظ التعديلات</button>
+                            <a asp-action="Index" class="btn btn-light px-4">إلغاء والعودة</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* @section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} *@

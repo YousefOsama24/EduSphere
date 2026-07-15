@@ -149,7 +149,12 @@ namespace EduSphere.Areas.Identity.Controllers
         }
 
         #endregion
-
+        [HttpGet]
+        public async Task<IActionResult> LogoutNow()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(Login));
+        }
         #region Logout
 
         [HttpPost]
@@ -175,11 +180,6 @@ namespace EduSphere.Areas.Identity.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            if (User.Identity!.IsAuthenticated)
-            {
-                return RedirectToAction(nameof(RedirectToDashboard));
-            }
-
             return View();
         }
 
@@ -297,315 +297,322 @@ namespace EduSphere.Areas.Identity.Controllers
             if (user == null)
                 return RedirectToAction(nameof(Login));
 
-            switch (user.UserType)
-            {
-                case UserType.SuperAdmin:
+            /* switch (user.UserType)
+               {
+                   case UserType.SuperAdmin:
 
-                    return RedirectToAction(
-                        "Index",
-                        "Home",
-                        new { area = "SuperAdmin" });
+                       return RedirectToAction(
+                           "Index",
+                           "Home",
+                           new { area = "SuperAdmin" });
 
-                case UserType.CenterManager:
+                   case UserType.CenterManager:
 
-                    return RedirectToAction(
-                        "Index",
-                        "Home",
-                        new { area = "Center" });
+                       return RedirectToAction(
+                           "Index",
+                           "Home",
+                           new { area = "Center" });
 
-                case UserType.Teacher:
+                   case UserType.Teacher:
 
-                    return RedirectToAction(
-                        "Index",
-                        "Home",
-                        new { area = "Teacher" });
+                       return RedirectToAction(
+                           "Index",
+                           "Home",
+                           new { area = "Teacher" });
 
-                case UserType.Student:
+                   case UserType.Student:
 
-                    return RedirectToAction(
-                        "Index",
-                        "Home",
-                        new { area = "Student" });
+                       return RedirectToAction(
+                           "Index",
+                           "Home",
+                           new { area = "Student" });
 
-                case UserType.Parent:
+                   case UserType.Parent:
 
-                    return RedirectToAction(
-                        "Index",
-                        "Home",
-                        new { area = "Parent" });
+                       return RedirectToAction(
+                           "Index",
+                           "Home",
+                           new { area = "Parent" });
 
-                default:
+                   default:
 
-                    return RedirectToAction(
-                        "Index",
-                        "Home",
-                        new { area = "" });
-            }
+                       return RedirectToAction(
+                           "Index",
+                           "Home",
+                           new { area = "" });
+               }
+           }
+            */
+
+            return Content(
+      $"Email: {user.Email}\n" +
+      $"UserType: {user.UserType}\n" +
+      $"Roles: {string.Join(", ", await _userManager.GetRolesAsync(user))}");
         }
 
-        #endregion
+#endregion
 
-        #endregion
+#endregion
 
-        #region Profile
+            #region Profile
 
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> Profile()
-        {
-            var user = await _userManager.GetUserAsync(User);
-
-            if (user == null)
-                return RedirectToAction(nameof(Login));
-
-            ProfileViewModel model = new()
+            [HttpGet]
+            [Authorize]
+            public async Task<IActionResult> Profile()
             {
-                UserId = user.Id,
-                FullName = user.FullName,
-                Email = user.Email!,
-                PhoneNumber = user.PhoneNumber!,
-                UserType = user.UserType,
-                CurrentProfileImage = user.ProfileImage,
-                CreatedAt = user.CreatedAt
-            };
+                var user = await _userManager.GetUserAsync(User);
 
-            return View(model);
-        }
+                if (user == null)
+                    return RedirectToAction(nameof(Login));
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize]
-        public async Task<IActionResult> Profile(ProfileViewModel model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            var user = await _userManager.GetUserAsync(User);
-
-            if (user == null)
-                return RedirectToAction(nameof(Login));
-
-            user.FullName = model.FullName;
-            user.PhoneNumber = model.PhoneNumber;
-
-            if (model.ProfileImage != null)
-            {
-                if (!string.IsNullOrEmpty(user.ProfileImage))
+                ProfileViewModel model = new()
                 {
-                    _imageService.DeleteImage(
-                        user.ProfileImage,
-                        "profiles");
+                    UserId = user.Id,
+                    FullName = user.FullName,
+                    Email = user.Email!,
+                    PhoneNumber = user.PhoneNumber!,
+                    UserType = user.UserType,
+                    CurrentProfileImage = user.ProfileImage,
+                    CreatedAt = user.CreatedAt
+                };
+
+                return View(model);
+            }
+
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            [Authorize]
+            public async Task<IActionResult> Profile(ProfileViewModel model)
+            {
+                if (!ModelState.IsValid)
+                    return View(model);
+
+                var user = await _userManager.GetUserAsync(User);
+
+                if (user == null)
+                    return RedirectToAction(nameof(Login));
+
+                user.FullName = model.FullName;
+                user.PhoneNumber = model.PhoneNumber;
+
+                if (model.ProfileImage != null)
+                {
+                    if (!string.IsNullOrEmpty(user.ProfileImage))
+                    {
+                        _imageService.DeleteImage(
+                            user.ProfileImage,
+                            "profiles");
+                    }
+
+                    user.ProfileImage =
+                        await _imageService.UploadImageAsync(
+                            model.ProfileImage,
+                            "profiles");
                 }
 
-                user.ProfileImage =
-                    await _imageService.UploadImageAsync(
-                        model.ProfileImage,
-                        "profiles");
-            }
+                var result = await _userManager.UpdateAsync(user);
+                _logger.LogInformation(
+        "PROFILE UPDATED | Email: {Email}",
+        user.Email);
 
-            var result = await _userManager.UpdateAsync(user);
-            _logger.LogInformation(
-    "PROFILE UPDATED | Email: {Email}",
-    user.Email);
-
-            if (!result.Succeeded)
-            {
-                foreach (var error in result.Errors)
+                if (!result.Succeeded)
                 {
-                    ModelState.AddModelError("", error.Description);
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+
+                    return View(model);
                 }
 
-                return View(model);
+                TempData["Success"] = "Profile updated successfully.";
+
+                return RedirectToAction(nameof(Profile));
             }
 
-            TempData["Success"] = "Profile updated successfully.";
+            #endregion
 
-            return RedirectToAction(nameof(Profile));
-        }
+            #region Change Password
 
-        #endregion
-
-        #region Change Password
-
-        [HttpGet]
-        [Authorize]
-        public IActionResult ChangePassword()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            var user = await _userManager.GetUserAsync(User);
-
-            if (user == null)
-                return RedirectToAction(nameof(Login));
-
-            var result = await _userManager.ChangePasswordAsync(
-                user,
-                model.CurrentPassword,
-                model.NewPassword);
-
-            if (!result.Succeeded)
+            [HttpGet]
+            [Authorize]
+            public IActionResult ChangePassword()
             {
-                foreach (var error in result.Errors)
+                return View();
+            }
+
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+            {
+                if (!ModelState.IsValid)
+                    return View(model);
+
+                var user = await _userManager.GetUserAsync(User);
+
+                if (user == null)
+                    return RedirectToAction(nameof(Login));
+
+                var result = await _userManager.ChangePasswordAsync(
+                    user,
+                    model.CurrentPassword,
+                    model.NewPassword);
+
+                if (!result.Succeeded)
                 {
-                    ModelState.AddModelError("", error.Description);
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+
+                    return View(model);
                 }
 
-                return View(model);
-            }
+                await _signInManager.RefreshSignInAsync(user);
 
-            await _signInManager.RefreshSignInAsync(user);
-
-            TempData["Success"] =
-                "Password changed successfully.";
-
-            _logger.LogInformation(
-    "CHANGE PASSWORD | Email: {Email}",
-    user.Email);
-
-            return RedirectToAction(nameof(Profile));
-        }
-
-        #endregion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        #region Reset Password
-
-        [HttpGet]
-        public IActionResult ResetPassword(string token, string email)
-        {
-            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
-                return BadRequest();
-
-            ResetPasswordViewModel model = new()
-            {
-                Token = token,
-                Email = email
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            var user = await _userManager.FindByEmailAsync(model.Email);
-
-            if (user == null)
-            {
-                ModelState.AddModelError("", "User not found.");
-
-                return View(model);
-            }
-
-            var result = await _userManager.ResetPasswordAsync(
-                user,
-                model.Token,
-                model.Password);
-
-            if (!result.Succeeded)
-            {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError("", error.Description);
-                }
-
-                return View(model);
-            }
-
-            TempData["Success"] =
-                "Password has been reset successfully. Please login.";
-            _logger.LogInformation(
-    "RESET PASSWORD | Email: {Email}",
-    user.Email);
-
-            return RedirectToAction(nameof(Login));
-        }
-
-        #endregion
-
-        #region Forgot Password
-
-        [HttpGet]
-        public IActionResult ForgotPassword()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            var user = await _userManager.FindByEmailAsync(model.Email);
-
-            if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
-            {
                 TempData["Success"] =
-                    "If the email exists, a password reset link has been sent.";
+                    "Password changed successfully.";
+
+                _logger.LogInformation(
+        "CHANGE PASSWORD | Email: {Email}",
+        user.Email);
+
+                return RedirectToAction(nameof(Profile));
+            }
+
+            #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            #region Reset Password
+
+            [HttpGet]
+            public IActionResult ResetPassword(string token, string email)
+            {
+                if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
+                    return BadRequest();
+
+                ResetPasswordViewModel model = new()
+                {
+                    Token = token,
+                    Email = email
+                };
+
+                return View(model);
+            }
+
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+            {
+                if (!ModelState.IsValid)
+                    return View(model);
+
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "User not found.");
+
+                    return View(model);
+                }
+
+                var result = await _userManager.ResetPasswordAsync(
+                    user,
+                    model.Token,
+                    model.Password);
+
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+
+                    return View(model);
+                }
+
+                TempData["Success"] =
+                    "Password has been reset successfully. Please login.";
+                _logger.LogInformation(
+        "RESET PASSWORD | Email: {Email}",
+        user.Email);
 
                 return RedirectToAction(nameof(Login));
             }
 
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            #endregion
 
-            var resetLink = Url.Action(
-                nameof(ResetPassword),
-                "Account",
-                new
+            #region Forgot Password
+
+            [HttpGet]
+            public IActionResult ForgotPassword()
+            {
+                return View();
+            }
+
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+            {
+                if (!ModelState.IsValid)
+                    return View(model);
+
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
                 {
-                    area = "Identity",
-                    token,
-                    email = user.Email
-                },
-                Request.Scheme);
+                    TempData["Success"] =
+                        "If the email exists, a password reset link has been sent.";
 
-            await _emailService.SendResetPasswordEmailAsync(
-                user.Email!,
-                user.FullName,
-                resetLink!);
+                    return RedirectToAction(nameof(Login));
+                }
 
-            _logger.LogInformation(
-    "FORGOT PASSWORD | Email: {Email}",
-    user.Email);
-            TempData["Success"] =
-                "Password reset link has been sent to your email.";
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            return RedirectToAction(nameof(Login));
+                var resetLink = Url.Action(
+                    nameof(ResetPassword),
+                    "Account",
+                    new
+                    {
+                        area = "Identity",
+                        token,
+                        email = user.Email
+                    },
+                    Request.Scheme);
+
+                await _emailService.SendResetPasswordEmailAsync(
+                    user.Email!,
+                    user.FullName,
+                    resetLink!);
+
+                _logger.LogInformation(
+        "FORGOT PASSWORD | Email: {Email}",
+        user.Email);
+                TempData["Success"] =
+                    "Password reset link has been sent to your email.";
+
+                return RedirectToAction(nameof(Login));
+            }
+
+            #endregion
+
+
+
+
         }
 
-        #endregion
-
-
-
-
-    }
-
-}
+    } 

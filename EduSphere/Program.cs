@@ -121,16 +121,15 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 
 #region Dependency Injection
 
-builder.Services.AddScoped(typeof(IGenericRepository<>),
-                           typeof(GenericRepository<>));
+builder.Services.AddScoped(typeof(Repository<>),
+                           typeof(Repository<>));
 
-builder.Services.AddScoped<ICourseRepository,
-                           CourseRepository>();
+
 
 #endregion
 
 
-
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 #region MVC
 
 builder.Services.AddControllersWithViews();

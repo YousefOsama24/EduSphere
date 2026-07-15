@@ -8,8 +8,9 @@
             public string UserId { get; set; } = string.Empty;
 
             public ApplicationUser? User { get; set; }
-
-            public int CenterId { get; set; }
+        public  int  ParentId { get; set; } 
+        public Parent? Parent { get; set; }
+        public int CenterId { get; set; }
 
             public Center? Center { get; set; }
 

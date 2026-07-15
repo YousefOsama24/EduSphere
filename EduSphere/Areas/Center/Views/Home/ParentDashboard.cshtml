@@ -1,0 +1,918 @@
+﻿@model EduSphere.ViewModel.ParentDashboardVM
+
+@{
+    ViewData["Title"] = "Parent Dashboard";
+    Layout = "~/Areas/Center/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-shell">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="appSidebar">
+
+        <div class="sidebar-brand">
+            <div class="mark">E</div>
+            <div>
+                <div class="name">EduSphere</div>
+                <div class="sub">Educational Platform</div>
+            </div>
+        </div>
+
+        <div class="sidebar-role-tab">
+            <i class="bi bi-people me-1"></i>
+            Parent Portal
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <div class="nav-section">Main</div>
+
+            <a asp-area="Center"
+                   asp-controller="Home"
+                   asp-action="ParentDashboard"
+                   class="nav-link active">
+                <i class="bi bi-grid-1x2"></i>
+                Dashboard
+            </a>
+
+            <a href="#exams" class="nav-link">
+                <i class="bi bi-journal-text"></i>
+                Exams
+            </a>
+
+            <a href="#assignments" class="nav-link">
+                <i class="bi bi-clipboard-check"></i>
+                Assignments
+            </a>
+
+            <a href="#grades" class="nav-link">
+                <i class="bi bi-bar-chart"></i>
+                Grades
+            </a>
+
+            <a href="#attendance" class="nav-link">
+                <i class="bi bi-calendar-check"></i>
+                Attendance
+            </a>
+
+            <div class="nav-section">More</div>
+
+            <a class="nav-link">
+                <i class="bi bi-wallet2"></i>
+                Fees
+            </a>
+
+            <a class="nav-link">
+                <i class="bi bi-calendar-event"></i>
+                Calendar
+            </a>
+
+            <a class="nav-link">
+                <i class="bi bi-envelope"></i>
+                Messages
+            </a>
+
+            <a asp-area="Identity"
+                   asp-controller="Account"
+                   asp-action="Logout"
+                   class="nav-link">
+                <i class="bi bi-box-arrow-right"></i>
+                Logout
+            </a>
+
+        </nav>
+
+        <div class="sidebar-foot">
+
+            <div class="id-badge">
+                @Model.Parent.User.FullName.Substring(0,1)
+            </div>
+
+            <div class="who">
+
+                @Model.Parent.User.FullName
+
+                <br />
+
+                <small>
+                    Parent
+                </small>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <div class="main">
+
+        <!-- Header -->
+
+        <header class="topbar">
+
+            <button class="btn-icon sidebar-toggle"
+                    data-toggle="sidebar">
+                <i class="bi bi-list fs-5"></i>
+            </button>
+
+            <div>
+
+                <div class="page-kicker">
+                    Parent Portal
+                </div>
+
+                <h1 class="page-title">
+                    Welcome,
+                    @Model.Parent.User.FullName
+                </h1>
+
+            </div>
+
+            <div class="spacer"></div>
+
+            <div class="dropdown d-none d-md-block me-2">
+
+                <button class="btn btn-outline-ink btn-sm dropdown-toggle"
+                        data-bs-toggle="dropdown">
+
+                    @Model.Parent.User.FullName
+
+                </button>
+
+            </div>
+
+            <button class="btn-icon">
+
+                <i class="bi bi-bell"></i>
+
+                @if (Model.NotificationsCount > 0)
+                {
+                    <span class="dot"></span>
+                }
+
+            </button>
+
+        </header>
+
+        <div class="content">
+            <!-- Summary Cards -->
+
+            <div class="row g-4 mb-4">
+
+                <div class="col-xl-3 col-md-6">
+
+                    <div class="dashboard-card">
+
+                        <div class="card-icon bg-primary-subtle text-primary">
+                            <i class="bi bi-mortarboard-fill"></i>
+                        </div>
+
+                        <div class="card-body">
+
+                            <h6>Children</h6>
+
+                            <h2>
+                                @Model.Children.Count()
+                            </h2>
+
+                            <small class="text-muted">
+                                Registered Students
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+
+                    <div class="dashboard-card">
+
+                        <div class="card-icon bg-success-subtle text-success">
+                            <i class="bi bi-calendar-check-fill"></i>
+                        </div>
+
+                        <div class="card-body">
+
+                            <h6>Attendance</h6>
+
+                            <h2>
+                                @Model.AttendancePercentage%
+                            </h2>
+
+                            <small class="text-muted">
+                                Overall Attendance
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+
+                    <div class="dashboard-card">
+
+                        <div class="card-icon bg-warning-subtle text-warning">
+                            <i class="bi bi-bar-chart-fill"></i>
+                        </div>
+
+                        <div class="card-body">
+
+                            <h6>Average Grade</h6>
+
+                            <h2>
+                                @Model.AverageGrade%
+                            </h2>
+
+                            <small class="text-muted">
+                                Current Semester
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+
+                    <div class="dashboard-card">
+
+                        <div class="card-icon bg-danger-subtle text-danger">
+                            <i class="bi bi-bell-fill"></i>
+                        </div>
+
+                        <div class="card-body">
+
+                            <h6>Notifications</h6>
+
+                            <h2>
+                                @Model.NotificationsCount
+                            </h2>
+
+                            <small class="text-muted">
+                                Unread Notifications
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Upcoming Exams -->
+
+            <div class="card shadow-sm border-0 mb-4" id="exams">
+
+                <div class="card-header bg-white">
+
+                    <h5 class="mb-0">
+                        Upcoming Exams
+                    </h5>
+
+                </div>
+
+                <div class="card-body p-0">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Subject</th>
+
+                                <th>Student</th>
+
+                                <th>Date</th>
+
+                                <th>Status</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var exam in Model.UpcomingExams)
+                            {
+                                <tr>
+
+                                    <td>@exam.Subject</td>
+
+                                    <td>@exam.StudentName</td>
+
+                                    <td>@exam.Date.ToShortDateString()</td>
+
+                                    <td>
+
+                                        <span class="badge bg-warning">
+                                            Upcoming
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- Assignments -->
+
+            <div class="card shadow-sm border-0 mb-4" id="assignments">
+
+                <div class="card-header bg-white">
+
+                    <h5 class="mb-0">
+
+                        Assignments
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body p-0">
+
+                    <table class="table table-striped mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Assignment</th>
+
+                                <th>Student</th>
+
+                                <th>Due Date</th>
+
+                                <th>Status</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var assignment in Model.Assignments)
+                            {
+
+                                <tr>
+
+                                    <td>
+                                        @assignment.Title
+                                    </td>
+
+                                    <td>
+                                        @assignment.StudentName
+                                    </td>
+
+                                    <td>
+                                        @assignment.DueDate.ToShortDateString()
+                                    </td>
+
+                                    <td>
+
+                                        @if (assignment.IsSubmitted)
+                                        {
+                                            <span class="badge bg-success">
+                                                Submitted
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">
+                                                Pending
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                </tr>
+
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+            <!-- Grades -->
+
+            <div class="card shadow-sm border-0 mb-4" id="grades">
+
+                <div class="card-header bg-white">
+
+                    <h5 class="mb-0">
+                        Latest Grades
+                    </h5>
+
+                </div>
+
+                <div class="card-body p-0">
+
+                    <table class="table table-hover mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Student</th>
+                                <th>Subject</th>
+                                <th>Grade</th>
+                                <th>Percentage</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var grade in Model.Grades)
+                            {
+                                <tr>
+
+                                    <td>@grade.StudentName</td>
+
+                                    <td>@grade.Subject</td>
+
+                                    <td>@grade.Mark</td>
+
+                                    <td>
+
+                                        <span class="badge bg-primary">
+                                            @grade.Percentage%
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Attendance -->
+
+            <div class="card shadow-sm border-0 mb-4" id="attendance">
+
+                <div class="card-header bg-white">
+
+                    <h5 class="mb-0">
+                        Attendance Records
+                    </h5>
+
+                </div>
+
+                <div class="card-body p-0">
+
+                    <table class="table table-striped mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Student</th>
+                                <th>Date</th>
+                                <th>Status</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var attendance in Model.AttendanceRecords)
+                            {
+
+                                <tr>
+
+                                    <td>
+                                        @attendance.StudentName
+                                    </td>
+
+                                    <td>
+                                        @attendance.Date.ToShortDateString()
+                                    </td>
+
+                                    <td>
+
+                                        @if (attendance.IsPresent)
+                                        {
+                                            <span class="badge bg-success">
+                                                Present
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">
+                                                Absent
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                </tr>
+
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="row g-4">
+
+                <!-- Teacher Contacts -->
+
+                <div class="col-lg-6">
+
+                    <div class="card shadow-sm border-0 h-100">
+
+                        <div class="card-header bg-white">
+
+                            <h5 class="mb-0">
+                                Teachers
+                            </h5>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            @foreach (var teacher in Model.Teachers)
+                            {
+
+                                <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+
+                                    <div>
+
+                                        <strong>
+                                            @teacher.Name
+                                        </strong>
+
+                                        <br />
+
+                                        <small class="text-muted">
+                                            @teacher.Subject
+                                        </small>
+
+                                    </div>
+
+                                    <span class="badge bg-primary">
+
+                                        @teacher.Phone
+
+                                    </span>
+
+                                </div>
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Announcements -->
+
+                <div class="col-lg-6">
+
+                    <div class="card shadow-sm border-0 h-100">
+
+                        <div class="card-header bg-white">
+
+                            <h5 class="mb-0">
+                                Latest Announcements
+                            </h5>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            @foreach (var item in Model.Notifications)
+                            {
+
+                                <div class="border-bottom pb-3 mb-3">
+
+                                    <h6>
+
+                                        @item.Title
+
+                                    </h6>
+
+                                    <p class="mb-1 text-muted">
+
+                                        @item.Message
+
+                                    </p>
+
+                                    <small class="text-secondary">
+
+                                        @item.CreatedAt.ToShortDateString()
+
+                                    </small>
+
+                                </div>
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Fees -->
+
+            <div class="card shadow-sm border-0 mt-4">
+
+                <div class="card-header bg-white">
+
+                    <h5 class="mb-0">
+
+                        Fees Summary
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-md-4">
+
+                            <div class="border rounded p-3 text-center">
+
+                                <h6>Total Fees</h6>
+
+                                <h3>
+
+                                    @Model.TotalFees.ToString("N0")
+
+                                    EGP
+
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <div class="border rounded p-3 text-center">
+
+                                <h6>Paid</h6>
+
+                                <h3 class="text-success">
+
+                                    @Model.PaidFees.ToString("N0")
+
+                                    EGP
+
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <div class="border rounded p-3 text-center">
+
+                                <h6>Remaining</h6>
+
+                                <h3 class="text-danger">
+
+                                    @Model.RemainingFees.ToString("N0")
+
+                                    EGP
+
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+        // Sidebar Toggle
+
+        const sidebar =
+        document.getElementById("appSidebar");
+
+        const backdrop =
+        document.getElementById("sidebarBackdrop");
+
+        const toggle =
+        document.querySelector(".sidebar-toggle");
+
+        if (toggle) {
+
+        toggle.addEventListener("click", function () {
+
+        sidebar.classList.toggle("show");
+
+        backdrop.classList.toggle("show");
+
+        });
+
+        }
+
+        if (backdrop) {
+
+        backdrop.addEventListener("click", function () {
+
+        sidebar.classList.remove("show");
+
+        backdrop.classList.remove("show");
+
+        });
+
+        }
+
+        });
+
+    </script>
+
+    <script>
+
+        const attendanceCanvas =
+        document.getElementById("attendanceChart");
+
+        if (attendanceCanvas) {
+
+        new Chart(attendanceCanvas, {
+
+        type: "doughnut",
+
+        data: {
+
+        labels: [
+        "Present",
+        "Absent"
+        ],
+
+        datasets: [{
+
+        data: [
+        @Model.PresentCount,
+        @Model.AbsentCount
+        ],
+
+        backgroundColor: [
+        "#198754",
+        "#dc3545"
+        ],
+
+        borderWidth: 0
+
+        }]
+
+        },
+
+        options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+
+        legend: {
+
+        position: "bottom"
+
+        }
+
+        }
+
+        }
+
+        });
+
+        }
+
+    </script>
+
+    <script>
+
+        const gradeCanvas =
+        document.getElementById("gradeChart");
+
+        if (gradeCanvas) {
+
+        new Chart(gradeCanvas, {
+
+        type: "bar",
+
+        data: {
+
+        labels: [
+
+        @foreach (var g in Model.Grades)
+        {
+            <text>"@g.Subject",</text>
+        }
+
+        ],
+
+        datasets: [{
+
+        label: "Marks",
+
+        data: [
+
+        @foreach (var g in Model.Grades)
+        {
+            <text>@g.Mark,</text>
+        }
+
+        ]
+
+        }]
+
+        },
+
+        options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        scales: {
+
+        y: {
+
+        beginAtZero: true,
+
+        max: 100
+
+        }
+
+        }
+
+        }
+
+        });
+
+        }
+
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

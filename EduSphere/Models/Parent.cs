@@ -11,8 +11,8 @@
 
             public string Occupation { get; set; } = string.Empty;
 
-            // Navigation
-
-            public ICollection<ParentStudent> ParentStudents { get; set; }  = new List<ParentStudent>();
+        // Navigation
+        public ICollection<Student> Students { get; set; }
+        public ICollection<ParentStudent> ParentStudents { get; set; }  = new List<ParentStudent>();
         }
     }
