@@ -1,0 +1,405 @@
+/* ==========================================================================
+   Courses Landing Page — "Registry" identity
+   Palette:
+     --ink-navy      #10213B   headers / dark surfaces
+     --ledger-white  #F6F5F1   page background (warm paper tone)
+     --slate         #3E4759   body text
+     --brass         #B08D3F   accent (credential / CTA)
+     --deep-teal     #1F5F5B   secondary accent (links, filters)
+     --rule          #D8D3C4   hairline dividers
+   Type:
+     --font-display  Fraunces      (headings)
+     --font-body     Inter         (body copy)
+     --font-mono     IBM Plex Mono (stats / tallies)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+:root {
+  --ink-navy: #10213B;
+  --ink-navy-soft: #17294a;
+  --ledger-white: #F6F5F1;
+  --card-white: #FFFFFF;
+  --slate: #3E4759;
+  --slate-soft: #6b7386;
+  --brass: #B08D3F;
+  --brass-dark: #8f7431;
+  --deep-teal: #1F5F5B;
+  --rule: #D8D3C4;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+
+body.courses-page {
+  margin: 0;
+  background: var(--ledger-white);
+  color: var(--slate);
+  font-family: var(--font-body);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.courses-page a { color: inherit; text-decoration: none; }
+.courses-page img { max-width: 100%; display: block; }
+
+/* ---------- Top institutional bar ---------- */
+.registry-topbar {
+  background: var(--ink-navy);
+  color: #EDEBE3;
+  padding: 14px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  letter-spacing: .03em;
+}
+
+.registry-topbar .brand {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 19px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.registry-topbar .brand .mark {
+  width: 26px; height: 26px;
+  border: 1.5px solid var(--brass);
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brass);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.registry-topbar nav {
+  display: flex;
+  gap: 28px;
+}
+
+.registry-topbar nav a {
+  opacity: .8;
+  transition: opacity .2s ease;
+}
+.registry-topbar nav a:hover { opacity: 1; }
+
+.registry-topbar .cta-btn {
+  background: var(--brass);
+  color: var(--ink-navy);
+  padding: 9px 18px;
+  border-radius: 3px;
+  font-weight: 600;
+  opacity: 1 !important;
+}
+.registry-topbar .cta-btn:hover { background: #c39c48; }
+
+/* ---------- Hero ---------- */
+.registry-hero {
+  background: var(--ink-navy);
+  color: #EDEBE3;
+  padding: 64px 40px 0;
+}
+
+.registry-hero .hero-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 40px;
+  align-items: end;
+}
+
+.registry-hero .eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 14px;
+}
+
+.registry-hero h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.15;
+  margin: 0 0 18px;
+  color: #fff;
+}
+
+.registry-hero p.lede {
+  font-size: 16px;
+  color: #C7CCDA;
+  max-width: 46ch;
+  margin: 0 0 32px;
+}
+
+/* Ledger strip — registrar-style tally, not a decorative stat card */
+.ledger-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid rgba(255,255,255,.18);
+  margin-top: 8px;
+}
+
+.ledger-strip .entry {
+  padding: 22px 20px 26px;
+  border-left: 1px solid rgba(255,255,255,.18);
+}
+.ledger-strip .entry:first-child { border-left: none; padding-left: 0; }
+
+.ledger-strip .num {
+  font-family: var(--font-mono);
+  font-size: 30px;
+  font-weight: 600;
+  color: #fff;
+  display: block;
+}
+.ledger-strip .label {
+  font-size: 12.5px;
+  color: #9AA3B8;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+/* Panel on the right of hero — search/filter dossier */
+.filter-panel {
+  background: var(--ledger-white);
+  color: var(--slate);
+  border-radius: 6px 6px 0 0;
+  padding: 26px 26px 30px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.25);
+}
+
+.filter-panel h3 {
+  font-family: var(--font-display);
+  font-size: 17px;
+  margin: 0 0 16px;
+  color: var(--ink-navy);
+}
+
+.filter-panel .field { margin-bottom: 14px; }
+.filter-panel label {
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--slate-soft);
+  margin-bottom: 6px;
+}
+.filter-panel input[type="text"],
+.filter-panel select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  background: #fff;
+  color: var(--slate);
+}
+.filter-panel .apply-btn {
+  width: 100%;
+  margin-top: 6px;
+  padding: 11px;
+  background: var(--ink-navy);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: background .2s ease;
+}
+.filter-panel .apply-btn:hover { background: var(--ink-navy-soft); }
+
+/* ---------- Course archive section ---------- */
+.course-archive {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 56px 40px 90px;
+}
+
+.archive-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 16px;
+  margin-bottom: 30px;
+}
+
+.archive-heading h2 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  margin: 0;
+  color: var(--ink-navy);
+}
+
+.archive-heading .count-tag {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--slate-soft);
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 26px;
+}
+
+/* Signature element: file-tab dossier card */
+.course-card {
+  position: relative;
+  background: var(--card-white);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 30px 24px 24px;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.course-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(16,33,59,.10);
+}
+
+.course-card .tab {
+  position: absolute;
+  top: -1px;
+  left: 24px;
+  transform: translateY(-100%);
+  background: var(--deep-teal);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: 3px 3px 0 0;
+}
+.course-card.cat-business .tab { background: var(--brass-dark); }
+.course-card.cat-design .tab { background: var(--deep-teal); }
+.course-card.cat-tech .tab { background: var(--ink-navy); }
+
+.course-card .instructor-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.course-card .avatar {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: var(--ledger-white);
+  border: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--ink-navy);
+  font-size: 15px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.course-card .instructor-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-navy);
+}
+.course-card .instructor-title {
+  font-size: 12px;
+  color: var(--slate-soft);
+}
+
+.course-card h3.course-title {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--ink-navy);
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+
+.course-card p.course-desc {
+  font-size: 13.5px;
+  color: var(--slate);
+  margin: 0 0 18px;
+}
+
+.course-card .stat-row {
+  display: flex;
+  gap: 18px;
+  border-top: 1px solid var(--rule);
+  padding-top: 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--slate-soft);
+}
+.course-card .stat-row strong {
+  color: var(--ink-navy);
+  font-weight: 600;
+}
+
+.course-card .enroll-link {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--deep-teal);
+  border-bottom: 1px solid transparent;
+}
+.course-card .enroll-link:hover { border-bottom-color: var(--deep-teal); }
+
+/* ---------- Empty state ---------- */
+.archive-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--slate-soft);
+  border: 1px dashed var(--rule);
+  border-radius: 4px;
+  display: none;
+}
+.archive-empty.visible { display: block; }
+.archive-empty h4 {
+  font-family: var(--font-display);
+  color: var(--ink-navy);
+  margin-bottom: 6px;
+}
+
+/* ---------- Footer ---------- */
+.registry-footer {
+  background: var(--ink-navy);
+  color: #9AA3B8;
+  padding: 26px 40px;
+  text-align: center;
+  font-size: 12.5px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 860px) {
+  .registry-hero .hero-inner { grid-template-columns: 1fr; }
+  .registry-topbar nav { display: none; }
+  .ledger-strip { grid-template-columns: 1fr 1fr; }
+  .ledger-strip .entry:nth-child(3) { border-left: none; padding-left: 0; grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,.18); padding-top: 18px; }
+}
+
+/* ---------- Accessibility ---------- */
+.courses-page a:focus-visible,
+.courses-page button:focus-visible,
+.courses-page input:focus-visible,
+.courses-page select:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .course-card { transition: none; }
+}

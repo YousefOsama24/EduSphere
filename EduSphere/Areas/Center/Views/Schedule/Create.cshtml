@@ -9,6 +9,7 @@
     <div class="row my-3">
         <div class="col-12">
             <form method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
                 @* <div class="mb-3">
                     <label for="GroupId" class="form-label">ScheduleId</label>
                     <input class="form-control" placeholder="ScheduleId" asp-for="ScheduleId">

@@ -265,8 +265,10 @@ namespace EduSphere.Areas.Center.Controllers
                     return NotFound();
 
                 oldEnrollment.StudentId = enrollment.StudentId;
+                oldEnrollment.GroupId = enrollment.GroupId;
                 oldEnrollment.CourseId = enrollment.CourseId;
                 oldEnrollment.EnrollmentDate = enrollment.EnrollmentDate;
+                oldEnrollment.Status = enrollment.Status;
 
                 await _enrollmentRepository.CommitAsync(cancellationToken);
 

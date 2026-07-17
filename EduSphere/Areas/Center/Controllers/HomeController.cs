@@ -2,9 +2,9 @@
 using EduSphere.Repositories.Interfaces;
 using EduSphere.Utility;
 using EduSphere.ViewModel;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Serilog.Parsing;
-using System.Diagnostics;
 using System.Linq.Expressions;
 
 namespace EduSphere.Areas.Center.Controllers
@@ -20,8 +20,7 @@ namespace EduSphere.Areas.Center.Controllers
         private readonly IRepository<AttendanceSession> _attendanceSessionRepository;
         private readonly IRepository<Subscription> _subscriptionRepository;
         private readonly IRepository<AttendanceRecord> _attendanceRecordRepository;
-        private readonly IRepository<Exam> _examRepository;
-        private readonly IRepository<Notification> _notificationRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public HomeController(
             IRepository<Student> studentRepository,
@@ -31,7 +30,9 @@ namespace EduSphere.Areas.Center.Controllers
             IRepository<Parent> parentRepository,
             IRepository<Enrollment> enrollmentRepository,
             IRepository<AttendanceSession> attendanceSessionRepository,
-            IRepository<Subscription> subscriptionRepository)
+            IRepository<Subscription> subscriptionRepository,
+            IRepository<AttendanceRecord> attendanceRecordRepository,
+            UserManager<ApplicationUser> userManager)
         {
             _studentRepository = studentRepository;
             _teacherRepository = teacherRepository;
@@ -41,8 +42,11 @@ namespace EduSphere.Areas.Center.Controllers
             _enrollmentRepository = enrollmentRepository;
             _attendanceSessionRepository = attendanceSessionRepository;
             _subscriptionRepository = subscriptionRepository;
+            _attendanceRecordRepository = attendanceRecordRepository;
+            _userManager = userManager;
         }
 
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Index()
         {
             DashboardVM dashboard = new DashboardVM
@@ -107,16 +111,22 @@ namespace EduSphere.Areas.Center.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Parent")]
         public async Task<IActionResult> ParentDashboard(
     CancellationToken cancellationToken = default)
         {
-            var parent = (await _parentRepository.GetAsync(
+            var currentUserId = _userManager.GetUserId(User);
+
+            if (string.IsNullOrEmpty(currentUserId))
+                return RedirectToAction("Login", "Account", new { area = SD.IDENTITY_AREA });
+
+            var parent = await _parentRepository.GetOneAsync(
+                x => x.UserId == currentUserId,
                 includes: new Expression<Func<Parent, object>>[]
                 {
             x => x.User
                 },
-                cancellationToken: cancellationToken))
-                .FirstOrDefault();
+                cancellationToken: cancellationToken);
 
             if (parent == null)
                 return NotFound();
@@ -129,7 +139,13 @@ namespace EduSphere.Areas.Center.Controllers
                 },
                 cancellationToken: cancellationToken);
 
+            var childCenterIds = students
+                .Select(s => s.CenterId)
+                .Distinct()
+                .ToList();
+
             var teachers = await _teacherRepository.GetAsync(
+                x => childCenterIds.Contains(x.CenterId),
                 includes: new Expression<Func<EduSphere.Models.Teacher, object>>[]
                 {
             x => x.User
@@ -148,22 +164,15 @@ namespace EduSphere.Areas.Center.Controllers
             attendanceRecords = attendanceRecords.Where(x =>
                 students.Any(s => s.StudentId == x.StudentId));
 
-            int presentCount =
-                attendanceRecords.Count(x => x.Status == AttendanceStatus.Present);
-
-            int absentCount =
-                attendanceRecords.Count(x => x.Status == AttendanceStatus.Absent);
-
             var subscriptions =
     await _subscriptionRepository.GetAsync(
-        x => x.Status == SubscriptionStatus.Active,
+        x => x.Status == SubscriptionStatus.Active &&
+             childCenterIds.Contains(x.CenterId),
         includes: new Expression<Func<Subscription, object>>[]
         {
             x => x.SubscriptionPlan
         },
         cancellationToken: cancellationToken);
-
-            int totalStudents = students.Count();
 
             int notificationsCount = 0;
 
@@ -217,7 +226,9 @@ namespace EduSphere.Areas.Center.Controllers
     .Take(10)
     .Select(x => new AttendanceVM
     {
-        StudentName = x.Student?.User?.FullName ?? "Unknown",
+        StudentName =
+            students.FirstOrDefault(s => s.StudentId == x.StudentId)?.User?.FullName
+            ?? "Unknown",
 
         Date = x.AttendanceSession?.SessionDate ?? DateTime.MinValue,
 
@@ -265,11 +276,13 @@ namespace EduSphere.Areas.Center.Controllers
             return View(vm);
         }
 
+        [Authorize(Roles = "Student")]
         public IActionResult StudentDashboard()
         {
             return View();
         }
 
+        [Authorize(Roles = "Teacher")]
         public IActionResult TeacherDashboard()
         {
             return View();

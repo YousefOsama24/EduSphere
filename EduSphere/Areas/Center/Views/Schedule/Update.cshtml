@@ -10,6 +10,7 @@
     <div class="row my-3">
         <div class="col-12">
             <form method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
                 <!-- Ensure the Edit form posts the id -->
                 <input type="hidden" asp-for="ScheduleId" />
                @*  <div class="mb-3">

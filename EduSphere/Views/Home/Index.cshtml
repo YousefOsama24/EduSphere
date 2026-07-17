@@ -5,4 +5,29 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <a asp-area="Identity"
+           asp-controller="Account"
+           asp-action="Login"
+           class="login-btn">
+        Login
+    </a>
+    <style>
+            .login-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 10px 24px;
+                border-radius: 8px;
+                background: #10213B;
+                color: #fff;
+                font-weight: 600;
+                text-decoration: none;
+                transition: 0.2s ease;
+            }
+
+                .login-btn:hover {
+                    opacity: 0.9;
+                    color: #fff;
+        }</style>
 </div>

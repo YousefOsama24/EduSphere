@@ -157,7 +157,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 #endregion
-#region DataSeeder
+          /*#region DataSeeder
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -169,7 +169,7 @@ using (var scope = app.Services.CreateScope())
     await DbSeeder.SeedAsync(context, userManager, roleManager);
 }
 #endregion
-
+          */
 #region Routing
 app.MapControllerRoute(
     name: "areas",

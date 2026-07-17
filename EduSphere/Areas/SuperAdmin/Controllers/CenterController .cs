@@ -1,5 +1,6 @@
 ﻿using EduSphere.Repositories.Interfaces;
 using EduSphere.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 using CenterModel = EduSphere.Models.Center;
@@ -8,6 +9,7 @@ using EduSphere.ViewModel;
 namespace EduSphere.Areas.SupeAdmin.Controllers
 {
     [Area(SD.SuperAdmin_AREA)]
+    [Authorize(Roles = "SuperAdmin")]
     public class CenterController : Controller
     {
 

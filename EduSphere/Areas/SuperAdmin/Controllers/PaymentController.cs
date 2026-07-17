@@ -1,5 +1,6 @@
 ﻿using EduSphere.Repositories.Interfaces;
 using EduSphere.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Linq.Expressions;
@@ -8,6 +9,7 @@ using EduSphere.ViewModel;
 namespace EduSphere.Areas.SuperAdmin.Controllers
 {
     [Area(SD.SuperAdmin_AREA)]
+    [Authorize(Roles = "SuperAdmin")]
     public class PaymentController : Controller
     {
 

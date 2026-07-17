@@ -1,9 +1,11 @@
 ﻿using EduSphere.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduSphere.Areas.SuperAdmin.Controllers
 {
     [Area(SD.SuperAdmin_AREA)]
+    [Authorize(Roles = "SuperAdmin")]
     public class HomeController : Controller
     {
         public IActionResult Index()

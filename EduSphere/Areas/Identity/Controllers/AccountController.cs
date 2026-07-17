@@ -83,6 +83,7 @@ namespace EduSphere.Areas.Identity.Controllers
         #region Login
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login()
         {
             if (User.Identity!.IsAuthenticated)
@@ -95,6 +96,7 @@ namespace EduSphere.Areas.Identity.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
@@ -150,6 +152,7 @@ namespace EduSphere.Areas.Identity.Controllers
 
         #endregion
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> LogoutNow()
         {
             await _signInManager.SignOutAsync();
@@ -157,10 +160,18 @@ namespace EduSphere.Areas.Identity.Controllers
         }
         #region Logout
 
+        [HttpGet]
+        [Authorize]
+        public IActionResult Logout()
+        {
+            return View();
+        }
+
         [HttpPost]
+        [ActionName("Logout")]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> LogoutPost()
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -286,6 +297,12 @@ namespace EduSphere.Areas.Identity.Controllers
 
         #region Helpers
 
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return Content("Access denied.");
+        }
+
         #region Redirect
 
         [HttpGet]
@@ -297,57 +314,38 @@ namespace EduSphere.Areas.Identity.Controllers
             if (user == null)
                 return RedirectToAction(nameof(Login));
 
-            /* switch (user.UserType)
-               {
-                   case UserType.SuperAdmin:
+            return user.UserType switch
+            {
+                UserType.SuperAdmin => RedirectToAction(
+                    "Index",
+                    "Home",
+                    new { area = "SuperAdmin" }),
 
-                       return RedirectToAction(
-                           "Index",
-                           "Home",
-                           new { area = "SuperAdmin" });
+                UserType.CenterManager => RedirectToAction(
+                    "Index",
+                    "Home",
+                    new { area = "Center" }),
 
-                   case UserType.CenterManager:
+                UserType.Teacher => RedirectToAction(
+                    "TeacherDashboard",
+                    "Home",
+                    new { area = "Center" }),
 
-                       return RedirectToAction(
-                           "Index",
-                           "Home",
-                           new { area = "Center" });
+                UserType.Student => RedirectToAction(
+                    "StudentDashboard",
+                    "Home",
+                    new { area = "Center" }),
 
-                   case UserType.Teacher:
+                UserType.Parent => RedirectToAction(
+                    "ParentDashboard",
+                    "Home",
+                    new { area = "Center" }),
 
-                       return RedirectToAction(
-                           "Index",
-                           "Home",
-                           new { area = "Teacher" });
-
-                   case UserType.Student:
-
-                       return RedirectToAction(
-                           "Index",
-                           "Home",
-                           new { area = "Student" });
-
-                   case UserType.Parent:
-
-                       return RedirectToAction(
-                           "Index",
-                           "Home",
-                           new { area = "Parent" });
-
-                   default:
-
-                       return RedirectToAction(
-                           "Index",
-                           "Home",
-                           new { area = "" });
-               }
-           }
-            */
-
-            return Content(
-      $"Email: {user.Email}\n" +
-      $"UserType: {user.UserType}\n" +
-      $"Roles: {string.Join(", ", await _userManager.GetRolesAsync(user))}");
+                _ => RedirectToAction(
+                    "Index",
+                    "Home",
+                    new { area = "" })
+            };
         }
 
 #endregion

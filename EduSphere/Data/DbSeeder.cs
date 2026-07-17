@@ -39,34 +39,49 @@ public static class DbSeeder
 
         string[] names =
         {
-    "Yousef Osama",
-    "Ahmed Mohamed",
-    "Omar Ali",
-    "Mahmoud Hassan",
-    "Sara Ahmed",
-    "Mona Mostafa",
-    "Ali Ibrahim",
-    "Nour Mohamed",
-    "Heba Adel",
-    "Mostafa Gamal"
+    "Super Admin",
+    "Center Manager",
+    "Teacher User",
+    "Student User",
+    "Parent User",
+    "Teacher 2",
+    "Teacher 3",
+    "Student 2",
+    "Student 3",
+    "Parent 2"
 };
 
         string[] emails =
         {
-    "YousefOsama24@gmail.com",
-    "ahmed@edusphere.com",
-    "omar@edusphere.com",
-    "mahmoud@edusphere.com",
-    "sara@edusphere.com",
-    "mona@edusphere.com",
-    "ali@edusphere.com",
-    "nour@edusphere.com",
-    "heba@edusphere.com",
-    "mostafa@edusphere.com"
+    "admin@edusphere.com",
+    "center@edusphere.com",
+    "teacher@edusphere.com",
+    "student@edusphere.com",
+    "parent@edusphere.com",
+    "teacher2@edusphere.com",
+    "teacher3@edusphere.com",
+    "student2@edusphere.com",
+    "student3@edusphere.com",
+    "parent2@edusphere.com"
 };
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < names.Length; i++)
         {
+            UserType userType = i switch
+            {
+                0 => UserType.SuperAdmin,
+                1 => UserType.CenterManager,
+                2 => UserType.Teacher,
+                3 => UserType.Student,
+                4 => UserType.Parent,
+                5 => UserType.Teacher,
+                6 => UserType.Teacher,
+                7 => UserType.Student,
+                8 => UserType.Student,
+                9 => UserType.Parent,
+                _ => UserType.Student
+            };
+
             var user = new ApplicationUser
             {
                 FullName = names[i],
@@ -76,40 +91,52 @@ public static class DbSeeder
                 EmailConfirmed = true,
                 IsActive = true,
                 ProfileImage = null,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
+
+                UserType = userType
             };
 
-            await userManager.CreateAsync(user, "Admin@123");
+            string password = i switch
+            {
+                0 => "Admin@123",
+                1 => "Center@123",
+                2 => "Teacher@123",
+                3 => "Student@123",
+                4 => "Parent@123",
+                _ => "Admin@123"
+            };
 
-            users.Add(user);
+            var result = await userManager.CreateAsync(user, password);
+
+            if (result.Succeeded)
+            {
+                users.Add(user);
+            }
         }
 
         #endregion
 
+
         #region Assign Roles
 
-        // 3 Super Admins
         await userManager.AddToRoleAsync(users[0], "SuperAdmin");
-        await userManager.AddToRoleAsync(users[1], "SuperAdmin");
-        await userManager.AddToRoleAsync(users[2], "SuperAdmin");
 
-        // Center Managers
-        await userManager.AddToRoleAsync(users[3], "CenterManager");
-        await userManager.AddToRoleAsync(users[4], "CenterManager");
+        await userManager.AddToRoleAsync(users[1], "CenterManager");
 
-        // Teachers
+        await userManager.AddToRoleAsync(users[2], "Teacher");
+
+        await userManager.AddToRoleAsync(users[3], "Student");
+
+        await userManager.AddToRoleAsync(users[4], "Parent");
+
+        // Extra Demo Accounts
         await userManager.AddToRoleAsync(users[5], "Teacher");
         await userManager.AddToRoleAsync(users[6], "Teacher");
-
-        // Students
         await userManager.AddToRoleAsync(users[7], "Student");
         await userManager.AddToRoleAsync(users[8], "Student");
-
-        // Parent
         await userManager.AddToRoleAsync(users[9], "Parent");
 
         #endregion
-
         #region Centers
 
         List<Center> centers = new();
@@ -255,35 +282,6 @@ public static class DbSeeder
 
         #endregion
 
-        #region Students
-
-        List<Student> students = new()
-{
-    new Student
-    {
-        UserId = users[7].Id,
-        CenterId = centers[0].CenterId,
-        DateOfBirth = new DateTime(2008,5,10),
-        AcademicLevel = "Grade 10",
-        CreatedAt = DateTime.Now
-    },
-
-    new Student
-    {
-        UserId = users[8].Id,
-        CenterId = centers[1].CenterId,
-        DateOfBirth = new DateTime(2007,8,25),
-        AcademicLevel = "Grade 11",
-        CreatedAt = DateTime.Now
-    }
-};
-
-        context.Students.AddRange(students);
-
-        await context.SaveChangesAsync();
-
-        #endregion
-
         #region Parents
 
         List<Parent> parents = new()
@@ -296,6 +294,37 @@ public static class DbSeeder
 };
 
         context.Parents.AddRange(parents);
+
+        await context.SaveChangesAsync();
+
+        #endregion
+
+        #region Students
+
+        List<Student> students = new()
+{
+    new Student
+    {
+        UserId = users[7].Id,
+        CenterId = centers[0].CenterId,
+        ParentId = parents[0].ParentId,
+        DateOfBirth = new DateTime(2008,5,10),
+        AcademicLevel = "Grade 10",
+        CreatedAt = DateTime.Now
+    },
+
+    new Student
+    {
+        UserId = users[8].Id,
+        CenterId = centers[1].CenterId,
+        ParentId = parents[0].ParentId,
+        DateOfBirth = new DateTime(2007,8,25),
+        AcademicLevel = "Grade 11",
+        CreatedAt = DateTime.Now
+    }
+};
+
+        context.Students.AddRange(students);
 
         await context.SaveChangesAsync();
 
@@ -447,6 +476,7 @@ public static class DbSeeder
     {
         StudentId = students[0].StudentId,
         GroupId = groups[0].GroupId,
+        CourseId = courses[0].CourseId,
         EnrollmentDate = DateTime.Now,
         Status = EnrollmentStatus.Active
     },
@@ -455,6 +485,7 @@ public static class DbSeeder
     {
         StudentId = students[1].StudentId,
         GroupId = groups[1].GroupId,
+        CourseId = courses[1].CourseId,
         EnrollmentDate = DateTime.Now,
         Status = EnrollmentStatus.Active
     }
@@ -897,7 +928,7 @@ public static class DbSeeder
 
 
 
-
+    
 
     }
 }
