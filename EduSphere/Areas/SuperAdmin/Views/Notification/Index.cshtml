@@ -9,7 +9,7 @@
         @*if (User.IsInRole(SD.SUPER_ADMIN_ROLE) || User.IsInRole(SD.ADMIN_ROLE))
         {*@
             <div class="col-md-6 text-md-end text-start mt-2 mt-md-0">
-                <a href="/Admin/Notification/Create" class="btn btn-success"><i class="bi bi-plus-circle"></i> Create</a>
+                <a href="/SuperAdmin/Notification/Create" class="btn btn-success"><i class="bi bi-plus-circle"></i> Create</a>
             </div>
         @* } *@
     </div>
@@ -67,7 +67,7 @@
 
                             
                             <td>
-                                <a href="/Admin/Notification/Update/@item.NotificationId" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i> Edit</a>
+                                <a href="/SuperAdmin/Notification/Update/@item.NotificationId" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i> Edit</a>
                                 <form asp-action="Delete"
                                       asp-route-id="@item.NotificationId"
                                       method="post"
@@ -100,22 +100,22 @@
                 <ul class="pagination justify-content-center">
                     @if (Model.CurrentPage > 1)
                     {
-                        <li class="page-item"><a class="page-link" href="/Admin/Notification/Index?page=@(Model.CurrentPage - 1)">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="/SuperAdmin/Notification/Index?page=@(Model.CurrentPage - 1)">Previous</a></li>
                     }
                     @for (var i = 1; i <= Model.TotalPages; i++)
                     {
                         @if (i == Model.CurrentPage)
                         {
-                            <li class="page-item active"><a class="page-link" href="/Admin/Notification/Index?page=@i">@i</a></li>
+                            <li class="page-item active"><a class="page-link" href="/SuperAdmin/Notification/Index?page=@i">@i</a></li>
                         }
                         else
                         {
-                            <li class="page-item"><a class="page-link" href="/Admin/Notification/Index?page=@i">@i</a></li>
+                            <li class="page-item"><a class="page-link" href="/SuperAdmin/Notification/Index?page=@i">@i</a></li>
                         }
                     }
                     @if (Model.CurrentPage != Model.TotalPages)
                     {
-                        <li class="page-item"><a class="page-link" href="/Admin/Notification/Index?page=@(Model.CurrentPage + 1)">Next</a></li>
+                        <li class="page-item"><a class="page-link" href="/SuperAdmin/Notification/Index?page=@(Model.CurrentPage + 1)">Next</a></li>
                     }
                 </ul>
             </nav>

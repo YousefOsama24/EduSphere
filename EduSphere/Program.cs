@@ -146,7 +146,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
@@ -157,28 +156,31 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 #endregion
-          /*#region DataSeeder
+/*#region DataSeeder
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
+var services = scope.ServiceProvider;
 
-    var context = services.GetRequiredService<ApplicationDbContext>();
-    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+var context = services.GetRequiredService<ApplicationDbContext>();
+var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-    await DbSeeder.SeedAsync(context, userManager, roleManager);
+await DbSeeder.SeedAsync(context, userManager, roleManager);
 }
 #endregion
-          */
+*/
 #region Routing
+
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area=Identity}/{controller=Account}/{action=Login}/{id?}");
 
 #endregion
+
 Log.Information("EduSphere Application Started.");
 app.Run();
 Log.CloseAndFlush();
