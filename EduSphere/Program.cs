@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using EduSphere.Services.Interfaces;
 using EduSphere.Services.Implementations;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 using Serilog;
 using Serilog.Events;
 
@@ -111,7 +113,23 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("SuperAdminOnly",
+        policy => policy.RequireRole("SuperAdmin"));
+
+    options.AddPolicy("CenterManagerOnly",
+        policy => policy.RequireRole("CenterManager"));
+
+    options.AddPolicy("TeacherOnly",
+        policy => policy.RequireRole("Teacher"));
+
+    options.AddPolicy("StudentOnly",
+        policy => policy.RequireRole("Student"));
+
+    options.AddPolicy("ParentOnly",
+        policy => policy.RequireRole("Parent"));
+});
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
@@ -131,12 +149,31 @@ builder.Services.AddScoped(typeof(Repository<>),
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 #region MVC
+builder.Services.AddLocalization(options =>
+{
+    options.ResourcesPath = "Resources";
+});
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
+
 
 #endregion
 
 var app = builder.Build();
+var supportedCultures = new[]
+{
+    new CultureInfo("en"),
+    new CultureInfo("ar")
+};
+
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+});
 
 #region Middleware
 

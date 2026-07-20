@@ -77,6 +77,7 @@ namespace EduSphere.Areas.Center.Controllers
         #region Create
 
         [HttpGet]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Create(
     CancellationToken cancellationToken = default)
         {
@@ -104,6 +105,7 @@ namespace EduSphere.Areas.Center.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CenterManager,SuperAdmin")] 
         public async Task<IActionResult> Create(
       Enrollment enrollment,
       CancellationToken cancellationToken = default)
@@ -202,6 +204,7 @@ namespace EduSphere.Areas.Center.Controllers
         }
         #endregion
         [HttpGet]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Details(
     int id,
     CancellationToken cancellationToken = default)
@@ -230,6 +233,7 @@ namespace EduSphere.Areas.Center.Controllers
         #region Edit
 
         [HttpGet]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Update(
             int id,
             CancellationToken cancellationToken = default)
@@ -247,6 +251,7 @@ namespace EduSphere.Areas.Center.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Update(
             Enrollment enrollment,
             CancellationToken cancellationToken = default)
@@ -301,6 +306,7 @@ namespace EduSphere.Areas.Center.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Delete(
             int id,
             CancellationToken cancellationToken = default)

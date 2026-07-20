@@ -49,6 +49,7 @@ namespace EduSphere.Areas.SupeAdmin.Controllers
             });
         }
         [HttpGet]
+        [Authorize(Policy = "SuperAdminOnly")]
         public IActionResult Create()
         {
             return View(new CenterModel());
@@ -56,6 +57,7 @@ namespace EduSphere.Areas.SupeAdmin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "SuperAdminOnly")]
         public async Task<IActionResult> Create(CenterModel Center, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
@@ -69,6 +71,7 @@ namespace EduSphere.Areas.SupeAdmin.Controllers
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]
+        [Authorize(Policy = "SuperAdminOnly")]
         public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
             var Center = await _context.GetOneAsync(
@@ -82,6 +85,7 @@ namespace EduSphere.Areas.SupeAdmin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "SuperAdminOnly")]
         public async Task<IActionResult> Update(CenterModel Center, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
@@ -112,6 +116,7 @@ namespace EduSphere.Areas.SupeAdmin.Controllers
             return RedirectToAction(nameof(Index));
         }
         [HttpPost]
+        [Authorize(Policy = "SuperAdminOnly")]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var Center = await _context.GetOneAsync(

@@ -49,6 +49,7 @@ namespace EduSphere.Areas.Teacher.Controllers
             });
         }
         [HttpGet]
+        [Authorize(Roles = "Teacher,SuperAdmin")]
         public IActionResult Create()
         {
             return View(new ChoiceModel());
@@ -56,6 +57,7 @@ namespace EduSphere.Areas.Teacher.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Teacher,SuperAdmin")]
         public async Task<IActionResult> Create(ChoiceModel choice, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
@@ -69,6 +71,7 @@ namespace EduSphere.Areas.Teacher.Controllers
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]
+        [Authorize(Roles = "Teacher,SuperAdmin")]
         public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
             var choice = await _context.GetOneAsync(
@@ -82,6 +85,7 @@ namespace EduSphere.Areas.Teacher.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Teacher,SuperAdmin")]
         public async Task<IActionResult> Update(Choice choice, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
@@ -106,6 +110,7 @@ namespace EduSphere.Areas.Teacher.Controllers
             return RedirectToAction(nameof(Index));
         }
         [HttpPost]
+        [Authorize(Roles = "Teacher,SuperAdmin")]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var choice = await _context.GetOneAsync(

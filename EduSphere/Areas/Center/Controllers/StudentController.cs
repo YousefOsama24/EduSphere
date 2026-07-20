@@ -76,8 +76,8 @@ namespace EduSphere.Areas.Center.Controllers
         #region Create
 
         [HttpGet]
-        public async Task<IActionResult> Create(
-    CancellationToken cancellationToken = default)
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
+        public async Task<IActionResult> Create(CancellationToken cancellationToken = default)
         {
             var users = await _userRepository.GetAsync(
                 cancellationToken: cancellationToken);
@@ -108,9 +108,8 @@ namespace EduSphere.Areas.Center.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-     Student student,
-     CancellationToken cancellationToken = default)
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
+        public async Task<IActionResult> Create(Student student, CancellationToken cancellationToken = default)
         {
             var users = await _userRepository.GetAsync(
                 cancellationToken: cancellationToken);
@@ -118,7 +117,7 @@ namespace EduSphere.Areas.Center.Controllers
             var parents = await _parentRepository.GetAsync(
                 includes: new Expression<Func<Parent, object>>[]
                 {
-            x => x.User
+                    x => x.User
                 },
                 cancellationToken: cancellationToken);
 
@@ -131,14 +130,14 @@ namespace EduSphere.Areas.Center.Controllers
                     student.UserId);
 
                 ViewBag.Parents = parents
-    .Select(x => new SelectListItem
-    {
-        Value = x.ParentId.ToString(),
-        Text = x.User != null
-            ? x.User.FullName
-            : $"Parent #{x.ParentId}"
-    })
-    .ToList();
+                .Select(x => new SelectListItem
+                {
+                    Value = x.ParentId.ToString(),
+                    Text = x.User != null
+                        ? x.User.FullName
+                        : $"Parent #{x.ParentId}"
+                })
+                .ToList();
 
                 return View(student);
             }
@@ -162,14 +161,14 @@ namespace EduSphere.Areas.Center.Controllers
                     student.UserId);
 
                 ViewBag.Parents = parents
-    .Select(x => new SelectListItem
-    {
-        Value = x.ParentId.ToString(),
-        Text = x.User != null
-            ? x.User.FullName
-            : $"Parent #{x.ParentId}"
-    })
-    .ToList();
+                .Select(x => new SelectListItem
+                {
+                    Value = x.ParentId.ToString(),
+                    Text = x.User != null
+                        ? x.User.FullName
+                        : $"Parent #{x.ParentId}"
+                })
+                .ToList();
 
                 return View(student);
             }
@@ -208,14 +207,14 @@ namespace EduSphere.Areas.Center.Controllers
                     student.UserId);
 
                 ViewBag.Parents = parents
-    .Select(x => new SelectListItem
-    {
-        Value = x.ParentId.ToString(),
-        Text = x.User != null
-            ? x.User.FullName
-            : $"Parent #{x.ParentId}"
-    })
-    .ToList();
+                .Select(x => new SelectListItem
+                {
+                    Value = x.ParentId.ToString(),
+                    Text = x.User != null
+                        ? x.User.FullName
+                        : $"Parent #{x.ParentId}"
+                })
+                .ToList();
 
                 return View(student);
             }
@@ -226,9 +225,8 @@ namespace EduSphere.Areas.Center.Controllers
         #region Edit
 
         [HttpGet]
-        public async Task<IActionResult> Update(
-            int id,
-            CancellationToken cancellationToken = default)
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
+        public async Task<IActionResult> Update( int id, CancellationToken cancellationToken = default)
         {
             var student = await _studentRepository.GetOneAsync(
                 x => x.StudentId == id,
@@ -243,9 +241,8 @@ namespace EduSphere.Areas.Center.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(
-            Student student,
-            CancellationToken cancellationToken = default)
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
+        public async Task<IActionResult> Update( Student student, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return View(student);
@@ -294,6 +291,7 @@ namespace EduSphere.Areas.Center.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Delete(
             int id,
             CancellationToken cancellationToken = default)

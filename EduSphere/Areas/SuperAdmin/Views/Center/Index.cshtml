@@ -6,12 +6,12 @@
         <div class="col-md-6">
             <h2 class="display-6">All Centers</h2>
         </div>
-        @*if (User.IsInRole(SD.SUPER_ADMIN_ROLE) || User.IsInRole(SD.ADMIN_ROLE))
-        {*@
-            <div class="col-md-6 text-md-end text-start mt-2 mt-md-0">
-                <a href="/Admin/Center/Create" class="btn btn-success"><i class="bi bi-plus-circle"></i> Create</a>
-            </div>
-        @* } *@
+        if (User.IsInRole(SD.SUPER_ADMIN_ROLE))
+        {
+        <div class="col-md-6 text-md-end text-start mt-2 mt-md-0">
+            <a href="/Admin/Center/Create" class="btn btn-success"><i class="bi bi-plus-circle"></i> Create</a>
+        </div>
+        }
     </div>
 
     <!-- Filter Section -->
@@ -52,7 +52,7 @@
                         <th scope="col">CreatedAt</th>
                         <th scope="col">UpdatedAt</th>
                         <th scope="col">IsDeleted</th>
-                        
+
                     </tr>
                 </thead>
                 <tbody>
@@ -72,25 +72,25 @@
 
                             
                             <td>
-                                <a href="/Admin/Center/Update/@item.CenterId" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i> Edit</a>
-                                <form asp-action="Delete"
-                                      asp-route-id="@item.CenterId"
-                                      method="post"
-                                      style="display:inline">
-
-                                    <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('Are you sure you want to delete this choice?')">
-                                        <i class="bi bi-trash"></i> Delete
-                                    </button>
-                                </form>
-                               @* @if (User.IsInRole(SD.SUPER_ADMIN_ROLE) || User.IsInRole(SD.ADMIN_ROLE))
+                                @if (User.IsInRole(SD.SUPER_ADMIN_ROLE))
                                 {
-                                   
+                                    <a href="/Admin/Center/Update/@item.CenterId" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i> Edit</a>
+                                    <form asp-action="Delete"
+                                          asp-route-id="@item.CenterId"
+                                          method="post"
+                                          style="display:inline">
+
+                                        <button type="submit" class="btn btn-danger"
+                                                onclick="return confirm('Are you sure you want to delete this choice?')">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </button>
+                                    </form>
+
                                 }
                                 else
                                 {
                                     <span>NoAction</span>
-                                }*@
+                                }
                             </td>
                         </tr>
                     }
@@ -130,11 +130,11 @@
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         const deleteButtons = document.querySelectorAll(".btn-delete");
 
         deleteButtons.forEach(button => {
-            button.addEventListener("click", function (e) {
+            button.addEventListener("click", function(e) {
                 e.preventDefault(); // stop normal navigation
 
                 const url = this.getAttribute("href");
@@ -150,9 +150,9 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         Swal.fire({
-                          title: "Deleted!",
-                          text: "Your file has been deleted.",
-                          icon: "success"
+                            title: "Deleted!",
+                            text: "Your file has been deleted.",
+                            icon: "success"
                         });
 
                         // Redirect to delete URL

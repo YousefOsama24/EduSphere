@@ -49,6 +49,7 @@ namespace EduSphere.Areas.SuperAdmin.Controllers
             });
         }
         [HttpGet]
+        [Authorize(Policy = "SuperAdminOnly")]
         public IActionResult Create()
         {
             return View(new PaymentModel());
@@ -56,6 +57,7 @@ namespace EduSphere.Areas.SuperAdmin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "SuperAdminOnly")]
         public async Task<IActionResult> Create(PaymentModel Payment, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
@@ -69,6 +71,7 @@ namespace EduSphere.Areas.SuperAdmin.Controllers
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]
+        [Authorize(Policy = "SuperAdminOnly")]
         public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
             var Payment = await _context.GetOneAsync(
@@ -82,6 +85,7 @@ namespace EduSphere.Areas.SuperAdmin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "SuperAdminOnly")]
         public async Task<IActionResult> Update(PaymentModel Payment, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
@@ -109,6 +113,7 @@ namespace EduSphere.Areas.SuperAdmin.Controllers
             return RedirectToAction(nameof(Index));
         }
         [HttpPost]
+        [Authorize(Policy = "SuperAdminOnly")]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var Payment = await _context.GetOneAsync(

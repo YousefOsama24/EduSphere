@@ -49,6 +49,7 @@ namespace EduSphere.Areas.Admin.Controllers
             });
         }
         [HttpGet]
+        [Authorize(Policy = "SuperAdminOnly")]
         public IActionResult Create()
         {
             return View(new NotificationModel());
@@ -56,6 +57,7 @@ namespace EduSphere.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "SuperAdminOnly")]
         public async Task<IActionResult> Create(NotificationModel notification, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
@@ -67,11 +69,12 @@ namespace EduSphere.Areas.Admin.Controllers
             await _context.CreateAsync(notification, cancellationToken);
             await _context.CommitAsync(cancellationToken);
 
-            TempData["success"] = "Notification created successfully.";
+            TempData["success-notification"] = "Notification created successfully.";
 
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]
+        [Authorize(Policy = "SuperAdminOnly")]
         public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
             var Notification = await _context.GetOneAsync(
@@ -91,6 +94,7 @@ namespace EduSphere.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "SuperAdminOnly")]
         public async Task<IActionResult> Update(NotificationModel Notification, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
@@ -112,11 +116,12 @@ namespace EduSphere.Areas.Admin.Controllers
            
             await _context.CommitAsync(cancellationToken);
 
-            TempData["success-notification"] = "Attendance Record updated successfully.";
+            TempData["success-notification"] = "Notification updated successfully.";
 
             return RedirectToAction(nameof(Index));
         }
         [HttpPost]
+        [Authorize(Policy = "SuperAdminOnly")]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var Notification = await _context.GetOneAsync(

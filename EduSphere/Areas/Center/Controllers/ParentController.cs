@@ -57,6 +57,7 @@ namespace EduSphere.Areas.Center.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public IActionResult Create()
         {
             return View(new Parent());
@@ -64,6 +65,7 @@ namespace EduSphere.Areas.Center.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Create(Parent parent, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
@@ -88,6 +90,7 @@ namespace EduSphere.Areas.Center.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
             var parent = await _context.GetOneAsync(
@@ -107,6 +110,7 @@ namespace EduSphere.Areas.Center.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Update(Parent parent, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
@@ -142,6 +146,7 @@ namespace EduSphere.Areas.Center.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             try

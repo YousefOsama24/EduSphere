@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 namespace EduSphere.Areas.Center.Controllers
 {
     [Area(SD.Center_AREA)]
+    [Authorize(Roles = "CenterManager,SuperAdmin")]
     public class HomeController : Controller
     {
         private readonly IRepository<Student> _studentRepository;

@@ -50,6 +50,7 @@ namespace EduSphere.Areas.Teacher.Controllers
             });
         }
         [HttpGet]
+        [Authorize(Roles = "Teacher,SuperAdmin")]
         public IActionResult Create()
         {
             return View(new ExamModel());
@@ -57,6 +58,7 @@ namespace EduSphere.Areas.Teacher.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Teacher,SuperAdmin")]
         public async Task<IActionResult> Create(ExamModel Exam, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
@@ -70,6 +72,7 @@ namespace EduSphere.Areas.Teacher.Controllers
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]
+        [Authorize(Roles = "Teacher,SuperAdmin")]
         public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
             var Exam = await _context.GetOneAsync(
@@ -83,6 +86,7 @@ namespace EduSphere.Areas.Teacher.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Teacher,SuperAdmin")]
         public async Task<IActionResult> Update(Exam Exam, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
@@ -111,6 +115,7 @@ namespace EduSphere.Areas.Teacher.Controllers
             return RedirectToAction(nameof(Index));
         }
         [HttpPost]
+        [Authorize(Roles = "Teacher,SuperAdmin")]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var Exam = await _context.GetOneAsync(

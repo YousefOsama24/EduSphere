@@ -73,6 +73,7 @@ namespace EduSphere.Areas.Center.Controllers
         #region Create
 
         [HttpGet]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public IActionResult Create()
         {
             return View(new SubscriptionPlanModel());
@@ -80,6 +81,7 @@ namespace EduSphere.Areas.Center.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]   
         public async Task<IActionResult> Create(
             SubscriptionPlanModel subscriptionPlan,
             CancellationToken cancellationToken = default)
@@ -122,6 +124,7 @@ namespace EduSphere.Areas.Center.Controllers
         #region Edit
 
         [HttpGet]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Update(
             int id,
             CancellationToken cancellationToken = default)
@@ -140,6 +143,7 @@ namespace EduSphere.Areas.Center.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Update(
             SubscriptionPlanModel subscriptionPlan,
             CancellationToken cancellationToken = default)
@@ -197,6 +201,7 @@ namespace EduSphere.Areas.Center.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Delete(
             int id,
             CancellationToken cancellationToken = default)

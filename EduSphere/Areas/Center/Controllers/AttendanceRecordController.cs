@@ -74,6 +74,7 @@ IRepository<AttendanceSession> attendanceSessionRepository)
         }
 
         [HttpGet]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Create(
     CancellationToken cancellationToken = default)
         {
@@ -103,6 +104,7 @@ IRepository<AttendanceSession> attendanceSessionRepository)
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Create(
     AttendanceRecord attendanceRecord,
     CancellationToken cancellationToken = default)
@@ -185,6 +187,7 @@ IRepository<AttendanceSession> attendanceSessionRepository)
         }
 
         [HttpGet]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Details(
     int id,
     CancellationToken cancellationToken = default)
@@ -212,6 +215,7 @@ IRepository<AttendanceSession> attendanceSessionRepository)
         }
 
         [HttpGet]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Update(
     int id,
     CancellationToken cancellationToken = default)
@@ -252,6 +256,7 @@ IRepository<AttendanceSession> attendanceSessionRepository)
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Update(
     AttendanceRecord attendanceRecord,
     CancellationToken cancellationToken = default)
@@ -335,6 +340,7 @@ IRepository<AttendanceSession> attendanceSessionRepository)
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Delete(
             int id,
             CancellationToken cancellationToken = default)

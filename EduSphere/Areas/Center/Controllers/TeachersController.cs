@@ -42,6 +42,7 @@ namespace EduSphere.Areas.Center.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Create(
             CancellationToken cancellationToken = default)
         {
@@ -52,6 +53,7 @@ namespace EduSphere.Areas.Center.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Create(
             TeacherModel teacher,
             CancellationToken cancellationToken = default)
@@ -90,6 +92,7 @@ namespace EduSphere.Areas.Center.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Edit(
             int id,
             CancellationToken cancellationToken = default)
@@ -112,6 +115,7 @@ namespace EduSphere.Areas.Center.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Edit(
             TeacherModel teacher,
             CancellationToken cancellationToken = default)
@@ -145,6 +149,7 @@ namespace EduSphere.Areas.Center.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public IActionResult Details(int id)
         {
             return RedirectToAction(nameof(Edit), new { id });
@@ -152,6 +157,7 @@ namespace EduSphere.Areas.Center.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "CenterManager,SuperAdmin")]
         public async Task<IActionResult> Delete(
             int id,
             CancellationToken cancellationToken = default)
