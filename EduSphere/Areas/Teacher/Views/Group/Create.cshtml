@@ -1,59 +1,83 @@
-﻿@model Group
-<div class="container">
-    <div class="row mb-3 align-items-center my-3">
-        <div class="col-md-6">
-            <h2 class="display-6">Create new Group</h2>
-        </div>
-    </div>
+﻿@model EduSphere.Models.Group
 
-    <div class="row my-3">
-        <div class="col-12">
-            <form method="post" enctype="multipart/form-data">
-                @* <div class="mb-3">
-                    <label for="Name" class="form-label">GroupId</label>
-                    <input class="form-control" placeholder="GroupId" asp-for="GroupId">
-                    <span asp-validation-for="GroupId" class="text-danger"></span>
-                </div> *@
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Name</label>
-                    <input class="form-control" placeholder="Name" asp-for="Name">
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                    
+@{
+    ViewData["Title"] = "Create Group";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <!-- زر الرجوع -->
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-circle p-2">
+                    <i class="bi bi-arrow-left d-flex"></i>
+                </a>
+                <span class="text-muted">Back to Groups</span>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="card-title mb-0"><i class="bi bi-people-fill me-2"></i>Create New Group</h5>
                 </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">CourseId</label>
-                    <input class="form-control" placeholder="CourseId" asp-for="CourseId">
-                    <span asp-validation-for="CourseId" class="text-danger"></span>
-                    
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="row g-3">
+                            <!-- اسم المجموعة -->
+                            <div class="col-md-12">
+                                <label asp-for="Name" class="form-label fw-semibold">Group Name</label>
+                                <input asp-for="Name" class="form-control" placeholder="e.g. CS-101 Morning Batch" />
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+
+                            <!-- معرف الكورس -->
+                            <div class="col-md-4">
+                                <label asp-for="CourseId" class="form-label fw-semibold">Course ID</label>
+                                <input asp-for="CourseId" type="number" class="form-control" placeholder="Enter Course ID" />
+                                <span asp-validation-for="CourseId" class="text-danger small"></span>
+                            </div>
+
+                            <!-- معرف المدرس -->
+                            <div class="col-md-4">
+                                <label asp-for="TeacherId" class="form-label fw-semibold">Teacher ID</label>
+                                <input asp-for="TeacherId" type="number" class="form-control" placeholder="Enter Teacher ID" />
+                                <span asp-validation-for="TeacherId" class="text-danger small"></span>
+                            </div>
+
+                            <!-- السعة الاستيعابية -->
+                            <div class="col-md-4">
+                                <label asp-for="Capacity" class="form-label fw-semibold">Capacity</label>
+                                <input asp-for="Capacity" type="number" class="form-control" placeholder="e.g. 30" />
+                                <span asp-validation-for="Capacity" class="text-danger small"></span>
+                            </div>
+
+                            <!-- تاريخ البداية -->
+                            <div class="col-md-6">
+                                <label asp-for="StartDate" class="form-label fw-semibold">Start Date</label>
+                                <input asp-for="StartDate" type="date" class="form-control" />
+                                <span asp-validation-for="StartDate" class="text-danger small"></span>
+                            </div>
+
+                            <!-- تاريخ النهاية -->
+                            <div class="col-md-6">
+                                <label asp-for="EndDate" class="form-label fw-semibold">End Date</label>
+                                <input asp-for="EndDate" type="date" class="form-control" />
+                                <span asp-validation-for="EndDate" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                            <a asp-action="Index" class="btn btn-light">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4">Save Group</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">TeacherId</label>
-                    <input class="form-control" placeholder="TeacherId" asp-for="TeacherId">
-                    <span asp-validation-for="TeacherId" class="text-danger"></span>
-                    
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Capacity</label>
-                    <input class="form-control" placeholder="Capacity" asp-for="Capacity">
-                    <span asp-validation-for="Capacity" class="text-danger"></span>
-                    
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">StartDate</label>
-                    <input class="form-control" placeholder="StartDate" asp-for="StartDate">
-                    <span asp-validation-for="StartDate" class="text-danger"></span>
-                    
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">EndDate</label>
-                    <input class="form-control" placeholder="EndDate" asp-for="EndDate">
-                    <span asp-validation-for="EndDate" class="text-danger"></span>
-                    
-                </div>
-                
-                
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            </div>
         </div>
     </div>
 </div>
+
+@* @section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+} *@

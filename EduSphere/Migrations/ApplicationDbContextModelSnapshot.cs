@@ -749,7 +749,7 @@ namespace EduSphere.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ParentId")
+                    b.Property<int?>("ParentId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -1318,8 +1318,7 @@ namespace EduSphere.Migrations
                     b.HasOne("EduSphere.Models.Parent", "Parent")
                         .WithMany("Students")
                         .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("EduSphere.Models.ApplicationUser", "User")
                         .WithOne("Student")

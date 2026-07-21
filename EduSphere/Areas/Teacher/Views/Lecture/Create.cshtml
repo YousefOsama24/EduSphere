@@ -1,62 +1,93 @@
-﻿@model Lecture
-<div class="container">
-    <div class="row mb-3 align-items-Lecture my-3">
-        <div class="col-md-6">
-            <h2 class="display-6">Create new Lecture</h2>
-        </div>
-    </div>
+﻿@model EduSphere.Models.Lecture
 
-    <div class="row my-3">
-        <div class="col-12">
-            <form method="post" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label for="Name" class="form-label">Title</label>
-                    <input class="form-control" placeholder="Title" asp-for="Title">
-                    <span asp-validation-for="Title" class="text-danger"></span>
+@{
+    ViewData["Title"] = "Create Lecture";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <!-- زر الرجوع للقائمة -->
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-circle p-2">
+                    <i class="bi bi-arrow-left d-flex"></i>
+                </a>
+                <span class="text-muted">Back to Lectures</span>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="card-title mb-0"><i class="bi bi-journal-plus me-2"></i>Add New Lecture</h5>
                 </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">CourseId</label>
-                    <input class="form-control" placeholder="CourseId" asp-for="CourseId">
-                    <span asp-validation-for="CourseId" class="text-danger"></span>
-                    
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="row g-3">
+                            <!-- عنوان المحاضرة -->
+                            <div class="col-md-8">
+                                <label asp-for="Title" class="form-label fw-semibold">Lecture Title</label>
+                                <input asp-for="Title" class="form-control" placeholder="e.g. Introduction to OOP" />
+                                <span asp-validation-for="Title" class="text-danger small"></span>
+                            </div>
+
+                            <!-- معرف الكورس -->
+                            <div class="col-md-4">
+                                <label asp-for="CourseId" class="form-label fw-semibold">Course ID</label>
+                                <input asp-for="CourseId" type="number" class="form-control" placeholder="Enter Course ID" />
+                                <span asp-validation-for="CourseId" class="text-danger small"></span>
+                            </div>
+
+                            <!-- رابط الفيديو -->
+                            <div class="col-md-6">
+                                <label asp-for="VideoUrl" class="form-label fw-semibold">Video URL</label>
+                                <input asp-for="VideoUrl" type="url" class="form-control" placeholder="https://example.com/video" />
+                                <span asp-validation-for="VideoUrl" class="text-danger small"></span>
+                            </div>
+
+                            <!-- رابط ملف الـ PDF -->
+                            <div class="col-md-6">
+                                <label asp-for="PdfUrl" class="form-label fw-semibold">Attachment PDF URL</label>
+                                <input asp-for="PdfUrl" type="url" class="form-control" placeholder="https://example.com/handout.pdf" />
+                                <span asp-validation-for="PdfUrl" class="text-danger small"></span>
+                            </div>
+
+                            <!-- ترتيب المحاضرة -->
+                            <div class="col-md-6">
+                                <label asp-for="Order" class="form-label fw-semibold">Lecture Order</label>
+                                <input asp-for="Order" type="number" class="form-control" placeholder="e.g. 1" />
+                                <span asp-validation-for="Order" class="text-danger small"></span>
+                            </div>
+
+                            <!-- هل هي Preview؟ -->
+                            <div class="col-md-6 d-flex align-items-end mb-2">
+                                <div class="form-check form-switch card p-2 px-4 w-100 border shadow-none bg-light mb-0">
+                                    <input class="form-check-input ms-0 me-2" type="checkbox" role="switch" asp-for="IsPreview" id="previewSwitch">
+                                    <label class="form-check-label fw-semibold text-primary" for="previewSwitch">
+                                        <i class="bi bi-eye me-1"></i> Allow Free Preview
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- وصف المحاضرة -->
+                            <div class="col-md-12">
+                                <label asp-for="Description" class="form-label fw-semibold">Lecture Description</label>
+                                <textarea asp-for="Description" class="form-control" rows="4" placeholder="Brief outline of what this lecture covers..."></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                            <a asp-action="Index" class="btn btn-light">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4">Save Lecture</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">VideoUrl</label>
-                    <input class="form-control" placeholder="VideoUrl" asp-for="VideoUrl">
-                    <span asp-validation-for="VideoUrl" class="text-danger"></span>
-                    
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Description</label>
-                    <input class="form-control" placeholder="Description" asp-for="Description">
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                    
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">PdfUrl</label>
-                    <input class="form-control" placeholder="PdfUrl" asp-for="PdfUrl">
-                    <span asp-validation-for="PdfUrl" class="text-danger"></span>
-                    
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Order</label>
-                    <input class="form-control" placeholder="Order" asp-for="Order">
-                    <span asp-validation-for="Order" class="text-danger"></span>
-                    
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">CreatedAt</label>
-                    <input class="form-control" placeholder="CreatedAt" asp-for="CreatedAt">
-                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
-                    
-                </div>
-                <div class="form-check mb-3">
-                    <input class="form-check-input" asp-for="IsPreview" />
-                    <label class="form-check-label" asp-for="IsPreview"></label>
-                </div>
-                
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            </div>
         </div>
     </div>
 </div>
+
+@* @section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+} *@

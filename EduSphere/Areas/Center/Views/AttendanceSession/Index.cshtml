@@ -1,158 +1,132 @@
-﻿
-@using EduSphere.ViewModel;
-@model AttendanceSessionsVM
+﻿@model EduSphere.ViewModel.AttendanceSessionsVM
 
-<div class="container">
-    <div class="row mb-3 align-items-center my-3">
-        <div class="col-md-6">
-            <h2 class="display-6">All AttendanceSessions</h2>
-        </div>
-        @*if (User.IsInRole(SD.SUPER_ADMIN_ROLE) || User.IsInRole(SD.ADMIN_ROLE))
-        {*@
-        <div class="col-md-6 text-md-end text-start mt-2 mt-md-0">
-            <a href="/Center/AttendanceSession/Create" class="btn btn-success"><i class="bi bi-plus-circle"></i> Create</a>
-        </div>
-        @* } *@
+@{
+    ViewData["Title"] = "جلسات الحضور";
+}
+
+<style>
+    .dragon-container {
+        background-color: #121212;
+        color: #f8f9fa;
+        padding: 25px;
+        border-radius: 12px;
+        border: 1px solid #8a0303;
+        box-shadow: 0 4px 15px rgba(255, 51, 51, 0.15);
+    }
+
+    .dragon-title {
+        color: #ff4d4d;
+        font-weight: bold;
+        text-shadow: 0 0 10px rgba(255, 77, 77, 0.3);
+    }
+
+    .dragon-btn {
+        background: linear-gradient(45deg, #8a0303, #ff3333);
+        color: white;
+        border: none;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+        .dragon-btn:hover {
+            background: linear-gradient(45deg, #ff3333, #8a0303);
+            color: white;
+            box-shadow: 0 0 12px rgba(255, 51, 51, 0.6);
+            transform: scale(1.02);
+        }
+
+    .dragon-table {
+        background-color: #1a1a1a;
+        color: white;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+        .dragon-table th {
+            background-color: #222;
+            color: #ff4d4d;
+            border-bottom: 2px solid #8a0303 !important;
+            padding: 15px;
+        }
+
+        .dragon-table td {
+            border-bottom: 1px solid #333;
+            padding: 12px;
+            vertical-align: middle;
+        }
+
+        .dragon-table tbody tr:hover {
+            background-color: #2a0808;
+        }
+
+    .dragon-input {
+        background-color: #222;
+        border: 1px solid #444;
+        color: white;
+    }
+
+        .dragon-input:focus {
+            background-color: #2a2a2a;
+            border-color: #ff4d4d;
+            color: white;
+            box-shadow: 0 0 8px rgba(255, 77, 77, 0.4);
+        }
+</style>
+
+<div class="container mt-4 dragon-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="dragon-title"><i class="bi bi-calendar-check"></i> إدارة جلسات الحضور</h2>
+        <a asp-action="Create" class="btn dragon-btn px-4">إضافة جلسة +</a>
     </div>
 
-    <!-- Filter Section -->
-    <section class="py-3 filter-bar">
-        <div class="container">
-            <div class="row" style="background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;">
-                <div class="col-12">
-                    <form>
-                        <div class="row">
-                            <!-- AttendanceSession Name -->
-                            <div class="col-md-3">
-                                <input type="text" class="form-control" placeholder="Name" name="query" value="@ViewBag.Query">
-                            </div>
-
-                            <!-- Submit Button -->
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-dark w-100">Filter</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+    <!-- فورم البحث -->
+    <form method="get" asp-action="Index" class="mb-4">
+        <div class="input-group shadow-sm">
+            <input type="text" name="query" class="form-control dragon-input" placeholder="ابحث باسم المدرس..." value="@ViewBag.Query" />
+            <button class="btn dragon-btn" type="submit">بحث</button>
+            @if (!string.IsNullOrEmpty(ViewBag.Query))
+            {
+                <a asp-action="Index" class="btn btn-outline-light">إلغاء</a>
+            }
         </div>
-    </section>
+    </form>
 
-    <div class="row">
-        <div class="col-12">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">AttendanceSessionId</th>
-                        <th scope="col">TeacherId</th>
-                        <th scope="col">GroupId</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">SessionDate</th>
-
-
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.AttendanceSessions)
+    <div class="table-responsive rounded shadow">
+        <table class="table dragon-table mb-0">
+            <thead>
+                <tr>
+                    <th>عنوان الجلسة</th>
+                    <th>المدرس</th>
+                    <th>التاريخ والوقت</th>
+                    <th class="text-center">الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.AttendanceSessions.Any())
+                {
+                    foreach (var item in Model.AttendanceSessions)
                     {
                         <tr>
-                            <th scope="row">@item.AttendanceSessionId</th>
-                            <td>@item.TeacherId</td>
-                            <td>@item.GroupId</td>
-                            <td>@item.Title</td>
-                            <td>@item.SessionDate</td>
-
-
-                            <td>
-                                <a href="/Center/AttendanceSession/Update/@item.AttendanceSessionId" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i> Edit</a>
-                                <form asp-action="Delete"
-                                      asp-route-id="@item.AttendanceSessionId"
-                                      method="post"
-                                      style="display:inline">
-
-                                    <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('Are you sure you want to delete this choice?')">
-                                        <i class="bi bi-trash"></i> Delete
-                                    </button>
+                            <td class="fw-bold">@item.Title</td>
+                            <td>@item.Teacher?.User?.FullName</td>
+                            <td><span class="badge bg-dark border border-danger p-2">@item.SessionDate.ToString("yyyy-MM-dd hh:mm tt")</span></td>
+                            <td class="text-center">
+                                <a asp-action="Update" asp-route-id="@item.AttendanceSessionId" class="btn btn-sm btn-outline-warning">تعديل</a>
+                                <a asp-action="Details" asp-route-id="@item.AttendanceSessionId" class="btn btn-sm btn-outline-info">تفاصيل</a>
+                                <form asp-action="Delete" asp-route-id="@item.AttendanceSessionId" method="post" class="d-inline" onsubmit="return confirm('متأكد إنك عايز تحذف الجلسة؟');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">حذف</button>
                                 </form>
-                                @* @if (User.IsInRole(SD.SUPER_ADMIN_ROLE) || User.IsInRole(SD.ADMIN_ROLE))
-                                {
-                                   
-                                }
-                                else
-                                {
-                                    <span>NoAction</span>
-                                }*@
                             </td>
                         </tr>
                     }
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12 d-flex justify-content-center">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center">
-                    @if (Model.CurrentPage > 1)
-                    {
-                        <li class="page-item"><a class="page-link" href="/Center/AttendanceSession/Index?page=@(Model.CurrentPage - 1)">Previous</a></li>
-                    }
-                    @for (var i = 1; i <= Model.TotalPages; i++)
-                    {
-                        @if (i == Model.CurrentPage)
-                        {
-                            <li class="page-item active"><a class="page-link" href="/Center/AttendanceSession/Index?page=@i">@i</a></li>
-                        }
-                        else
-                        {
-                            <li class="page-item"><a class="page-link" href="/Center/AttendanceSession/Index?page=@i">@i</a></li>
-                        }
-                    }
-                    @if (Model.CurrentPage != Model.TotalPages)
-                    {
-                        <li class="page-item"><a class="page-link" href="/Center/AttendanceSession/Index?page=@(Model.CurrentPage + 1)">Next</a></li>
-                    }
-                </ul>
-            </nav>
-        </div>
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center py-4 text-muted">لا توجد جلسات متاحة حالياً.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const deleteButtons = document.querySelectorAll(".btn-delete");
-
-        deleteButtons.forEach(button => {
-            button.addEventListener("click", function (e) {
-                e.preventDefault(); // stop normal navigation
-
-                const url = this.getAttribute("href");
-
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "This action cannot be undone!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#d33",
-                    cancelButtonColor: "#3085d6",
-                    confirmButtonText: "Yes, delete it!"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire({
-                          title: "Deleted!",
-                          text: "Your file has been deleted.",
-                          icon: "success"
-                        });
-
-                        // Redirect to delete URL
-                        window.location.href = url;
-                    }
-                });
-            });
-        });
-    });
-</script>
-

@@ -1,58 +1,90 @@
-﻿@model Student
-<div class="container">
-    <div class="row mb-3 align-items-center my-3">
-        <div class="col-md-6">
-            <h2 class="display-6">Create new Student</h2>
-        </div>
+﻿@model EduSphere.Models.Student
+
+@{
+    ViewData["Title"] = "Create Student";
+}
+
+<!-- Select2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+
+<div class="container-fluid px-4 py-3">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-person-plus-fill me-2"></i>Create New Student</h2>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Back to List
+        </a>
     </div>
 
-    <div class="row my-3">
-        <div class="col-12">
-            <form method="post" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label for="Name" class="form-label">Name</label>
-                    <input class="form-control" placeholder="Name" asp-for="User.FullName">
-                    <span asp-validation-for="User.FullName" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Gender</label>
-                    <input class="form-control" placeholder="Gender" asp-for="Gender">
-                    <span asp-validation-for="Gender" class="text-danger"></span>
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Email</label>
-                    <input class="form-control" placeholder="Email" asp-for="User.Email">
-                    <span asp-validation-for="User.Email" class="text-danger"></span>
+                <div class="row g-3">
+                    <!-- الخيار الأول: الاختيار من القائمة المسجلة مسبقاً -->
+                    <div class="col-md-6">
+                        <label asp-for="UserId" class="form-label fw-bold">Select Existing Student User</label>
+                        <select asp-for="UserId" id="userSelectDropdown" class="form-select searchable-select" asp-items="ViewBag.Users">
+                            <option value="">-- Choose from list --</option>
+                        </select>
+                        <span asp-validation-for="UserId" class="text-danger"></span>
+                    </div>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">DateOfBirth</label>
-                    <input class="form-control" placeholder="DateOfBirth" asp-for="DateOfBirth">
-                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    <!-- الخيار البديل: كتابة اسم جديد لو مش موجود في القائمة -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Or Type New Student Name</label>
+                        <input type="text" id="customUserNameInput" class="form-control" placeholder="Type name if not in list..." />
+                        <small class="form-text text-muted">If you type here, it will override the selection from the dropdown.</small>
+                    </div>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">AcademicLevel</label>
-                    <input class="form-control" placeholder="AcademicLevel" asp-for="AcademicLevel">
-                    <span asp-validation-for="AcademicLevel" class="text-danger"></span>
-
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">CenterId</label>
-                    <input class="form-control" placeholder="CenterId" asp-for="CenterId">
-                    <span asp-validation-for="CenterId" class="text-danger"></span>
-
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">CreatedAt</label>
-                    <input class="form-control" placeholder="CreatedAt" asp-for="CreatedAt">
-                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
-
+                    <!-- Parent Dropdown -->
+                    <div class="col-md-6 mt-3">
+                        <label asp-for="ParentId" class="form-label fw-bold">Parent</label>
+                        <select asp-for="ParentId" class="form-select searchable-select" asp-items="ViewBag.Parents">
+                            <option value="">-- Select Parent (Optional) --</option>
+                        </select>
+                        <span asp-validation-for="ParentId" class="text-danger"></span>
+                    </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="mt-4 d-flex justify-content-end gap-2">
+                    <a asp-action="Index" class="btn btn-light px-4">Cancel</a>
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-check-circle me-1"></i> Save Student
+                    </button>
+                </div>
             </form>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // تفعيل الـ Select2 للبحث والفلترة بدون خاصية الـ tags اللي بتعمل مشاكل
+            $('.searchable-select').select2({
+                theme: 'bootstrap-5',
+                width: '100%',
+                placeholder: "-- Select --",
+                allowClear: true
+            });
+
+            // لو المستخدم كتب اسم جديد في حقل النص، نفرغ القائمة المنسدلة عشان السيرفر يستقبل النص الحر بسلام
+            $('#customUserNameInput').on('input', function() {
+                if ($(this).val().trim() !== "") {
+                    $('#userSelectDropdown').val('').trigger('change');
+                }
+            });
+
+            // لو اختار من القائمة المنسدلة، نفضي حقل الكتابة اليدوية
+            $('#userSelectDropdown').on('change', function() {
+                if ($(this).val()) {
+                    $('#customUserNameInput').val('');
+                }
+            });
+        });
+    </script>
+}

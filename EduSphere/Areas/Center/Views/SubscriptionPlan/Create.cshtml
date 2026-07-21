@@ -1,65 +1,80 @@
-﻿@model SubscriptionPlan
-<div class="container">
-    <div class="row mb-3 align-items-center my-3">
-        <div class="col-md-6">
-            <h2 class="display-6">Create new SubscriptionPlan</h2>
+﻿@model EduSphere.Models.SubscriptionPlan
+@{
+    ViewData["Title"] = "إضافة خطة جديدة";
+}
+
+<div class="container py-4" dir="rtl" style="max-width: 800px;">
+
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h3 class="fw-bold mb-1 text-dark">➕ إضافة خطة اشتراك جديدة</h3>
+            <p class="text-muted mb-0 small">أدخل تفاصيل الباقة والقيود الخاصة بها.</p>
         </div>
+        <a asp-action="Index" class="btn btn-outline-secondary rounded-3 px-3">
+            <i class="bi bi-arrow-right ms-1"></i> العودة
+        </a>
     </div>
 
-    <div class="row my-3">
-        <div class="col-12">
-            <form method="post" enctype="multipart/form-data">
-               @*  <div class="mb-3">
-                    <label for="Name" class="form-label">SubscriptionPlanId</label>
-                    <input class="form-control" placeholder="SubscriptionPlanId" asp-for="SubscriptionPlanId">
-                    <span asp-validation-for="SubscriptionPlanId" class="text-danger"></span>
-                </div> *@
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Name</label>
-                    <input class="form-control" placeholder="Name" asp-for="Name">
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                    
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Tier</label>
-                    <input class="form-control" placeholder="Tier" asp-for="Tier">
-                    <span asp-validation-for="Tier" class="text-danger"></span>
-                    
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Price</label>
-                    <input class="form-control" placeholder="Price" asp-for="Price">
-                    <span asp-validation-for="Price" class="text-danger"></span>
-                    
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">DurationInMonths</label>
-                    <input class="form-control" placeholder="DurationInMonths" asp-for="DurationInMonths">
-                    <span asp-validation-for="DurationInMonths" class="text-danger"></span>
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4 p-md-5">
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">MaxTeachers</label>
-                    <input class="form-control" placeholder="MaxTeachers" asp-for="MaxTeachers">
-                    <span asp-validation-for="MaxTeachers" class="text-danger"></span>
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">MaxStudents</label>
-                    <input class="form-control" placeholder="MaxStudents" asp-for="MaxStudents">
-                    <span asp-validation-for="MaxStudents" class="text-danger"></span>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="Name" class="form-label fw-bold small">اسم الخطة</label>
+                        <input asp-for="Name" class="form-control rounded-3" placeholder="مثال: الباقة الذهبية" />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Features</label>
-                    <input class="form-control" placeholder="Features" asp-for="Features">
-                    <span asp-validation-for="Features" class="text-danger"></span>
+                    <div class="col-md-6">
+                        <label asp-for="Tier" class="form-label fw-bold small">المستوى (Tier)</label>
+                        <input asp-for="Tier" class="form-control rounded-3" placeholder="Basic, Pro, Enterprise" />
+                        <span asp-validation-for="Tier" class="text-danger small"></span>
+                    </div>
 
+                    <div class="col-md-6">
+                        <label asp-for="Price" class="form-label fw-bold small">السعر (ج.م)</label>
+                        <input asp-for="Price" type="number" step="0.01" class="form-control rounded-3" />
+                        <span asp-validation-for="Price" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="DurationInMonths" class="form-label fw-bold small">المدة (بالشهور)</label>
+                        <input asp-for="DurationInMonths" type="number" class="form-control rounded-3" />
+                        <span asp-validation-for="DurationInMonths" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="MaxTeachers" class="form-label fw-bold small">أقصى عدد للمدرسين</label>
+                        <input asp-for="MaxTeachers" type="number" class="form-control rounded-3" />
+                        <span asp-validation-for="MaxTeachers" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="MaxStudents" class="form-label fw-bold small">أقصى عدد للطلاب</label>
+                        <input asp-for="MaxStudents" type="number" class="form-control rounded-3" />
+                        <span asp-validation-for="MaxStudents" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="Features" class="form-label fw-bold small">المميزات (مفصولة بفواصل)</label>
+                        <textarea asp-for="Features" class="form-control rounded-3" rows="3" placeholder="دعم فني 24/7, تقارير متقدمة..."></textarea>
+                        <span asp-validation-for="Features" class="text-danger small"></span>
+                    </div>
                 </div>
-               
-                
-                <button type="submit" class="btn btn-primary">Submit</button>
+
+                <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                    <a asp-action="Index" class="btn btn-light rounded-3 px-4">إلغاء</a>
+                    <button type="submit" class="btn btn-primary rounded-3 px-4 fw-bold">حفظ الخطة</button>
+                </div>
             </form>
         </div>
     </div>
 </div>
+
+@* @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} *@

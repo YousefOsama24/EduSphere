@@ -1,155 +1,135 @@
-﻿@using EduSphere.ViewModel;
-@model StudentAnswersVM
+﻿@model EduSphere.ViewModel.StudentAnswersVM
 
-<div class="container">
-    <div class="row mb-3 align-items-center my-3">
-        <div class="col-md-6">
-            <h2 class="display-6">All StudentAnswers</h2>
+@{
+    ViewData["Title"] = "Student Answers Management";
+}
+
+<div class="container-fluid py-4">
+    @if (TempData["success-notification"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["success-notification"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        @*if (User.IsInRole(SD.SUPER_ADMIN_ROLE) || User.IsInRole(SD.ADMIN_ROLE))
-        {*@
-            <div class="col-md-6 text-md-end text-start mt-2 mt-md-0">
-            <a href="/Teacher/StudentAnswer/Create" class="btn btn-success"><i class="bi bi-plus-circle"></i> Create</a>
-            </div>
-        @* } *@
+    }
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-gray-800">Student Answers</h1>
+            <p class="text-muted small mb-0">Review and grade students' submitted answers, choices, and essay responses.</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary d-flex align-items-center gap-2">
+            <i class="bi bi-plus-lg"></i> Add New Answer record
+        </a>
     </div>
 
-    <!-- Filter Section -->
-    <section class="py-3 filter-bar">
-        <div class="container">
-            <div class="row" style="background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;">
-                <div class="col-12">
-                    <form>
-                        <div class="row">
-                            <!-- StudentAnswer Name -->
-                            <div class="col-md-3">
-                                <input type="text" class="form-control" placeholder="Name" name="query" value="@ViewBag.Query">
-                            </div>
-
-                            <!-- Submit Button -->
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-dark w-100">Filter</button>
-                            </div>
-                        </div>
-                    </form>
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form asp-action="Index" method="get" class="row g-3 align-items-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="input-group">
+                        <input type="text" name="query" value="@ViewBag.Query" class="form-control" placeholder="Search by essay content..." />
+                        <button class="btn btn-secondary" type="submit">
+                            <i class="bi bi-search"></i> Search
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="row">
-        <div class="col-12">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">StudentAnswerId</th>
-                        <th scope="col">ExamAttemptId</th>
-                        <th scope="col">QuestionId</th>
-                        <th scope="col">SelectedChoiceId</th>
-                        <th scope="col">EssayAnswer</th>
-                        <th scope="col">MarksAwarded</th> 
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.StudentAnswers)
-                    {
-                        <tr>
-                            <th scope="row">@item.StudentAnswerId</th>
-                            <td>@item.ExamAttemptId</td>
-                            <td>@item.QuestionId</td>
-                            <td>@item.SelectedChoiceId</td>
-                            <td>@item.EssayAnswer</td>
-                            <td>@item.MarksAwarded</td>
-                            <td>
-                                <a href="/Teacher/StudentAnswer/Update/@item.StudentAnswerId" type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i> Edit</a>
-                                <form asp-action="Delete"
-                                      asp-route-id="@item.StudentAnswerId"
-                                      method="post"
-                                      style="display:inline">
-
-                                    <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('Are you sure you want to delete this choice?')">
-                                        <i class="bi bi-trash"></i> Delete
-                                    </button>
-                                </form>
-                               @* @if (User.IsInRole(SD.SUPER_ADMIN_ROLE) || User.IsInRole(SD.ADMIN_ROLE))
-                                {
-                                   
-                                }
-                                else
-                                {
-                                    <span>NoAction</span>
-                                }*@
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                @if (!string.IsNullOrWhiteSpace(ViewBag.Query))
+                {
+                    <div class="col-auto">
+                        <a asp-action="Index" class="btn btn-outline-secondary btn-sm">Clear Filter</a>
+                    </div>
+                }
+            </form>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12 d-flex justify-content-center">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center">
-                    @if (Model.CurrentPage > 1)
-                    {
-                        <li class="page-item"><a class="page-link" href="/Teacher/StudentAnswer/Index?page=@(Model.CurrentPage - 1)">Previous</a></li>
-                    }
-                    @for (var i = 1; i <= Model.TotalPages; i++)
-                    {
-                        @if (i == Model.CurrentPage)
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Attempt ID</th>
+                            <th>Question</th>
+                            <th>Answer Details</th>
+                            <th>Marks Awarded</th>
+                            <th class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.StudentAnswers != null && Model.StudentAnswers.Any())
                         {
-                            <li class="page-item active"><a class="page-link" href="/Teacher/StudentAnswer/Index?page=@i">@i</a></li>
+                            @foreach (var item in Model.StudentAnswers)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-semibold">
+                                        <span class="badge bg-secondary">#@item.ExamAttemptId</span>
+                                    </td>
+                                    <td class="text-wrap" style="max-width: 300px;">
+                                        @(item.Question?.Content ?? $"Question ID: {item.QuestionId}")
+                                    </td>
+                                    <td class="text-wrap" style="max-width: 350px;">
+                                        @if (!string.IsNullOrEmpty(item.EssayAnswer))
+                                        {
+                                            <small class="d-block text-muted"><strong>Essay:</strong> @item.EssayAnswer</small>
+                                        }
+                                        @if (item.SelectedChoiceId != null)
+                                        {
+                                            <small class="d-block text-info"><strong>Selected Choice ID:</strong> @item.SelectedChoiceId</small>
+                                        }
+                                        @if (string.IsNullOrEmpty(item.EssayAnswer) && item.SelectedChoiceId == null)
+                                        {
+                                            <span class="text-danger small">No answer provided</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success fs-6">@item.MarksAwarded Pts</span>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <div class="btn-group btn-group-sm">
+                                            <a asp-action="Update" asp-route-id="@item.StudentAnswerId" class="btn btn-outline-primary" title="Review / Edit">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <form asp-action="Delete" asp-route-id="@item.StudentAnswerId" method="post" onsubmit="return confirm('Are you sure you want to delete this record?');" style="display:inline;">
+                                                <button type="submit" class="btn btn-outline-danger" title="Delete">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
                         }
                         else
                         {
-                            <li class="page-item"><a class="page-link" href="/Teacher/StudentAnswer/Index?page=@i">@i</a></li>
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="bi bi-chat-left-text display-4 d-block mb-3"></i>
+                                    No student answers records found.
+                                </td>
+                            </tr>
                         }
-                    }
-                    @if (Model.CurrentPage != Model.TotalPages)
-                    {
-                        <li class="page-item"><a class="page-link" href="/Teacher/StudentAnswer/Index?page=@(Model.CurrentPage + 1)">Next</a></li>
-                    }
-                </ul>
-            </nav>
+                    </tbody>
+                </table>
+            </div>
         </div>
+
+        @if (Model.TotalPages > 1)
+        {
+            <div class="card-footer bg-white d-flex justify-content-between align-items-center py-3">
+                <span class="small text-muted">Page @Model.CurrentPage of @Model.TotalPages</span>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-sm mb-0">
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { page = i, query = ViewBag.Query })">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+        }
     </div>
 </div>
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const deleteButtons = document.querySelectorAll(".btn-delete");
-
-        deleteButtons.forEach(button => {
-            button.addEventListener("click", function (e) {
-                e.preventDefault(); // stop normal navigation
-
-                const url = this.getAttribute("href");
-
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "This action cannot be undone!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#d33",
-                    cancelButtonColor: "#3085d6",
-                    confirmButtonText: "Yes, delete it!"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire({
-                          title: "Deleted!",
-                          text: "Your file has been deleted.",
-                          icon: "success"
-                        });
-
-                        // Redirect to delete URL
-                        window.location.href = url;
-                    }
-                });
-            });
-        });
-    });
-</script>
-

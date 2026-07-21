@@ -1,53 +1,55 @@
-﻿@model Parent
+﻿@model EduSphere.Models.Parent
 
-<div class="container">
-    <div class="row mb-3 align-items-center my-3">
-        <div class="col-md-6">
-            <h2 class="display-6">Update Parent</h2>
-        </div>
-    </div>
+@{
+    ViewData["Title"] = "تعديل ولي الأمر";
+}
 
-    <div class="row my-3">
-        <div class="col-12">
-            <form method="post" enctype="multipart/form-data">
-                <!-- Ensure the Edit form posts the id -->
-                <input type="hidden" asp-for="ParentId" />
-                @*  <div class="mb-3">
-                    <label for="Name" class="form-label">ParentId</label>
-                    <input class="form-control" placeholder="ParentId" asp-for="ParentId">
-                    <span asp-validation-for="ParentId" class="text-danger"></span>
-                </div> *@
-                <div class="mb-3">
-                    <label for="Name" class="form-label">Name</label>
-                    <input class="form-control" placeholder="Name" asp-for="User.FullName">
-                    <span asp-validation-for="User.FullName" class="text-danger"></span>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-header bg-warning text-dark py-3 rounded-top-3">
+                    <h5 class="card-title mb-0 fw-bold">
+                        <i class="bi bi-pencil-square me-2"></i>تعديل بيانات ولي الأمر
+                    </h5>
                 </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Occupation</label>
-                    <input class="form-control" placeholder="Occupation" asp-for="Occupation">
-                    <span asp-validation-for="Occupation" class="text-danger"></span>
+                <div class="card-body p-4">
+                    <form asp-action="Update" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="ParentId" />
+                        <input type="hidden" asp-for="UserId" />
 
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
+
+                        <!-- Linked User (Read-Only) -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted">اسم ولي الأمر المرتبط</label>
+                            <input type="text" class="form-control bg-light" value="@(Model.User?.FullName ?? "غير محدد")" readonly />
+                        </div>
+
+                        <!-- Occupation -->
+                        <div class="mb-4">
+                            <label asp-for="Occupation" class="form-label fw-semibold">الوظيفة / المهنة</label>
+                            <input asp-for="Occupation" class="form-control" placeholder="مثال: مهندس، معلم، طبيب..." />
+                            <span asp-validation-for="Occupation" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                <i class="bi bi-arrow-right me-1"></i>إلغاء
+                            </a>
+                            <button type="submit" class="btn btn-warning px-4 fw-semibold">
+                                <i class="bi bi-check-lg me-1"></i>حفظ التغييرات
+                            </button>
+                        </div>
+                    </form>
                 </div>
-
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            </div>
         </div>
     </div>
 </div>
 
-@* <script>
-    function previewImage(event) {
-        const input = event.target;
-        const preview = document.getElementById("preview");
-
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result; // الصورة الجديدة
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script> *@
-
-
+@* @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} *@

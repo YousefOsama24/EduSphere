@@ -1,68 +1,101 @@
 ﻿@model Center
-<div class="container">
-    <div class="row mb-3 align-items-center my-3">
+
+<div class="container my-4">
+    <!-- عنوان الصفحة -->
+    <div class="row mb-4 align-items-center">
         <div class="col-md-6">
-            <h2 class="display-6">Create new Center</h2>
+            <h2 class="fw-bold text-dark"><i class="fa-solid fa-school-flag text-primary me-2"></i> إضافة سنتر جديد</h2>
+            <p class="text-muted mb-0">قم بملء البيانات التالية لإنشاء سنتر تعليمي جديد على المنصة</p>
         </div>
     </div>
 
-    <div class="row my-3">
-        <div class="col-12">
+    <!-- كارت الفورم -->
+    <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-body p-4">
             <form method="post" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label for="Name" class="form-label">Name</label>
-                    <input class="form-control" placeholder="Name" asp-for="Name">
-                    <span asp-validation-for="Name" class="text-danger"></span>
+
+                <div class="row">
+                    <!-- العمود الأيمن: البيانات الأساسية -->
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Name" class="form-label fw-semibold">CenterName</label>
+                                <input class="form-control form-control-lg" placeholder="مثال: سنتر النخبة" asp-for="Name">
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Email" class="form-label fw-semibold">Email</label>
+                                <input type="email" class="form-control form-control-lg" placeholder="center@example.com" asp-for="Email">
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Phone" class="form-label fw-semibold">Phone</label>
+                                <input class="form-control form-control-lg" placeholder="01xxxxxxxxx" asp-for="Phone">
+                                <span asp-validation-for="Phone" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Address" class="form-label fw-semibold">Address</label>
+                                <input class="form-control form-control-lg" placeholder="المحافظة - المدينة - الشارع" asp-for="Address">
+                                <span asp-validation-for="Address" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12 mb-3">
+                                <label asp-for="Description" class="form-label fw-semibold">Description</label>
+                                <textarea class="form-control" rows="3" placeholder="اكتب وصفاً مختصراً عن السنتر والمراحل الدراسية..." asp-for="Description"></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- العمود الأيسر: رفع لوجو السنتر والمعاينة -->
+                    <div class="col-lg-4 border-start-lg mb-3">
+                        <div class="d-flex flex-column align-items-center text-center p-2">
+                            <label class="form-label fw-semibold mb-3">شعار السنتر (Logo)</label>
+
+                            <!-- مكان عرض الصورة الافتراضية أو المرفوعة -->
+                            <div class="mb-3 position-relative">
+                                <img id="logoPreview" src="@(string.IsNullOrEmpty(Model?.LogoUrl) ? "https://via.placeholder.com/150?text=No+Logo" : Model.LogoUrl)"
+                                     alt="Logo Preview"
+                                     class="img-thumbnail rounded-circle shadow-sm"
+                                     style="width: 150px; height: 150px; object-fit: cover;">
+                            </div>
+
+                            <!-- زر رفع الملف المعمول بشكل نضيف -->
+                            <div class="w-100 px-3">
+                                <input type="file" name="LogoFile" id="logoInput" class="form-control" accept="image/*" onchange="previewImage(event)">
+                                <small class="text-muted d-block mt-1">امتدادات مدعومة: JPG, PNG, WEBP</small>
+                                <span asp-validation-for="LogoUrl" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Description</label>
-                    <input class="form-control" placeholder="Description" asp-for="Description">
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                    
+
+                <hr class="text-muted my-4">
+
+                <!-- أزرار التحكم -->
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="/SuperAdmin/Centers" class="btn btn-light px-4">إلغاء</a>
+                    <button type="submit" class="btn btn-primary px-5 fw-semibold"><i class="fa-solid fa-floppy-disk me-1"></i> Seve </button>
                 </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Email</label>
-                    <input class="form-control" placeholder="Email" asp-for="Email">
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                    
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Address</label>
-                    <input class="form-control" placeholder="Address" asp-for="Address">
-                    <span asp-validation-for="Address" class="text-danger"></span>
-                    
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Phone</label>
-                    <input class="form-control" placeholder="Phone" asp-for="Phone">
-                    <span asp-validation-for="Phone" class="text-danger"></span>
-                    
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">LogoUrl</label>
-                    <input class="form-control" placeholder="LogoUrl" asp-for="LogoUrl">
-                    <span asp-validation-for="LogoUrl" class="text-danger"></span>
-                    
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">CreatedAt</label>
-                    <input class="form-control" placeholder="CreatedAt" asp-for="CreatedAt">
-                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
-                    
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">UpdatedAt</label>
-                    <input class="form-control" placeholder="UpdatedAt" asp-for="UpdatedAt">
-                    <span asp-validation-for="UpdatedAt" class="text-danger"></span>
-                    
-                </div>
-                <div class="form-check mb-3">
-                    <input class="form-check-input" asp-for="IsDeleted" />
-                    <label class="form-check-label" asp-for="IsDeleted"></label>
-                </div>
-                
-                <button type="submit" class="btn btn-primary">Submit</button>
+
             </form>
         </div>
     </div>
 </div>
+
+<!-- كود الـ JavaScript لمعاينة الصورة فوراً عند اختيارها -->
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('logoPreview');
+            output.src = reader.result;
+        }
+        if(event.target.files[0]) {
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    }
+</script>

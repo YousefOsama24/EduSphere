@@ -3,10 +3,10 @@ using EduSphere.Repositories.Interfaces;
 using EduSphere.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 using EduSphere.ViewModel;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 using SubscriptionModel = EduSphere.Models.Subscription;
 
@@ -19,15 +19,15 @@ namespace EduSphere.Areas.Center.Controllers
         private const int PageSize = 10;
 
         private readonly IRepository<SubscriptionModel> _subscriptionRepository;
-        private readonly ILogger<SubscriptionController> _logger;
         private readonly IRepository<EduSphere.Models.Center> _centerRepository;
         private readonly IRepository<SubscriptionPlan> _subscriptionPlanRepository;
+        private readonly ILogger<SubscriptionController> _logger;
 
         public SubscriptionController(
-    IRepository<SubscriptionModel> subscriptionRepository,
-    IRepository<EduSphere.Models.Center> centerRepository,
-    IRepository<SubscriptionPlan> subscriptionPlanRepository,
-    ILogger<SubscriptionController> logger)
+            IRepository<SubscriptionModel> subscriptionRepository,
+            IRepository<EduSphere.Models.Center> centerRepository,
+            IRepository<SubscriptionPlan> subscriptionPlanRepository,
+            ILogger<SubscriptionController> logger)
         {
             _subscriptionRepository = subscriptionRepository;
             _centerRepository = centerRepository;
@@ -42,35 +42,40 @@ namespace EduSphere.Areas.Center.Controllers
             string? query = null,
             CancellationToken cancellationToken = default)
         {
-            var subscriptions = await _subscriptionRepository.GetAsync(
-                includes: new Expression<Func<SubscriptionModel, object>>[]
-                {
-                    x => x.SubscriptionPlan
-                },
-                cancellationToken: cancellationToken);
+            Expression<Func<SubscriptionModel, bool>>? filter = null;
 
             if (!string.IsNullOrWhiteSpace(query))
             {
                 string search = query.Trim().ToLower();
-
-                subscriptions = subscriptions.Where(x =>
-                    x.SubscriptionId.ToString().Contains(search) ||
-                    x.CenterId.ToString().Contains(search) ||
-                    x.SubscriptionPlanId.ToString().Contains(search));
+                filter = x => x.SubscriptionId.ToString().Contains(search) ||
+                              x.Center.Name.ToLower().Contains(search) ||
+                              x.SubscriptionPlan.Name.ToLower().Contains(search);
 
                 ViewBag.Query = query;
             }
 
-            double totalPages =
-                Math.Ceiling(subscriptions.Count() / (double)PageSize);
+            // سحب البيانات من الداتابيز مباشرة مع الـ Includes والـ Pagination
+            var subscriptions = await _subscriptionRepository.GetAsync(
+                filter: filter,
+                includes: new Expression<Func<SubscriptionModel, object>>[]
+                {
+                    x => x.SubscriptionPlan,
+                    x => x.Center
+                },
+                skip: (page - 1) * PageSize,
+                take: PageSize,
+                tracked: false,
+                cancellationToken: cancellationToken);
 
-            subscriptions = subscriptions
-                .Skip((page - 1) * PageSize)
-                .Take(PageSize);
+            int totalCount = await _subscriptionRepository.CountAsync(
+                predicate: filter,
+                cancellationToken: cancellationToken);
+
+            double totalPages = Math.Ceiling(totalCount / (double)PageSize);
 
             return View(new SubscriptionsVM
             {
-                Subscriptions = subscriptions.AsEnumerable(),
+                Subscriptions = subscriptions,
                 TotalPages = totalPages,
                 CurrentPage = page
             });
@@ -81,28 +86,10 @@ namespace EduSphere.Areas.Center.Controllers
         #region Create
 
         [HttpGet]
-        public async Task<IActionResult> Create(
-     CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Create(CancellationToken cancellationToken = default)
         {
-            var centers =
-                await _centerRepository.GetAsync(
-                    cancellationToken: cancellationToken);
-
-            var plans =
-                await _subscriptionPlanRepository.GetAsync(
-                    cancellationToken: cancellationToken);
-
-            ViewBag.Centers = new SelectList(
-                centers,
-                "CenterId",
-                "Name");
-
-            ViewBag.Plans = new SelectList(
-                plans,
-                "SubscriptionPlanId",
-                "Name");
-
-            return View(new SubscriptionModel());
+            await PopulateDropdownsAsync(cancellationToken);
+            return View(new SubscriptionModel { StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(1) });
         }
 
         [HttpPost]
@@ -112,34 +99,27 @@ namespace EduSphere.Areas.Center.Controllers
             CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
+            {
+                await PopulateDropdownsAsync(cancellationToken, subscription.CenterId, subscription.SubscriptionPlanId);
                 return View(subscription);
+            }
 
             try
             {
-                await _subscriptionRepository.CreateAsync(
-                    subscription,
-                    cancellationToken);
+                await _subscriptionRepository.CreateAsync(subscription, cancellationToken);
+                await _subscriptionRepository.CommitAsync(cancellationToken);
 
-                await _subscriptionRepository.CommitAsync(
-                    cancellationToken);
-
-                TempData["Success"] =
-                    "Subscription created successfully.";
-
-                _logger.LogInformation(
-                    "Subscription created successfully.");
+                TempData["Success"] = "Subscription created successfully.";
+                _logger.LogInformation("Subscription created successfully.");
 
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                _logger.LogError(
-                    ex,
-                    "Error while creating subscription.");
+                _logger.LogError(ex, "Error while creating subscription.");
+                TempData["Error"] = "Something went wrong while creating the subscription.";
 
-                TempData["Error"] =
-                    "Something went wrong while creating the subscription.";
-
+                await PopulateDropdownsAsync(cancellationToken, subscription.CenterId, subscription.SubscriptionPlanId);
                 return View(subscription);
             }
         }
@@ -155,12 +135,13 @@ namespace EduSphere.Areas.Center.Controllers
         {
             var subscription = await _subscriptionRepository.GetOneAsync(
                 x => x.SubscriptionId == id,
-                tracked: true,
+                tracked: false,
                 cancellationToken: cancellationToken);
 
             if (subscription == null)
                 return NotFound();
 
+            await PopulateDropdownsAsync(cancellationToken, subscription.CenterId, subscription.SubscriptionPlanId);
             return View(subscription);
         }
 
@@ -171,7 +152,10 @@ namespace EduSphere.Areas.Center.Controllers
             CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
+            {
+                await PopulateDropdownsAsync(cancellationToken, subscription.CenterId, subscription.SubscriptionPlanId);
                 return View(subscription);
+            }
 
             try
             {
@@ -191,25 +175,17 @@ namespace EduSphere.Areas.Center.Controllers
 
                 await _subscriptionRepository.CommitAsync(cancellationToken);
 
-                TempData["Success"] =
-                    "Subscription updated successfully.";
-
-                _logger.LogInformation(
-                    "Subscription updated successfully. Id: {Id}",
-                    subscription.SubscriptionId);
+                TempData["Success"] = "Subscription updated successfully.";
+                _logger.LogInformation("Subscription updated successfully. Id: {Id}", subscription.SubscriptionId);
 
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                _logger.LogError(
-                    ex,
-                    "Error while updating subscription. Id: {Id}",
-                    subscription.SubscriptionId);
+                _logger.LogError(ex, "Error while updating subscription. Id: {Id}", subscription.SubscriptionId);
+                TempData["Error"] = "Something went wrong while updating the subscription.";
 
-                TempData["Error"] =
-                    "Something went wrong while updating the subscription.";
-
+                await PopulateDropdownsAsync(cancellationToken, subscription.CenterId, subscription.SubscriptionPlanId);
                 return View(subscription);
             }
         }
@@ -228,36 +204,43 @@ namespace EduSphere.Areas.Center.Controllers
             {
                 var subscription = await _subscriptionRepository.GetOneAsync(
                     x => x.SubscriptionId == id,
+                    tracked: true,
                     cancellationToken: cancellationToken);
 
                 if (subscription == null)
                     return NotFound();
 
                 _subscriptionRepository.Delete(subscription);
-
                 await _subscriptionRepository.CommitAsync(cancellationToken);
 
-                TempData["Success"] =
-                    "Subscription deleted successfully.";
-
-                _logger.LogInformation(
-                    "Subscription deleted successfully. Id: {Id}",
-                    id);
+                TempData["Success"] = "Subscription deleted successfully.";
+                _logger.LogInformation("Subscription deleted successfully. Id: {Id}", id);
 
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                _logger.LogError(
-                    ex,
-                    "Error while deleting subscription. Id: {Id}",
-                    id);
-
-                TempData["Error"] =
-                    "Something went wrong while deleting the subscription.";
+                _logger.LogError(ex, "Error while deleting subscription. Id: {Id}", id);
+                TempData["Error"] = "Something went wrong while deleting the subscription.";
 
                 return RedirectToAction(nameof(Index));
             }
+        }
+
+        #endregion
+
+        #region Helper Methods
+
+        private async Task PopulateDropdownsAsync(
+            CancellationToken cancellationToken = default,
+            object? selectedCenter = null,
+            object? selectedPlan = null)
+        {
+            var centers = await _centerRepository.GetAsync(cancellationToken: cancellationToken);
+            var plans = await _subscriptionPlanRepository.GetAsync(cancellationToken: cancellationToken);
+
+            ViewBag.Centers = new SelectList(centers, "CenterId", "Name", selectedCenter);
+            ViewBag.Plans = new SelectList(plans, "SubscriptionPlanId", "Name", selectedPlan);
         }
 
         #endregion

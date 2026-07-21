@@ -1,71 +1,74 @@
-﻿@model Subscription
+﻿@model EduSphere.Models.Subscription
+@{
+    ViewData["Title"] = "تعديل الاشتراك";
+}
 
-<div class="container">
-    <div class="row mb-3 align-items-center my-3">
-        <div class="col-md-6">
-            <h2 class="display-6">Update Subscription</h2>
+<div class="container py-4" dir="rtl" style="max-width: 700px;">
+
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h3 class="fw-bold mb-1 text-dark">✏️ تعديل بيانات الاشتراك</h3>
+            <p class="text-muted mb-0 small">تعديل التواريخ أو الخطة للاشتراك رقم #@Model.SubscriptionId</p>
         </div>
+        <a asp-action="Index" class="btn btn-outline-secondary rounded-3 px-3">
+            <i class="bi bi-arrow-right ms-1"></i> العودة
+        </a>
     </div>
 
-    <div class="row my-3">
-        <div class="col-12">
-            <form method="post" enctype="multipart/form-data">
-                <!-- Ensure the Edit form posts the id -->
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4 p-md-5">
+            <form asp-action="Update" method="post">
+                @Html.AntiForgeryToken()
                 <input type="hidden" asp-for="SubscriptionId" />
-               @*  <div class="mb-3">
-                    <label for="Name" class="form-label">SubscriptionId</label>
-                    <input class="form-control" placeholder="SubscriptionId" asp-for="SubscriptionId">
-                    <span asp-validation-for="SubscriptionId" class="text-danger"></span>
-                </div>  *@
-                <div class="mb-3">
-                    <label for="Name" class="form-label">CenterId</label>
-                    <input class="form-control" placeholder="CenterId" asp-for="CenterId">
-                    <span asp-validation-for="CenterId" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">SubscriptionPlanId</label>
-                    <input class="form-control" placeholder="SubscriptionPlanId" asp-for="SubscriptionPlanId">
-                    <span asp-validation-for="SubscriptionPlanId" class="text-danger"></span>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">StartDate</label>
-                    <input class="form-control" placeholder="StartDate" asp-for="StartDate">
-                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">EndDate</label>
-                    <input class="form-control" placeholder="EndDate" asp-for="EndDate">
-                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="CenterId" class="form-label fw-bold small">المركز التعليمي</label>
+                        <select asp-for="CenterId" class="form-select rounded-3" asp-items="ViewBag.Centers">
+                        </select>
+                        <span asp-validation-for="CenterId" class="text-danger small"></span>
+                    </div>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Status</label>
-                    <input class="form-control" placeholder="Status" asp-for="Status">
-                    <span asp-validation-for="Status" class="text-danger"></span>
+                    <div class="col-md-6">
+                        <label asp-for="SubscriptionPlanId" class="form-label fw-bold small">خطة الاشتراك</label>
+                        <select asp-for="SubscriptionPlanId" class="form-select rounded-3" asp-items="ViewBag.Plans">
+                        </select>
+                        <span asp-validation-for="SubscriptionPlanId" class="text-danger small"></span>
+                    </div>
 
+                    <div class="col-md-6">
+                        <label asp-for="StartDate" class="form-label fw-bold small">تاريخ البداية</label>
+                        <input asp-for="StartDate" type="date" class="form-control rounded-3" asp-format="{0:yyyy-MM-dd}" />
+                        <span asp-validation-for="StartDate" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="EndDate" class="form-label fw-bold small">تاريخ النهاية</label>
+                        <input asp-for="EndDate" type="date" class="form-control rounded-3" asp-format="{0:yyyy-MM-dd}" />
+                        <span asp-validation-for="EndDate" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="Status" class="form-label fw-bold small">حالة الاشتراك</label>
+                        <select asp-for="Status" class="form-select rounded-3">
+                            <option value="Active">نشط (Active)</option>
+                            <option value="Inactive">غير نشط (Inactive)</option>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger small"></span>
+                    </div>
                 </div>
-                
-                <button type="submit" class="btn btn-primary">Submit</button>
+
+                <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                    <a asp-action="Index" class="btn btn-light rounded-3 px-4">إلغاء</a>
+                    <button type="submit" class="btn btn-primary rounded-3 px-4 fw-bold">تحديث البيانات</button>
+                </div>
             </form>
         </div>
     </div>
 </div>
 
-@* <script>
-    function previewImage(event) {
-        const input = event.target;
-        const preview = document.getElementById("preview");
-
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result; // الصورة الجديدة
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script> *@
-
-
+@* @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} *@

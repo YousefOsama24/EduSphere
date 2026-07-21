@@ -1,94 +1,100 @@
-﻿@model Course
+﻿@model EduSphere.Models.Course
 
-<div class="container">
-    <div class="row mb-3 align-items-Course my-3">
-        <div class="col-md-6">
-            <h2 class="display-6">Update Course</h2>
-        </div>
-    </div>
+@{
+    ViewData["Title"] = "Update Course";
+}
 
-    <div class="row my-3">
-        <div class="col-12">
-            <form method="post" enctype="multipart/form-data">
-                <!-- Ensure the Edit form posts the id -->
-                <input type="hidden" asp-for="CourseId" />
-               @*  <div class="mb-3">
-                    <label for="Name" class="form-label">CourseId</label>
-                    <input class="form-control" placeholder="CourseId" asp-for="CourseId">
-                    <span asp-validation-for="CourseId" class="text-danger"></span>
-                </div> *@
-                <div class="mb-3">
-                    <label for="Name" class="form-label">Title</label>
-                    <input class="form-control" placeholder="Title" asp-for="Title">
-                    <span asp-validation-for="Title" class="text-danger"></span>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- زر الرجوع -->
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-circle p-2">
+                    <i class="bi bi-arrow-left d-flex"></i>
+                </a>
+                <span class="text-muted">Back to List</span>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-dark py-3">
+                    <h5 class="card-title mb-0">Edit Course Architecture</h5>
                 </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">CenterId</label>
-                    <input class="form-control" placeholder="CenterId" asp-for="CenterId">
-                    <span asp-validation-for="CenterId" class="text-danger"></span>
+                <div class="card-body p-4">
+                    <form asp-action="Update" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">TeacherId</label>
-                    <input class="form-control" placeholder="TeacherId" asp-for="TeacherId">
-                    <span asp-validation-for="TeacherId" class="text-danger"></span>
+                        <!-- الحقول المخفية للحفاظ على المعرفات وتاريخ الإنشاء -->
+                        <input type="hidden" asp-for="CourseId" />
+                        <input type="hidden" asp-for="CreatedAt" />
+                        <!-- تحديث وقت التعديل تلقائياً بلحظة الحفظ -->
+                        <input type="hidden" asp-for="UpdatedAt" value="@DateTime.Now" />
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Description</label>
-                    <input class="form-control" placeholder="Description" asp-for="Description">
-                    <span asp-validation-for="Description" class="text-danger"></span>
+                        <div class="row g-3">
+                            <!-- اسم الكورس -->
+                            <div class="col-md-12">
+                                <label asp-for="Title" class="form-label fw-semibold">Course Title</label>
+                                <input asp-for="Title" class="form-control" />
+                                <span asp-validation-for="Title" class="text-danger small"></span>
+                            </div>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Price</label>
-                    <input class="form-control" placeholder="Price" asp-for="Price">
-                    <span asp-validation-for="Price" class="text-danger"></span>
+                            <!-- معرف المركز التعليمي -->
+                            <div class="col-md-6">
+                                <label asp-for="CenterId" class="form-label fw-semibold">Center ID</label>
+                                <input asp-for="CenterId" type="number" class="form-control" />
+                                <span asp-validation-for="CenterId" class="text-danger small"></span>
+                            </div>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">ThumbnailUrl</label>
-                    <input class="form-control" placeholder="ThumbnailUrl" asp-for="ThumbnailUrl">
-                    <span asp-validation-for="ThumbnailUrl" class="text-danger"></span>
+                            <!-- معرف المدرس المسؤول -->
+                            <div class="col-md-6">
+                                <label asp-for="TeacherId" class="form-label fw-semibold">Teacher ID</label>
+                                <input asp-for="TeacherId" type="number" class="form-control" />
+                                <span asp-validation-for="TeacherId" class="text-danger small"></span>
+                            </div>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">CreatedAt</label>
-                    <input class="form-control" placeholder="CreatedAt" asp-for="CreatedAt">
-                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                            <!-- السعر -->
+                            <div class="col-md-6">
+                                <label asp-for="Price" class="form-label fw-semibold">Price</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input asp-for="Price" type="number" step="0.01" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Price" class="text-danger small"></span>
+                            </div>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">UpdatedAt</label>
-                    <input class="form-control" placeholder="UpdatedAt" asp-for="UpdatedAt">
-                    <span asp-validation-for="UpdatedAt" class="text-danger"></span>
+                            <!-- حالة النشر -->
+                            <div class="col-md-6 d-flex align-items-end mb-2">
+                                <div class="form-check form-switch card p-2 px-4 w-100 border shadow-none bg-light mb-0">
+                                    <input class="form-check-input ms-0 me-2" type="checkbox" role="switch" asp-for="IsPublished" id="publishSwitch">
+                                    <label class="form-check-label fw-semibold" for="publishSwitch">Published Status</label>
+                                </div>
+                            </div>
 
-                </div>
+                            <!-- رابط صورة الغلاف -->
+                            <div class="col-md-12">
+                                <label asp-for="ThumbnailUrl" class="form-label fw-semibold">Thumbnail Cover Image URL</label>
+                                <input asp-for="ThumbnailUrl" class="form-control" />
+                                <span asp-validation-for="ThumbnailUrl" class="text-danger small"></span>
+                            </div>
 
-                <div class="form-check mb-3">
-                    <input class="form-check-input" asp-for="IsPublished" />
-                    <label class="form-check-label" asp-for="IsPublished"></label>
+                            <!-- وصف الكورس -->
+                            <div class="col-md-12">
+                                <label asp-for="Description" class="form-label fw-semibold">Course Overview / Description</label>
+                                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                            <a asp-action="Index" class="btn btn-light">Cancel</a>
+                            <button type="submit" class="btn btn-warning px-4">Update Course</button>
+                        </div>
+                    </form>
                 </div>
-               
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            </div>
         </div>
     </div>
 </div>
 
-@* <script>
-    function previewImage(event) {
-        const input = event.target;
-        const preview = document.getElementById("preview");
-
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result; // الصورة الجديدة
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script> *@
-
-
+@* @section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+} *@

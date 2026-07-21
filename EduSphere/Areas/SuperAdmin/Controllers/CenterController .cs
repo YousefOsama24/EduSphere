@@ -12,10 +12,12 @@ namespace EduSphere.Areas.SupeAdmin.Controllers
     {
 
         private readonly IRepository<CenterModel> _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public CenterController(IRepository<CenterModel> context)
+        public CenterController(IRepository<CenterModel> context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<IActionResult> Index(int page = 1, string? query = null, CancellationToken cancellationToken = default)
@@ -54,18 +56,38 @@ namespace EduSphere.Areas.SupeAdmin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CenterModel Center, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Create(CenterModel center, IFormFile LogoFile)
         {
-            if (!ModelState.IsValid)
-                return View(Center);
+            if (ModelState.IsValid)
+            {
+                if (LogoFile != null && LogoFile.Length > 0)
+                {
+                    // توليد اسم فريد للصورة
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(LogoFile.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Imges", fileName);
 
-            await _context.CreateAsync(Center, cancellationToken);
-            await _context.CommitAsync(cancellationToken);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await LogoFile.CopyToAsync(stream);
+                    }
 
-            TempData["success-notification"] = "Center added successfully.";
+                    // حفظ المسار في الموديل
+                    center.LogoUrl = "/images/" + fileName;
+                }
 
-            return RedirectToAction(nameof(Index));
+                // تعبئة البيانات التلقائية
+                center.CreatedAt = DateTime.Now;
+                center.IsDeleted = false;
+
+                await _context.CreateAsync(center);
+                await _context.CommitAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+            return View(center);
         }
+
+
         [HttpGet]
         public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
@@ -78,13 +100,15 @@ namespace EduSphere.Areas.SupeAdmin.Controllers
 
             return View(Center);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(CenterModel Center, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Update(CenterModel Center, IFormFile? LogoFile, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return View(Center);
 
+            // بنجيب السنتر القديم من الداتابيز ومادام tracked: true التعديلات هتسمع فوراً عند الـ Commit
             var oldCenter = await _context.GetOneAsync(
                 c => c.CenterId == Center.CenterId,
                 tracked: true,
@@ -93,16 +117,56 @@ namespace EduSphere.Areas.SupeAdmin.Controllers
             if (oldCenter == null)
                 return NotFound();
 
+            // ---- [ لوجيك رفع شعار السنتر الجديد ] ----
+            if (LogoFile != null && LogoFile.Length > 0)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "centers");
+
+                // 1. مسح الصورة القديمة من السيرفر لو موجودة فعلاً
+                if (!string.IsNullOrEmpty(oldCenter.LogoUrl))
+                {
+                    string oldFilePath = Path.Combine(_webHostEnvironment.WebRootPath, oldCenter.LogoUrl.TrimStart('/'));
+                    if (System.IO.File.Exists(oldFilePath))
+                    {
+                        System.IO.File.Delete(oldFilePath);
+                    }
+                }
+
+                // 2. إنشاء الفولدر لو مش موجود
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                // 3. توليد اسم فريد وحفظ الصورة الجديدة
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(LogoFile.FileName);
+                string newFilePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(newFilePath, FileMode.Create))
+                {
+                    await LogoFile.CopyToAsync(stream);
+                }
+
+                // 4. تحديث مسار الصورة بالجديد
+                oldCenter.LogoUrl = "/images/centers/" + uniqueFileName;
+            }
+            // ملحوظة: لو مرفعش صورة جديدة، مش هندخل الـ if دي، وبالتالي oldCenter.LogoUrl هيفضل محتفظ بقيمته القديمة السليمة!
+
+            // ---- [ مابينج بقية البيانات ] ----
             oldCenter.Name = Center.Name;
             oldCenter.Description = Center.Description;
             oldCenter.Address = Center.Address;
             oldCenter.Phone = Center.Phone;
             oldCenter.Email = Center.Email;
-            oldCenter.LogoUrl = Center.LogoUrl;
-            oldCenter.CreatedAt = Center.CreatedAt;
-            oldCenter.UpdatedAt = Center.UpdatedAt;
+
+            // تاريخ الإنشاء يفضل ثابت وميتغيرش أبداً في التعديل
+            // oldCenter.CreatedAt = oldCenter.CreatedAt; 
+
+            // بنسجل تاريخ التعديل اللحظة دي تلقائي
+            oldCenter.UpdatedAt = DateTime.Now;
             oldCenter.IsDeleted = Center.IsDeleted;
 
+            // حفظ التغييرات في الداتابيز
             await _context.CommitAsync(cancellationToken);
 
             TempData["success-notification"] = "Center updated successfully.";

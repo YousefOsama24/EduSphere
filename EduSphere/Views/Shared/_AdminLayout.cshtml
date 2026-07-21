@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard SuperAdmin</title>
+    <!-- Bootstrap CSS (RTL) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f5f7;
+            overflow-x: hidden;
+        }
+        /* Sidebar Styles */
+        .sidebar {
+            min-height: 100vh;
+            background-color: #11141a; /* لون داكن أكثر عمقاً للـ Super Admin */
+            color: #fff;
+            transition: all 0.3s;
+        }
+
+            .sidebar .brand-name {
+                font-size: 1.3rem;
+                font-weight: bold;
+                color: #ff5722; /* هوية Dragon System */
+                border-bottom: 1px solid #1f242e;
+            }
+
+            .sidebar .nav-link {
+                color: #9aa0ac;
+                padding: 12px 20px;
+                margin: 4px 12px;
+                border-radius: 8px;
+                transition: 0.3s;
+            }
+
+                .sidebar .nav-link:hover, .sidebar .nav-link.active {
+                    background-color: #ff5722;
+                    color: #fff;
+                }
+        /* Main Content */
+        .main-content {
+            background-color: #f4f5f7;
+        }
+
+        .navbar-custom {
+            background-color: #ffffff;
+            box-shadow: 0 2px 12px rgba(0,0,0,.04);
+            border-radius: 12px;
+        }
+
+        .card-custom {
+            border: none;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,.03);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+            .card-custom:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 8px 20px rgba(0,0,0,.07);
+            }
+    </style>
+</head>
+<body>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar القائمة الجانبية للمنصة -->
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse p-0">
+                <div class="brand-name p-3 text-center">
+                    <i class="fa-solid fa-dragon me-2"></i> EduSphere
+                    <div style="font-size: 0.75rem; color: #6c757d;" class="mt-1">Dashboard SuperAdmin</div>
+                </div>
+                <div class="pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/SuperAdmin/Home/Index">
+                                <i class="fa-solid fa-chart-line me-2"></i> الإحصائيات العامة
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/SuperAdmin/Center/Index">
+                                <i class="fa-solid fa-school me-2"></i> إدارة السناتر
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Center/Teachers/Index">
+                                <i class="fa-solid fa-chalkboard-user me-2"></i> المدرسين المشتركين
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/SuperAdmin/Notification/Index">
+                                <i class="fa-solid fa-user-graduate me-2"></i> Notifications
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/SuperAdmin/Payment/Index">
+                                <i class="fa-solid fa-users me-2"></i> Payments
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/SuperAdmin/Subscriptions">
+                                <i class="fa-solid fa-credit-card me-2"></i> اشتراكات السناتر والدفع
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/SuperAdmin/Settings">
+                                <i class="fa-solid fa-gears me-2"></i> إعدادات المنصة
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+                <!-- Top Navbar -->
+               
+
+                <!-- المحتوى الديناميكي -->
+                <div class="container-fluid p-0">
+                    @RenderBody()
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

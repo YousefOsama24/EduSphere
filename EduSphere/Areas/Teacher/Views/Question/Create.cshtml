@@ -1,47 +1,69 @@
-﻿@model Question
-<div class="container">
-    <div class="row mb-3 align-items-center my-3">
-        <div class="col-md-6">
-            <h2 class="display-6">Create new Question</h2>
-        </div>
-    </div>
+﻿@model EduSphere.Models.Question
 
-    <div class="row my-3">
-        <div class="col-12">
-            <form method="post" enctype="multipart/form-data">
-               @*  <div class="mb-3">
-                    <label for="Name" class="form-label">QuestionId</label>
-                    <input class="form-control" placeholder="QuestionId" asp-for="QuestionId">
-                    <span asp-validation-for="QuestionId" class="text-danger"></span>
-                </div> *@
-                <div class="mb-3">
-                    <label for="Img" class="form-label">ExamId</label>
-                    <input class="form-control" placeholder="ExamId" asp-for="ExamId">
-                    <span asp-validation-for="ExamId" class="text-danger"></span>
-                    
+@{
+    ViewData["Title"] = "Create Question";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- زر الرجوع -->
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-circle p-2">
+                    <i class="bi bi-arrow-left d-flex"></i>
+                </a>
+                <span class="text-muted">Back to Questions</span>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="card-title mb-0"><i class="bi bi-patch-question me-2"></i>Add New Question</h5>
                 </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Content</label>
-                    <input class="form-control" placeholder="Content" asp-for="Content">
-                    <span asp-validation-for="Content" class="text-danger"></span>
-                    
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="row g-3">
+                            <!-- معرف الامتحان المرتبط به -->
+                            <div class="col-md-4">
+                                <label asp-for="ExamId" class="form-label fw-semibold">Exam ID</label>
+                                <input asp-for="ExamId" type="number" class="form-control" placeholder="Enter Exam ID" />
+                                <span asp-validation-for="ExamId" class="text-danger small"></span>
+                            </div>
+
+                            <!-- درجة السؤال -->
+                            <div class="col-md-4">
+                                <label asp-for="Marks" class="form-label fw-semibold">Question Marks</label>
+                                <input asp-for="Marks" type="number" step="0.5" class="form-control" placeholder="2.0" />
+                                <span asp-validation-for="Marks" class="text-danger small"></span>
+                            </div>
+
+                            <!-- نوع السؤال -->
+                            <div class="col-md-4">
+                                <label asp-for="Type" class="form-label fw-semibold">Question Type</label>
+                                <input asp-for="Type" class="form-control" placeholder="e.g. MCQ, True/False, Written" />
+                                <span asp-validation-for="Type" class="text-danger small"></span>
+                            </div>
+
+                            <!-- نص السؤال ومحتواه -->
+                            <div class="col-md-12">
+                                <label asp-for="Content" class="form-label fw-semibold">Question Content</label>
+                                <textarea asp-for="Content" class="form-control" rows="5" placeholder="Type the full question body or details here..."></textarea>
+                                <span asp-validation-for="Content" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                            <a asp-action="Index" class="btn btn-light">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4">Save Question</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Type</label>
-                    <input class="form-control" placeholder="Type" asp-for="Type">
-                    <span asp-validation-for="Type" class="text-danger"></span>
-                    
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Marks</label>
-                    <input class="form-control" placeholder="Marks" asp-for="Marks">
-                    <span asp-validation-for="Marks" class="text-danger"></span>
-                    
-                </div>
-                
-                
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            </div>
         </div>
     </div>
 </div>
+
+@* @section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+} *@

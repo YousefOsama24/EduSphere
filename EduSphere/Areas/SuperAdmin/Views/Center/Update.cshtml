@@ -1,93 +1,108 @@
 ﻿@model Center
 
-<div class="container">
-    <div class="row mb-3 align-items-center my-3">
+<div class="container my-4">
+    <!-- عنوان الصفحة -->
+    <div class="row mb-4 align-items-center">
         <div class="col-md-6">
-            <h2 class="display-6">Update Center</h2>
+            <h2 class="fw-bold text-dark"><i class="fa-solid fa-pen-to-square text-warning me-2"></i> تعديل بيانات السنتر</h2>
+            <p class="text-muted mb-0">تحديث معلومات سنتر: **@Model.Name**</p>
         </div>
     </div>
 
-    <div class="row my-3">
-        <div class="col-12">
-            <form method="post" enctype="multipart/form-data">
-                <!-- Ensure the Edit form posts the id -->
+    <!-- كارت الفورم -->
+    <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-body p-4">
+            <form asp-controller="Center" asp-action="Update" method="post" enctype="multipart/form-data">
+
+                <!-- حقول مخفية مهمة جداً عشان الأنبوتس القديمة متبوظش في الـ Post -->
                 <input type="hidden" asp-for="CenterId" />
-               @*  <div class="mb-3">
-                    <label for="Name" class="form-label">CenterId</label>
-                    <input class="form-control" placeholder="CenterId" asp-for="CenterId">
-                    <span asp-validation-for="CenterId" class="text-danger"></span>
-                </div> *@
-                <div class="mb-3">
-                    <label for="Name" class="form-label">Name</label>
-                    <input class="form-control" placeholder="Name" asp-for="Name">
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Description</label>
-                    <input class="form-control" placeholder="Description" asp-for="Description">
-                    <span asp-validation-for="Description" class="text-danger"></span>
+                <input type="hidden" asp-for="LogoUrl" />
+                <input type="hidden" asp-for="CreatedAt" />
+                <input type="hidden" asp-for="IsDeleted" />
+                
+                <div class="row">
+                    <!-- العمود الأيمن: البيانات الأساسية -->
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Name" class="form-label fw-semibold">CenterName</label>
+                                <input class="form-control form-control-lg" placeholder="CenterName" asp-for="Name">
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Email</label>
-                    <input class="form-control" placeholder="Email" asp-for="Email">
-                    <span asp-validation-for="Email" class="text-danger"></span>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Email" class="form-label fw-semibold">Email</label>
+                                <input type="email" class="form-control form-control-lg" placeholder="Email" asp-for="Email">
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Address</label>
-                    <input class="form-control" placeholder="Address" asp-for="Address">
-                    <span asp-validation-for="Address" class="text-danger"></span>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Phone" class="form-label fw-semibold">Phone</label>
+                                <input class="form-control form-control-lg" placeholder="Phone" asp-for="Phone">
+                                <span asp-validation-for="Phone" class="text-danger small"></span>
+                            </div>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Phone</label>
-                    <input class="form-control" placeholder="Phone" asp-for="Phone">
-                    <span asp-validation-for="Phone" class="text-danger"></span>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Address" class="form-label fw-semibold">Address</label>
+                                <input class="form-control form-control-lg" placeholder="Address" asp-for="Address">
+                                <span asp-validation-for="Address" class="text-danger small"></span>
+                            </div>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">LogoUrl</label>
-                    <input class="form-control" placeholder="LogoUrl" asp-for="LogoUrl">
-                    <span asp-validation-for="LogoUrl" class="text-danger"></span>
+                            <div class="col-12 mb-3">
+                                <label asp-for="Description" class="form-label fw-semibold">Description</label>
+                                <textarea class="form-control" rows="3" placeholder="Description" asp-for="Description"></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">CreatedAt</label>
-                    <input class="form-control" placeholder="CreatedAt" asp-for="CreatedAt">
-                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                    <!-- العمود الأيسر: عرض اللوجو الحالي وتحديثه -->
+                    <div class="col-lg-4 border-start-lg mb-3">
+                        <div class="d-flex flex-column align-items-center text-center p-2">
+                            <label class="form-label fw-semibold mb-3">شعار السنتر الحالي (Logo)</label>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">UpdatedAt</label>
-                    <input class="form-control" placeholder="UpdatedAt" asp-for="UpdatedAt">
-                    <span asp-validation-for="UpdatedAt" class="text-danger"></span>
+                            <!-- هنا بنعرض اللوجو القديم، ولو مفيش بنحط صورة الـ Placeholder -->
+                            <div class="mb-3 position-relative">
+                                <img id="logoPreview" src="@(string.IsNullOrEmpty(Model.LogoUrl) ? "https://via.placeholder.com/150?text=No+Logo" : Model.LogoUrl)"
+                                     alt="Logo Preview"
+                                     class="img-thumbnail rounded-circle shadow-sm"
+                                     style="width: 150px; height: 150px; object-fit: cover;">
+                            </div>
 
+                            <!-- إنبوت رفع صورة جديدة لو الأدمن حابب يغيرها -->
+                            <div class="w-100 px-3">
+                                <input type="file" name="LogoFile" id="logoInput" class="form-control" accept="image/*" onchange="previewImage(event)">
+                                <small class="text-muted d-block mt-2">اسحب أو اختر صورة جديدة لتحديث اللوجو الحالي</small>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-check mb-3">
-                    <input class="form-check-input" asp-for="IsDeleted" />
-                    <label class="form-check-label" asp-for="IsDeleted"></label>
+
+                <hr class="text-muted my-4">
+
+                <!-- أزرار التحكم -->
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="/SuperAdmin/Center/Index" class="btn btn-light px-4">إلغاء</a>
+                    <button type="submit" class="btn btn-warning px-5 fw-semibold text-white">
+                        <i class="fa-solid fa-pen-to-square me-1"></i> تحديث البيانات
+                    </button>
                 </div>
-               
-                <button type="submit" class="btn btn-primary">Submit</button>
+
             </form>
         </div>
     </div>
 </div>
 
-@* <script>
+<!-- كود الـ JavaScript لمعاينة الصورة الجديدة فوراً لو الأدمن اختار ملف جديد -->
+<script>
     function previewImage(event) {
-        const input = event.target;
-        const preview = document.getElementById("preview");
-
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result; // الصورة الجديدة
-            }
-            reader.readAsDataURL(input.files[0]);
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('logoPreview');
+            output.src = reader.result;
+        }
+        if(event.target.files[0]) {
+            reader.readAsDataURL(event.target.files[0]);
         }
     }
-</script> *@
-
-
+</script>

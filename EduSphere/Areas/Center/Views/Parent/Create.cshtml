@@ -1,29 +1,55 @@
-﻿@model Parent
-<div class="container">
-    <div class="row mb-3 align-items-center my-3">
-        <div class="col-md-6">
-            <h2 class="display-6">Create new Parent</h2>
-        </div>
-    </div>
+﻿@model EduSphere.Models.Parent
 
-    <div class="row my-3">
-        <div class="col-12">
-            <form method="post" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label for="Name" class="form-label">Name</label>
-                    <input class="form-control" placeholder="Name" asp-for="User.FullName">
-                    <span asp-validation-for="User.FullName" class="text-danger"></span>
+@{
+    ViewData["Title"] = "إضافة ولي أمر جديد";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-header bg-primary text-white py-3 rounded-top-3">
+                    <h5 class="card-title mb-0 fw-bold">
+                        <i class="bi bi-person-plus-fill me-2"></i>إضافة ولي أمر جديد
+                    </h5>
                 </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Occupation</label>
-                    <input class="form-control" placeholder="Occupation" asp-for="Occupation">
-                    <span asp-validation-for="Occupation" class="text-danger"></span>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
 
+                        <!-- User Selection -->
+                        <div class="mb-3">
+                            <label asp-for="UserId" class="form-label fw-semibold">اختر حسابه من المستخدمين</label>
+                            <select asp-for="UserId" asp-items="ViewBag.Users" class="form-select">
+                                <option value="">-- اختر المستخدم --</option>
+                            </select>
+                            <span asp-validation-for="UserId" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Occupation -->
+                        <div class="mb-4">
+                            <label asp-for="Occupation" class="form-label fw-semibold">الوظيفة / المهنة</label>
+                            <input asp-for="Occupation" class="form-control" placeholder="مثال: مهندس، معلم، طبيب..." />
+                            <span asp-validation-for="Occupation" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                <i class="bi bi-arrow-right me-1"></i>رجوع
+                            </a>
+                            <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                                <i class="bi bi-check-lg me-1"></i>حفظ البيانات
+                            </button>
+                        </div>
+                    </form>
                 </div>
-
-
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            </div>
         </div>
     </div>
 </div>
+
+@* @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} *@

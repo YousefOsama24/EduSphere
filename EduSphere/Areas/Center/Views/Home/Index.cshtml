@@ -1,578 +1,352 @@
 ﻿@model EduSphere.ViewModel.DashboardVM
-
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "لوحة التحكم الرئيسية - EduSphere";
 }
 
-<div class="container-fluid">
+<div class="container-fluid py-4" dir="rtl">
 
-    <!-- Header -->
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 rounded-4 shadow-sm border-start border-5 border-primary">
         <div>
-
-            <h2 class="fw-bold">
-
-                Center Dashboard
-
-            </h2>
-
-            <p class="text-muted mb-0">
-
-                Welcome back 👋
-
-            </p>
-
+            <h3 class="fw-bold mb-1 text-dark">
+                <i class="bi bi-speedometer2 text-primary me-2"></i>لوحة إدارة السنتر الشاملة
+            </h3>
+            <p class="text-muted mb-0 small">مرحباً بك! متابعة لحظية لجميع المؤشرات والأعمال اليومية الخاصة بالسنتر.</p>
         </div>
-
-        <div>
-
-            <span class="badge bg-success fs-6">
-
-                @DateTime.Now.ToString("dddd, dd MMM yyyy")
-
-            </span>
-
+        <div class="d-flex gap-2 align-items-center">
+            <a asp-area="Center" asp-controller="Home" asp-action="HomeCast" class="btn btn-outline-danger fw-semibold rounded-3 shadow-sm">
+                <i class="bi bi-broadcast me-1"></i> شاشة البث المباشر
+            </a>
+            <span class="badge bg-primary fs-6 px-3 py-2 rounded-3">EduSphere System</span>
         </div>
-
     </div>
 
-    <!-- Statistics -->
-
-    <div class="row g-4">
-
-        <div class="col-xl-3 col-lg-4 col-md-6">
-
-            <div class="card shadow border-0">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-
-                        Students
-
-                    </h6>
-
-                    <h2 class="fw-bold">
-
-                        @Model.TotalStudents
-
-                    </h2>
-
-                </div>
-
+    <!-- Quick Actions Bar (شريط الوصول السريع لكافة الأقسام) -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4 bg-light">
+        <div class="card-body p-3">
+            <h6 class="fw-bold text-secondary mb-3">
+                <i class="bi bi-lightning-charge-fill text-warning me-2"></i>الإجراءات السريعة وتنقلات الكنترول
+            </h6>
+            <div class="d-flex flex-wrap gap-2">
+                <!-- إدارة الطلاب -->
+                <a asp-area="Center" asp-controller="Student" asp-action="Index" class="btn btn-primary rounded-3 btn-sm px-3 shadow-sm">
+                    <i class="bi bi-person-plus-fill me-1"></i> Student View
+                </a>
+                <!-- إدارة المعلمين -->
+                <a asp-area="Center" asp-controller="Teachers" asp-action="Index" class="btn btn-success rounded-3 btn-sm px-3 shadow-sm">
+                    <i class="bi bi-person-badge-fill me-1"></i> Teachers View
+                </a>
+                <!-- إدارة أولياء الأمور -->
+                <a asp-area="Center" asp-controller="Parent" asp-action="Index" class="btn btn-info text-white rounded-3 btn-sm px-3 shadow-sm">
+                    <i class="bi bi-person-heart me-1"></i> Parent View
+                </a>
+                <!-- الكورسات -->
+                <a asp-area="Teacher" asp-controller="Course" asp-action="Index" class="btn btn-warning text-dark rounded-3 btn-sm px-3 shadow-sm">
+                    <i class="bi bi-journal-plus me-1"></i> Course View
+                </a>
+                <!-- المجموعات -->
+                <a asp-area="Teacher" asp-controller="Group" asp-action="Index" class="btn btn-secondary rounded-3 btn-sm px-3 shadow-sm">
+                    <i class="bi bi-diagram-3-fill me-1"></i> Group View
+                </a>
+                <!-- التسجيلات (Enrollments) -->
+                <a asp-area="Center" asp-controller="Enrollment" asp-action="Index" class="btn btn-dark rounded-3 btn-sm px-3 shadow-sm">
+                    <i class="bi bi-card-checklist me-1"></i> Enrollment View
+                </a>
+                <!-- جلسات الحضور -->
+                <a asp-area="Center" asp-controller="AttendanceSession" asp-action="Index" class="btn btn-outline-primary rounded-3 btn-sm px-3 bg-white shadow-sm">
+                    <i class="bi bi-clock-history me-1"></i> AttendanceSession View
+                </a>
+                <!-- الامتحانات -->
+                <a asp-area="Teachers" asp-controller="Exam" asp-action="Index" class="btn btn-outline-danger rounded-3 btn-sm px-3 bg-white shadow-sm">
+                    <i class="bi bi-file-earmark-text me-1"></i> Exam View
+                </a>
             </div>
-
         </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6">
-
-            <div class="card shadow border-0">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-
-                        Teachers
-
-                    </h6>
-
-                    <h2 class="fw-bold">
-
-                        @Model.TotalTeachers
-
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6">
-
-            <div class="card shadow border-0">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-
-                        Courses
-
-                    </h6>
-
-                    <h2 class="fw-bold">
-
-                        @Model.TotalCourses
-
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6">
-
-            <div class="card shadow border-0">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-
-                        Groups
-
-                    </h6>
-
-                    <h2 class="fw-bold">
-
-                        @Model.TotalGroups
-
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6">
-
-            <div class="card shadow border-0">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-
-                        Parents
-
-                    </h6>
-
-                    <h2 class="fw-bold">
-
-                        @Model.TotalParents
-
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6">
-
-            <div class="card shadow border-0">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-
-                        Attendance Sessions
-
-                    </h6>
-
-                    <h2 class="fw-bold">
-
-                        @Model.TotalAttendanceSessions
-
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6">
-
-            <div class="card shadow border-0">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-
-                        Today's Attendance
-
-                    </h6>
-
-                    <h2 class="fw-bold">
-
-                        @Model.TodayAttendance
-
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6">
-
-            <div class="card shadow border-0">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-
-                        Active Subscriptions
-
-                    </h6>
-
-                    <h2 class="fw-bold">
-
-                        @Model.ActiveSubscriptions
-
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
     </div>
 
-    <!-- Quick Actions -->
-
-    <div class="card shadow border-0 mt-5">
-
-        <div class="card-header bg-white">
-
-            <h4 class="mb-0">
-
-                Quick Actions
-
-            </h4>
-
-        </div>
-
-        <div class="card-body">
-
-            <div class="row g-3">
-
-                <div class="col-lg-3">
-
-                    <a asp-controller="Student"
-                           asp-action="Create"
-                           class="btn btn-primary w-100">
-
-                        Add Student
-
-                    </a>
-
-                </div>
-
-                <div class="col-lg-3">
-
-                    <a asp-controller="Teacher"
-                           asp-action="Create"
-                           class="btn btn-success w-100">
-
-                        Add Teacher
-
-                    </a>
-
-                </div>
-
-                <div class="col-lg-3">
-
-                    <a asp-controller="Enrollment"
-                           asp-action="Create"
-                           class="btn btn-warning w-100">
-
-                        New Enrollment
-
-                    </a>
-
-                </div>
-
-                <div class="col-lg-3">
-
-                    <a asp-controller="AttendanceRecord"
-                           asp-action="Create"
-                           class="btn btn-danger w-100">
-
-                        Attendance
-
-                    </a>
-
-                </div>
-
+    <!-- Live Statistics Overview (عدادات الإحصائيات) -->
+    <h5 class="fw-bold text-secondary mb-3"><i class="bi bi-bar-chart-line me-2"></i>الإحصائيات المباشرة</h5>
+    <div class="row g-3 mb-4">
+        <div class="col-md-2 col-sm-4">
+            <div class="card border-0 shadow-sm bg-white p-3 text-center rounded-4 border-bottom border-4 border-primary">
+                <i class="bi bi-people text-primary fs-2 mb-1"></i>
+                <h6 class="text-muted small mb-1">إجمالي الطلاب</h6>
+                <h3 class="fw-bold text-dark mb-0">@Model.TotalStudents</h3>
             </div>
-
         </div>
-
+        <div class="col-md-2 col-sm-4">
+            <div class="card border-0 shadow-sm bg-white p-3 text-center rounded-4 border-bottom border-4 border-success">
+                <i class="bi bi-person-badge text-success fs-2 mb-1"></i>
+                <h6 class="text-muted small mb-1">إجمالي المعلمين</h6>
+                <h3 class="fw-bold text-dark mb-0">@Model.TotalTeachers</h3>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-4">
+            <div class="card border-0 shadow-sm bg-white p-3 text-center rounded-4 border-bottom border-4 border-info">
+                <i class="bi bi-book text-info fs-2 mb-1"></i>
+                <h6 class="text-muted small mb-1">المواد والكورسات</h6>
+                <h3 class="fw-bold text-dark mb-0">@Model.TotalCourses</h3>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-4">
+            <div class="card border-0 shadow-sm bg-white p-3 text-center rounded-4 border-bottom border-4 border-warning">
+                <i class="bi bi-diagram-3 text-warning fs-2 mb-1"></i>
+                <h6 class="text-muted small mb-1">المجموعات</h6>
+                <h3 class="fw-bold text-dark mb-0">@Model.TotalGroups</h3>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-4">
+            <div class="card border-0 shadow-sm bg-white p-3 text-center rounded-4 border-bottom border-4 border-secondary">
+                <i class="bi bi-person-heart text-secondary fs-2 mb-1"></i>
+                <h6 class="text-muted small mb-1">أولياء الأمور</h6>
+                <h3 class="fw-bold text-dark mb-0">@Model.TotalParents</h3>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-4">
+            <div class="card border-0 shadow-sm bg-white p-3 text-center rounded-4 border-bottom border-4 border-danger">
+                <i class="bi bi-card-checklist text-danger fs-2 mb-1"></i>
+                <h6 class="text-muted small mb-1">الاشتراكات النشطة</h6>
+                <h3 class="fw-bold text-dark mb-0">@Model.ActiveSubscriptions</h3>
+            </div>
+        </div>
     </div>
 
-</div>
-<!-- Latest Students & Teachers -->
-
-<div class="row mt-4">
-
-    <!-- Latest Students -->
-
-    <div class="col-lg-6">
-
-        <div class="card shadow border-0 h-100">
-
-            <div class="card-header bg-white">
-
-                <h5 class="mb-0">
-
-                    Latest Students
-
-                </h5>
-
-            </div>
-
-            <div class="card-body p-0">
-
-                <table class="table table-hover mb-0">
-
-                    <thead class="table-light">
-
-                        <tr>
-
-                            <th>Name</th>
-
-                            <th>Parent</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        @foreach (var student in Model.LatestStudents)
-                        {
-                            <tr>
-
-                                <td>
-
-                                    @student.User?.FullName
-
-                                </td>
-
-                                <td>
-
-                                    @(student.Parent?.User?.FullName ?? "-")
-
-                                </td>
-
-                            </tr>
-                        }
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
+    <!-- Central Tabs Section (تبويبات عرض البيانات المطلوبة) -->
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-header bg-white border-0 py-3">
+            <ul class="nav nav-pills card-header-pills gap-2" id="adminTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active fw-bold rounded-3" id="students-tab" data-bs-toggle="tab" data-bs-target="#tab-students" type="button" role="tab">
+                        <i class="bi bi-people me-1"></i> أحدث الطلاب
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold rounded-3" id="teachers-tab" data-bs-toggle="tab" data-bs-target="#tab-teachers" type="button" role="tab">
+                        <i class="bi bi-person-badge me-1"></i> المعلمين
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold rounded-3" id="enrollments-tab" data-bs-toggle="tab" data-bs-target="#tab-enrollments" type="button" role="tab">
+                        <i class="bi bi-journal-check me-1"></i> أحدث التسجيلات
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold rounded-3" id="sessions-tab" data-bs-toggle="tab" data-bs-target="#tab-sessions" type="button" role="tab">
+                        <i class="bi bi-clock-history me-1"></i> حصص اليوم
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold rounded-3" id="expiring-tab" data-bs-toggle="tab" data-bs-target="#tab-expiring" type="button" role="tab">
+                        <i class="bi bi-exclamation-triangle me-1"></i> اشتراكات تنتهي قريباً
+                    </button>
+                </li>
+            </ul>
         </div>
 
-    </div>
+        <div class="card-body p-0">
+            <div class="tab-content" id="adminTabContent">
 
-    <!-- Latest Teachers -->
+                <!-- TAB 1: Latest Students -->
+                <div class="tab-pane fade show active" id="tab-students" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="py-3 px-4">كود الطالب</th>
+                                    <th class="py-3">اسم الطالب</th>
+                                    <th class="py-3">المرحلة الدراسية</th>
+                                    <th class="py-3 text-end px-4">إجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.LatestStudents != null && Model.LatestStudents.Any())
+                                {
+                                    @foreach (var student in Model.LatestStudents)
+                                    {
+                                        <tr>
+                                            <td class="py-3 px-4 fw-bold text-primary">#@student.StudentId</td>
+                                            <td class="fw-semibold">@(student.User?.FullName ?? "غير محدد")</td>
+                                            <td><span class="badge bg-light text-dark border">@(student.AcademicLevel?.ToString() ?? "عام")</span></td>
+                                            <td class="text-end px-4">
+                                                <a asp-area="Center" asp-controller="Student" asp-action="Update" asp-route-id="@student.StudentId" class="btn btn-sm btn-outline-primary rounded-3 me-1">تعديل</a>
+                                                <a asp-area="Center" asp-controller="Student" asp-action="Details" asp-route-id="@student.StudentId" class="btn btn-sm btn-light rounded-3">التفاصيل</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr><td colspan="4" class="text-center py-4 text-muted">لا يوجد طلاب مسجلين مؤخراً.</td></tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-    <div class="col-lg-6">
+                <!-- TAB 2: Latest Teachers -->
+                <div class="tab-pane fade" id="tab-teachers" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="py-3 px-4">الكود</th>
+                                    <th class="py-3">اسم المعلم</th>
+                                    <th class="py-3">التخصص / المادة</th>
+                                    <th class="py-3 text-end px-4">إجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.LatestTeachers != null && Model.LatestTeachers.Any())
+                                {
+                                    @foreach (var teacher in Model.LatestTeachers)
+                                    {
+                                        <tr>
+                                            <td class="py-3 px-4 fw-bold text-success">#@teacher.TeacherId</td>
+                                            <td class="fw-semibold">@(teacher.User?.FullName ?? "غير محدد")</td>
+                                            <td><span class="badge bg-soft-success text-success fw-bold">@(teacher.Specialization ?? "غير محدد")</span></td>
+                                            <td class="text-end px-4">
+                                                <a asp-area="Center" asp-controller="Teachers" asp-action="Update" asp-route-id="@teacher.TeacherId" class="btn btn-sm btn-outline-success rounded-3 me-1">تعديل</a>
+                                                <a asp-area="Center" asp-controller="Teachers" asp-action="Details" asp-route-id="@teacher.TeacherId" class="btn btn-sm btn-light rounded-3">التفاصيل</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr><td colspan="4" class="text-center py-4 text-muted">لا يوجد معلمون مسجلون.</td></tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-        <div class="card shadow border-0 h-100">
+                <!-- TAB 3: Latest Enrollments -->
+                <div class="tab-pane fade" id="tab-enrollments" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="py-3 px-4">الكود</th>
+                                    <th class="py-3">اسم الطالب</th>
+                                    <th class="py-3">المجموعة</th>
+                                    <th class="py-3">تاريخ التسجيل</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.LatestEnrollments != null && Model.LatestEnrollments.Any())
+                                {
+                                    @foreach (var enroll in Model.LatestEnrollments)
+                                    {
+                                        <tr>
+                                            <td class="py-3 px-4 fw-bold text-dark">#@enroll.EnrollmentId</td>
+                                            <td class="fw-semibold">@(enroll.Student?.User?.FullName ?? "طالب")</td>
+                                            <td><span class="badge bg-info text-white">@(enroll.Group?.Name ?? "مجموعة")</span></td>
+                                            <td><small class="text-muted">@enroll.EnrollmentDate.ToString("yyyy/MM/dd")</small></td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr><td colspan="4" class="text-center py-4 text-muted">لا توجد تسجيلات حديثة.</td></tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-            <div class="card-header bg-white">
+                <!-- TAB 4: Today Sessions -->
+                <div class="tab-pane fade" id="tab-sessions" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="py-3 px-4">رقم الجلسة</th>
+                                    <th class="py-3">المجموعة</th>
+                                    <th class="py-3">موعد الجلسة</th>
+                                    <th class="py-3 text-end px-4">إدارة الحضور</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.TodaySessions != null && Model.TodaySessions.Any())
+                                {
+                                    @foreach (var session in Model.TodaySessions)
+                                    {
+                                        <tr>
+                                            <td class="py-3 px-4 fw-bold">#@session.AttendanceSessionId</td>
+                                            <td><span class="fw-semibold text-dark">@(session.Group?.Name ?? "مجموعة")</span></td>
+                                            <td><span class="badge bg-light text-dark border">@session.SessionDate.ToString("hh:mm tt")</span></td>
+                                            <td class="text-end px-4">
+                                                <a asp-area="Center" asp-controller="AttendanceSession" asp-action="TakeAttendance" asp-route-id="@session.AttendanceSessionId" class="btn btn-sm btn-primary rounded-3">تسجيل الحضور</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr><td colspan="4" class="text-center py-4 text-muted">لا توجد حصص مجدولة لهذا اليوم.</td></tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-                <h5 class="mb-0">
-
-                    Latest Teachers
-
-                </h5>
+                <!-- TAB 5: Expiring Subscriptions (التعديل الجديد) -->
+                <div class="tab-pane fade" id="tab-expiring" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="py-3 px-4">رقم الاشتراك</th>
+                                    <th class="py-3">السنتر</th>
+                                    <th class="py-3">خطة الاشتراك</th>
+                                    <th class="py-3">تاريخ الانتهاء</th>
+                                    <th class="py-3 text-end px-4">إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.ExpiringSubscriptions != null && Model.ExpiringSubscriptions.Any())
+                                {
+                                    @foreach (var sub in Model.ExpiringSubscriptions)
+                                    {
+                                        <tr>
+                                            <td class="py-3 px-4 fw-bold">#@sub.SubscriptionId</td>
+                                            <td class="fw-semibold">@(sub.Center?.Name ?? "غير محدد")</td>
+                                            <td><span class="badge bg-info text-dark">@(sub.SubscriptionPlan?.Name ?? "خطة اشتراك")</span></td>
+                                            <td><span class="badge bg-warning text-dark">@sub.EndDate.ToString("yyyy/MM/dd")</span></td>
+                                            <td class="text-end px-4">
+                                                <a asp-area="Center" asp-controller="Subscription" asp-action="Renew" asp-route-id="@sub.SubscriptionId" class="btn btn-sm btn-outline-warning rounded-3">تجديد الاشتراك</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr><td colspan="5" class="text-center py-4 text-muted">لا توجد اشتراكات سناتر توشك على الانتهاء.</td></tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
             </div>
-
-            <div class="card-body p-0">
-
-                <table class="table table-hover mb-0">
-
-                    <thead class="table-light">
-
-                        <tr>
-
-                            <th>Name</th>
-
-                            <th>Specialization</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        @foreach (var teacher in Model.LatestTeachers)
-                        {
-                            <tr>
-
-                                <td>
-
-                                    @teacher.User?.FullName
-
-                                </td>
-
-                                <td>
-
-                                    @teacher.Specialization
-
-                                </td>
-
-                            </tr>
-                        }
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
         </div>
-
     </div>
 
 </div>
-<div class="card shadow border-0 mt-4">
 
-    <div class="card-header bg-white">
-
-        <h5 class="mb-0">
-
-            Latest Enrollments
-
-        </h5>
-
-    </div>
-
-    <div class="card-body p-0">
-
-        <table class="table table-striped table-hover mb-0">
-
-            <thead class="table-light">
-
-                <tr>
-
-                    <th>Student</th>
-
-                    <th>Course</th>
-
-                    <th>Date</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                @foreach (var enrollment in Model.LatestEnrollments)
-                {
-                    <tr>
-
-                        <td>
-
-                            @enrollment.Student?.User?.FullName
-
-                        </td>
-
-                        <td>
-
-                            @enrollment.Course?.Title
-
-                        </td>
-
-                        <td>
-
-                            @enrollment.EnrollmentDate.ToString("dd MMM yyyy")
-
-                        </td>
-
-                    </tr>
-                }
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-</div>
-<div class="card shadow border-0 mt-4">
-
-    <div class="card-header bg-white">
-
-        <h5 class="mb-0">
-
-            Today's Sessions
-
-        </h5>
-
-    </div>
-
-    <div class="card-body p-0">
-
-        <table class="table table-hover mb-0">
-
-            <thead class="table-light">
-
-                <tr>
-
-                    <th>Title</th>
-
-                    <th>Teacher</th>
-
-                    <th>Group</th>
-
-                    <th>Date</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                @foreach (var session in Model.TodaySessions)
-                {
-                    <tr>
-
-                        <td>
-
-                            @session.Title
-
-                        </td>
-
-                        <td>
-
-                            @session.Teacher?.User?.FullName
-
-                        </td>
-
-                        <td>
-
-                            @session.Group?.Name
-
-                        </td>
-
-                        <td>
-
-                            @session.SessionDate.ToString("dd MMM yyyy HH:mm")
-
-                        </td>
-
-                    </tr>
-                }
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-</div>
+<style>
+    .nav-pills .nav-link {
+        color: #6c757d;
+        background-color: #f8f9fa;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .nav-pills .nav-link.active {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+
+        .nav-pills .nav-link:hover:not(.active) {
+            background-color: #e9ecef;
+        }
+</style>

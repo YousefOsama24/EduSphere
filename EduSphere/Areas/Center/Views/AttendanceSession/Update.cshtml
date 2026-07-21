@@ -1,67 +1,110 @@
-﻿@model AttendanceSession
+﻿@model EduSphere.Models.AttendanceSession
 
-<div class="container">
-    <div class="row mb-3 align-items-center my-3">
-        <div class="col-md-6">
-            <h2 class="display-6">Update AttendanceSession</h2>
-        </div>
-    </div>
+@{
+    ViewData["Title"] = "إضافة جلسة جديدة";
+}
 
-    <div class="row my-3">
-        <div class="col-12">
-            <form method="post" enctype="multipart/form-data">
-                <!-- Ensure the Edit form posts the id -->
-                <input type="hidden" asp-for="AttendanceSessionId" />
-                @*  <div class="mb-3">
-                    <label for="Name" class="form-label">AttendanceSessionId</label>
-                    <input class="form-control" placeholder="AttendanceSessionId" asp-for="AttendanceSessionId">
-                    <span asp-validation-for="AttendanceSessionId" class="text-danger"></span>
-                </div> *@
+<style>
+    .dragon-card {
+        background-color: #121212;
+        border: 1px solid #8a0303;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(255, 51, 51, 0.1);
+        color: white;
+    }
 
-                <div class="mb-3">
-                    <label for="Img" class="form-label">TeacherId</label>
-                    <input class="form-control" placeholder="TeacherId" asp-for="TeacherId">
-                    <span asp-validation-for="TeacherId" class="text-danger"></span>
+    .dragon-title {
+        color: #ff4d4d;
+        border-bottom: 2px solid #8a0303;
+        padding-bottom: 15px;
+    }
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">GroupId</label>
-                    <input class="form-control" placeholder="GroupId" asp-for="GroupId">
-                    <span asp-validation-for="GroupId" class="text-danger"></span>
+    .dragon-input {
+        background-color: #1e1e1e;
+        border: 1px solid #444;
+        color: white;
+        border-radius: 8px;
+    }
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Title</label>
-                    <input class="form-control" placeholder="Title" asp-for="Title">
-                    <span asp-validation-for="Title" class="text-danger"></span>
+        .dragon-input:focus {
+            background-color: #252525;
+            border-color: #ff4d4d;
+            color: white;
+            box-shadow: 0 0 8px rgba(255, 77, 77, 0.4);
+        }
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">SessionDate</label>
-                    <input class="form-control" placeholder="SessionDate" asp-for="SessionDate">
-                    <span asp-validation-for="SessionDate" class="text-danger"></span>
+    .dragon-btn {
+        background: linear-gradient(45deg, #8a0303, #ff3333);
+        color: white;
+        border: none;
+        font-weight: bold;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
 
-                </div>
+        .dragon-btn:hover {
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.6);
+            transform: translateY(-2px);
+            color: white;
+        }
 
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+    .form-label {
+        font-weight: 500;
+        color: #ccc;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="dragon-card p-5">
+                <h3 class="dragon-title mb-4 text-center">إضافة جلسة حضور جديدة</h3>
+
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-4">
+                        <label asp-for="Title" class="form-label">عنوان الجلسة</label>
+                        <input asp-for="Title" class="form-control dragon-input p-3" placeholder="أدخل عنوان الجلسة..." />
+                        <span asp-validation-for="Title" class="text-danger mt-1 d-block"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="TeacherId" class="form-label">المدرس</label>
+                            <select asp-for="TeacherId" class="form-select dragon-input p-3" asp-items="ViewBag.Teachers">
+                                <option value="">-- اختر المدرس --</option>
+                            </select>
+                            <span asp-validation-for="TeacherId" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="GroupId" class="form-label">المجموعة</label>
+                            <select asp-for="GroupId" class="form-select dragon-input p-3" asp-items="ViewBag.Groups">
+                                <option value="">-- اختر المجموعة --</option>
+                            </select>
+                            <span asp-validation-for="GroupId" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="SessionDate" class="form-label">تاريخ ووقت الجلسة</label>
+                        <input asp-for="SessionDate" type="datetime-local" class="form-control dragon-input p-3" />
+                        <span asp-validation-for="SessionDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-5">
+                        <a asp-action="Index" class="btn btn-outline-light px-4 py-2 rounded-3">رجوع للقائمة</a>
+                        <button type="submit" class="btn dragon-btn px-5 py-2">حفظ الجلسة</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
-@* <script>
-    function previewImage(event) {
-        const input = event.target;
-        const preview = document.getElementById("preview");
-
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result; // الصورة الجديدة
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
+@* @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-</script> *@
-
-
+} *@

@@ -7,6 +7,21 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Areas\SuperAdmin\ViewModels\**" />
+	  <Compile Remove="Areas\Teacher\ViewModels\**" />
+	  <Compile Remove="wwwroot\images\**" />
+	  <Content Remove="Areas\SuperAdmin\ViewModels\**" />
+	  <Content Remove="Areas\Teacher\ViewModels\**" />
+	  <Content Remove="wwwroot\images\**" />
+	  <EmbeddedResource Remove="Areas\SuperAdmin\ViewModels\**" />
+	  <EmbeddedResource Remove="Areas\Teacher\ViewModels\**" />
+	  <EmbeddedResource Remove="wwwroot\images\**" />
+	  <None Remove="Areas\SuperAdmin\ViewModels\**" />
+	  <None Remove="Areas\Teacher\ViewModels\**" />
+	  <None Remove="wwwroot\images\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.5" />
@@ -20,13 +35,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Areas\SuperAdmin\ViewModels\" />
-	  <Folder Include="Areas\Teacher\ViewModels\" />
-	  <Folder Include="wwwroot\images\centers\" />
-	  <Folder Include="wwwroot\images\courses\" />
-	  <Folder Include="wwwroot\images\students\" />
-	  <Folder Include="wwwroot\images\teachers\" />
-	  <Folder Include="wwwroot\images\profiles\" />
+	  <Folder Include="wwwroot\Imges\" />
 	</ItemGroup>
 
 </Project>

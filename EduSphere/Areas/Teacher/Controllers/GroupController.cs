@@ -1,18 +1,18 @@
 ﻿using EduSphere.Repositories.Interfaces;
-using EduSphere.Utility;    
+using EduSphere.Utility;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
-using GroupModel = EduSphere.Models.Group;
 using EduSphere.ViewModel;
-using EduSphere.Models;
+// استخدام الـ Alias بوضوح
+using GroupModel = EduSphere.Models.Group;
 
 namespace EduSphere.Areas.Teacher.Controllers
 {
     [Area(SD.TEACHER_AREA)]
     public class GroupController : Controller
     {
-
         private readonly IRepository<GroupModel> _context;
+        // لو عندك Repositories للكورسات والمدرسين، هتحتاج تعملهم Inject هنا عشان الـ Dropdowns
 
         public GroupController(IRepository<GroupModel> context)
         {
@@ -21,6 +21,8 @@ namespace EduSphere.Areas.Teacher.Controllers
 
         public async Task<IActionResult> Index(int page = 1, string? query = null, CancellationToken cancellationToken = default)
         {
+            // ملحوظة: يفضل تعدل GetAsync في الـ Repository عشان تستقبل skip و take
+            // بدل ما تجيب الداتا كلها للميموري
             var Groups = await _context.GetAsync(
                 includes: new Expression<Func<GroupModel, object>>[]
                 {
@@ -36,7 +38,6 @@ namespace EduSphere.Areas.Teacher.Controllers
                 ViewBag.Query = query;
             }
 
-
             double totalPages = System.Math.Ceiling(Groups.Count() / 10.0);
             Groups = Groups.Skip((page - 1) * 10).Take(10);
 
@@ -47,9 +48,11 @@ namespace EduSphere.Areas.Teacher.Controllers
                 CurrentPage = page,
             });
         }
+
         [HttpGet]
         public IActionResult Create()
         {
+            // TODO: Populate ViewBag.Courses and ViewBag.Teachers for the dropdowns
             return View(new GroupModel());
         }
 
@@ -58,7 +61,10 @@ namespace EduSphere.Areas.Teacher.Controllers
         public async Task<IActionResult> Create(GroupModel Group, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
+            {
+                // TODO: Repopulate ViewBag.Courses and ViewBag.Teachers here before returning View
                 return View(Group);
+            }
 
             await _context.CreateAsync(Group, cancellationToken);
             await _context.CommitAsync(cancellationToken);
@@ -67,6 +73,7 @@ namespace EduSphere.Areas.Teacher.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
         [HttpGet]
         public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
@@ -77,14 +84,20 @@ namespace EduSphere.Areas.Teacher.Controllers
             if (Group == null)
                 return NotFound();
 
+            // TODO: Populate ViewBag.Courses and ViewBag.Teachers for the dropdowns
             return View(Group);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(Group Group, CancellationToken cancellationToken = default)
+        // تم تعديل Group لـ GroupModel عشان نتفادى أي تعارض في الأسماء
+        public async Task<IActionResult> Update(GroupModel Group, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
+            {
+                // TODO: Repopulate ViewBag.Courses and ViewBag.Teachers here before returning View
                 return View(Group);
+            }
 
             var oldGroup = await _context.GetOneAsync(
                 c => c.GroupId == Group.GroupId,
@@ -107,7 +120,10 @@ namespace EduSphere.Areas.Teacher.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
         [HttpPost]
+        // لو حابب تحمي الـ Delete أكتر ممكن تضيفلها [ValidateAntiForgeryToken] 
+        // وتستخدم Form في الـ View بدل زرار عادي
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var Group = await _context.GetOneAsync(

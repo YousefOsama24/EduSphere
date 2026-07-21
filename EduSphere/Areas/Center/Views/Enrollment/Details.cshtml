@@ -1,0 +1,59 @@
+﻿@model EduSphere.Models.Enrollment
+
+@{
+    ViewData["Title"] = "Enrollment Details";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-info text-white p-4 rounded-top-4 d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0 fw-bold"><i class="bi bi-info-circle me-2"></i>Enrollment Info</h4>
+                    <span class="badge bg-white text-dark fs-6">#@Model.EnrollmentId</span>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-3">
+                                <small class="text-muted d-block">Student ID</small>
+                                <span class="fw-bold fs-5 text-dark">#@Model.StudentId</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-3">
+                                <small class="text-muted d-block">Student Name</small>
+                                <span class="fw-bold fs-5 text-dark">@(Model.Student?.User?.FullName ?? "N/A")</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-3">
+                                <small class="text-muted d-block">Course ID</small>
+                                <span class="fw-bold fs-5 text-primary">#@Model.CourseId</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-3">
+                                <small class="text-muted d-block">Course Title</small>
+                                <span class="fw-bold fs-5 text-primary">@(Model.Course?.Title ?? "N/A")</span>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="p-3 bg-light rounded-3">
+                                <small class="text-muted d-block">Enrollment Date</small>
+                                <span class="fw-bold fs-6 text-dark"><i class="bi bi-calendar-event me-2"></i>@Model.EnrollmentDate.ToString("dd MMMM yyyy")</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4 pt-2 border-top">
+                        <a asp-action="Index" class="btn btn-outline-secondary px-4">Back to List</a>
+                        <a asp-action="Update" asp-route-id="@Model.EnrollmentId" class="btn btn-primary px-4">Edit Enrollment</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

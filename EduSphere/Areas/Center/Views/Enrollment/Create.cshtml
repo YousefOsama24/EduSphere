@@ -1,41 +1,57 @@
-﻿@model Enrollment
-<div class="container">
-    <div class="row mb-3 align-items-center my-3">
-        <div class="col-md-6">
-            <h2 class="display-6">Create new Enrollment</h2>
-        </div>
-    </div>
+﻿@model EduSphere.Models.Enrollment
 
-    <div class="row my-3">
-        <div class="col-12">
-            <form method="post" enctype="multipart/form-data">
-                @*  <div class="mb-3">
-                    <label for="Name" class="form-label">EnrollmentId</label>
-                    <input class="form-control" placeholder="EnrollmentId" asp-for="EnrollmentId">
-                    <span asp-validation-for="EnrollmentId" class="text-danger"></span>
-                </div> *@
-                <div class="mb-3">
-                    <label for="Img" class="form-label">StudentId</label>
-                    <input class="form-control" placeholder="StudentId" asp-for="StudentId">
-                    <span asp-validation-for="StudentId" class="text-danger"></span>
+@{
+    ViewData["Title"] = "Create Enrollment";
+}
 
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-primary text-white p-4 rounded-top-4">
+                    <h4 class="mb-0 fw-bold"><i class="bi bi-journal-plus me-2"></i>Enroll Student in Course</h4>
                 </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">GroupId</label>
-                    <input class="form-control" placeholder="GroupId" asp-for="GroupId">
-                    <span asp-validation-for="GroupId" class="text-danger"></span>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post">
+                        @Html.AntiForgeryToken()
 
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="StudentId" class="form-label fw-semibold">Select Student</label>
+                            <select asp-for="StudentId" class="form-select" asp-items="ViewBag.Students">
+                                <option value="">-- Choose Student --</option>
+                            </select>
+                            <span asp-validation-for="StudentId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CourseId" class="form-label fw-semibold">Select Course</label>
+                            <select asp-for="CourseId" class="form-select" asp-items="ViewBag.Courses">
+                                <option value="">-- Choose Course --</option>
+                            </select>
+                            <span asp-validation-for="CourseId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="EnrollmentDate" class="form-label fw-semibold">Enrollment Date</label>
+                            <input asp-for="EnrollmentDate" type="date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            <span asp-validation-for="EnrollmentDate" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 pt-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4">Save Enrollment</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">EnrollmentDate</label>
-                    <input class="form-control" placeholder="EnrollmentDate" asp-for="EnrollmentDate">
-                    <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
-
-                </div>
-
-
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            </div>
         </div>
     </div>
 </div>
+
+@* @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+} *@

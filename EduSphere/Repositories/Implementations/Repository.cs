@@ -5,8 +5,7 @@ using System.Linq.Expressions;
 
 namespace EduSphere.Repositories.Implementations
 {
-    public class Repository<T> : IRepository<T>
-        where T : class
+    public class Repository<T> : IRepository<T> where T : class
     {
         protected readonly ApplicationDbContext _context;
         protected readonly DbSet<T> _dbSet;
@@ -24,7 +23,9 @@ namespace EduSphere.Repositories.Implementations
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             Expression<Func<T, object>>[]? includes = null,
             bool tracked = false,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default,
+            int skip = 0,
+            int take = 0)
         {
             IQueryable<T> query = _dbSet;
 
@@ -45,6 +46,16 @@ namespace EduSphere.Repositories.Implementations
             if (orderBy != null)
             {
                 query = orderBy(query);
+            }
+
+            if (skip > 0)
+            {
+                query = query.Skip(skip);
+            }
+
+            if (take > 0)
+            {
+                query = query.Take(take);
             }
 
             return await query.ToListAsync(cancellationToken);
@@ -104,7 +115,7 @@ namespace EduSphere.Repositories.Implementations
 
         #endregion
 
-        #region Exists
+        #region Exists & Aggregation
 
         public async Task<bool> AnyAsync(
             Expression<Func<T, bool>> predicate,

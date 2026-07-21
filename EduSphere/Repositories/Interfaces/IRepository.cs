@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using EduSphere.Models;
+using System.Linq.Expressions;
 
 namespace EduSphere.Repositories.Interfaces
 {
@@ -11,7 +12,9 @@ namespace EduSphere.Repositories.Interfaces
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             Expression<Func<T, object>>[]? includes = null,
             bool tracked = false,
-            CancellationToken cancellationToken = default);
+            CancellationToken cancellationToken = default,
+            int skip = 0,
+            int take = 0);
 
         Task<T?> GetOneAsync(
             Expression<Func<T, bool>> filter,
@@ -33,7 +36,7 @@ namespace EduSphere.Repositories.Interfaces
 
         #endregion
 
-        #region Exists
+        #region Exists & Aggregation
 
         Task<bool> AnyAsync(
             Expression<Func<T, bool>> predicate,
