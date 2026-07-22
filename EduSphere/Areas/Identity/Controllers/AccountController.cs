@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Encodings.Web;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Localization;
 namespace EduSphere.Areas.Identity.Controllers
 {
     [Area("Identity")]
@@ -16,19 +17,22 @@ namespace EduSphere.Areas.Identity.Controllers
         private readonly IEmailService _emailService;
         private readonly IImageService _imageService;
         private readonly ILogger<AccountController> _logger;
-
+        private readonly IStringLocalizer<SharedResource> _localizer;
+       
         public AccountController(
                      UserManager<ApplicationUser> userManager,
                      SignInManager<ApplicationUser> signInManager,
                      IEmailService emailService,
                      IImageService imageService,
-                     ILogger<AccountController> logger)
+                     ILogger<AccountController> logger,
+                     IStringLocalizer<SharedResource> localizer)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailService = emailService;
             _imageService = imageService;
             _logger = logger;
+            _localizer = localizer;
         }
 
 
@@ -158,6 +162,7 @@ namespace EduSphere.Areas.Identity.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(Login));
         }
+
         #region Logout
 
         [HttpGet]
