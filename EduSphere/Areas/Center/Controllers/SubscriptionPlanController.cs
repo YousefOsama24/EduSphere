@@ -12,7 +12,7 @@ using SubscriptionPlanModel = EduSphere.Models.SubscriptionPlan;
 namespace EduSphere.Areas.Center.Controllers
 {
     [Area(SD.Center_AREA)]
-    //[Authorize(Roles = "CenterManager,SuperAdmin")]
+   [Authorize(Roles = "CenterManager,SuperAdmin")]
     public class SubscriptionPlanController : Controller
     {
         private const int PageSize = 10;

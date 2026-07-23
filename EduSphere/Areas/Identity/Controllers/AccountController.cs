@@ -6,9 +6,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Encodings.Web;
 using Microsoft.Extensions.Logging;
+using EduSphere.Utility;
 namespace EduSphere.Areas.Identity.Controllers
 {
-    [Area("Identity")]
+    [Area(SD.IDENTITY_AREA)]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -297,66 +298,35 @@ namespace EduSphere.Areas.Identity.Controllers
             if (user == null)
                 return RedirectToAction(nameof(Login));
 
-            /* switch (user.UserType)
-               {
-                   case UserType.SuperAdmin:
+            switch (user.UserType)
+            {
+                case UserType.SuperAdmin:
+                    return RedirectToAction("Index", "Home", new { area = "SuperAdmin" });
 
-                       return RedirectToAction(
-                           "Index",
-                           "Home",
-                           new { area = "SuperAdmin" });
+                case UserType.CenterManager:
+                    return RedirectToAction("Index", "Home", new { area = "Center" });
 
-                   case UserType.CenterManager:
+                case UserType.Teacher:
+                    return RedirectToAction("Index", "Home", new { area = "Teacher" });
 
-                       return RedirectToAction(
-                           "Index",
-                           "Home",
-                           new { area = "Center" });
+                case UserType.Student:
+                    return RedirectToAction("StudentDB", "StudentDB", new { area = "Center" });
 
-                   case UserType.Teacher:
+                case UserType.Parent:
+                    return RedirectToAction("ParentDB", "ParentDBController1", new { area = "Center" });
 
-                       return RedirectToAction(
-                           "Index",
-                           "Home",
-                           new { area = "Teacher" });
-
-                   case UserType.Student:
-
-                       return RedirectToAction(
-                           "Index",
-                           "Home",
-                           new { area = "Student" });
-
-                   case UserType.Parent:
-
-                       return RedirectToAction(
-                           "Index",
-                           "Home",
-                           new { area = "Parent" });
-
-                   default:
-
-                       return RedirectToAction(
-                           "Index",
-                           "Home",
-                           new { area = "" });
-               }
-           }
-            */
-
-            return Content(
-      $"Email: {user.Email}\n" +
-      $"UserType: {user.UserType}\n" +
-      $"Roles: {string.Join(", ", await _userManager.GetRolesAsync(user))}");
+                default:
+                    return RedirectToAction("Index", "Home");
+            }
         }
 
-#endregion
+        #endregion
 
-#endregion
+        #endregion
 
-            #region Profile
+        #region Profile
 
-            [HttpGet]
+        [HttpGet]
             [Authorize]
             public async Task<IActionResult> Profile()
             {

@@ -2,12 +2,15 @@
 using EduSphere.Repositories.Interfaces;
 using EduSphere.Utility;
 using EduSphere.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 using System.Security.Claims;
 
 namespace EduSphere.Areas.Center.Controllers
 {
+    [Authorize(Roles = "CenterManager,SuperAdmin")]
+
     [Area(SD.Center_AREA)]
     public class HomeController : Controller
     {

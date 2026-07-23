@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 using CenterModel = EduSphere.Models.Center;
 using EduSphere.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EduSphere.Areas.SupeAdmin.Controllers
 {
     [Area(SD.SuperAdmin_AREA)]
+    [Authorize(Roles = "SuperAdmin")]
     public class CenterController : Controller
     {
 

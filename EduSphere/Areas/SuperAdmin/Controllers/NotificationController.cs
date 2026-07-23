@@ -1,13 +1,16 @@
 ﻿using EduSphere.Repositories.Interfaces;
 using EduSphere.Utility;
+using EduSphere.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 using NotificationModel = EduSphere.Models.Notification;
-using EduSphere.ViewModel;
 
 namespace EduSphere.Areas.Admin.Controllers
 {
     [Area(SD.SuperAdmin_AREA)]
+    [Authorize(Roles = "SuperAdmin")]
+
     public class NotificationController : Controller
     {
 

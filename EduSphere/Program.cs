@@ -17,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 
-
+/*
 #region Serilog
 Log.Logger = new LoggerConfiguration()
 
@@ -67,7 +67,7 @@ builder.Host.UseSerilog();
 
 #endregion
 
-
+*/
 #region Database
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -157,6 +157,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 #endregion
+
+/*
 #region DataSeeder
 using (var scope = app.Services.CreateScope())
 {
@@ -169,14 +171,16 @@ using (var scope = app.Services.CreateScope())
     await DbSeeder.SeedAsync(context, userManager, roleManager);
 }
 #endregion
+*/
 
 #region Routing
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area=Identity}/{controller=Account}/{action=Login}/{id?}");
 
 #endregion
 Log.Information("EduSphere Application Started.");

@@ -22,36 +22,50 @@
                 <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
                 <div class="row g-3">
-                    <!-- الخيار الأول: الاختيار من القائمة المسجلة مسبقاً -->
+
+                    <!-- Student Search -->
                     <div class="col-md-6">
-                        <label asp-for="UserId" class="form-label fw-bold">Select Existing Student User</label>
-                        <select asp-for="UserId" id="userSelectDropdown" class="form-select searchable-select" asp-items="ViewBag.Users">
-                            <option value="">-- Choose from list --</option>
+                        <label asp-for="UserId" class="form-label fw-bold">
+                            Search Student
+                        </label>
+
+                        <select asp-for="UserId"
+                                id="studentSearch"
+                                class="form-select">
                         </select>
+
                         <span asp-validation-for="UserId" class="text-danger"></span>
+
+                        <small class="text-muted">
+                            Type at least 2 letters to search for a registered student.
+                        </small>
                     </div>
 
-                    <!-- الخيار البديل: كتابة اسم جديد لو مش موجود في القائمة -->
+                    <!-- Parent -->
                     <div class="col-md-6">
-                        <label class="form-label fw-bold">Or Type New Student Name</label>
-                        <input type="text" id="customUserNameInput" class="form-control" placeholder="Type name if not in list..." />
-                        <small class="form-text text-muted">If you type here, it will override the selection from the dropdown.</small>
-                    </div>
+                        <label asp-for="ParentId" class="form-label fw-bold">
+                            Parent
+                        </label>
 
-                    <!-- Parent Dropdown -->
-                    <div class="col-md-6 mt-3">
-                        <label asp-for="ParentId" class="form-label fw-bold">Parent</label>
-                        <select asp-for="ParentId" class="form-select searchable-select" asp-items="ViewBag.Parents">
+                        <select asp-for="ParentId"
+                                class="form-select searchable-select"
+                                asp-items="ViewBag.Parents">
                             <option value="">-- Select Parent (Optional) --</option>
                         </select>
+
                         <span asp-validation-for="ParentId" class="text-danger"></span>
                     </div>
+
                 </div>
 
                 <div class="mt-4 d-flex justify-content-end gap-2">
-                    <a asp-action="Index" class="btn btn-light px-4">Cancel</a>
+                    <a asp-action="Index" class="btn btn-light px-4">
+                        Cancel
+                    </a>
+
                     <button type="submit" class="btn btn-primary px-4">
-                        <i class="bi bi-check-circle me-1"></i> Save Student
+                        <i class="bi bi-check-circle me-1"></i>
+                        Save Student
                     </button>
                 </div>
             </form>
@@ -63,28 +77,48 @@
     <partial name="_ValidationScriptsPartial" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // تفعيل الـ Select2 للبحث والفلترة بدون خاصية الـ tags اللي بتعمل مشاكل
-            $('.searchable-select').select2({
-                theme: 'bootstrap-5',
-                width: '100%',
-                placeholder: "-- Select --",
-                allowClear: true
-            });
+        $(document).ready(function () {
 
-            // لو المستخدم كتب اسم جديد في حقل النص، نفرغ القائمة المنسدلة عشان السيرفر يستقبل النص الحر بسلام
-            $('#customUserNameInput').on('input', function() {
-                if ($(this).val().trim() !== "") {
-                    $('#userSelectDropdown').val('').trigger('change');
-                }
-            });
+        $('#studentSearch').select2({
+        theme: 'bootstrap-5',
+        width: '100%',
+        placeholder: 'Type student name...',
+        minimumInputLength: 2,
+        ajax: {
+        url: '/Center/Student/SearchStudents',
+        dataType: 'json',
+        delay: 300,
 
-            // لو اختار من القائمة المنسدلة، نفضي حقل الكتابة اليدوية
-            $('#userSelectDropdown').on('change', function() {
-                if ($(this).val()) {
-                    $('#customUserNameInput').val('');
-                }
-            });
+        data: function (params) {
+        return {
+        term: params.term
+        };
+        },
+
+        processResults: function (data) {
+        return {
+        results: data
+        };
+        },
+
+        cache: true
+        },
+
+        language: {
+        inputTooShort: function () {
+        return "Type at least 2 letters";
+        },
+
+        noResults: function () {
+        return "No student found";
+        },
+
+        searching: function () {
+        return "Searching...";
+        }
+        }
+        });
+
         });
     </script>
 }

@@ -2,9 +2,12 @@
 using EduSphere.Repositories.Interfaces;
 using EduSphere.Utility;
 using EduSphere.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [Area(SD.TEACHER_AREA)]
+[Authorize(Roles = "Teacher")]
+
 public class HomeController : Controller
 {
     private readonly IRepository<Student> _studentRepo;

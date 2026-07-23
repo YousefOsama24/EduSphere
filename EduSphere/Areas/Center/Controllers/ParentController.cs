@@ -15,7 +15,7 @@ using Microsoft.Extensions.Logging;
 namespace EduSphere.Areas.Center.Controllers
 {
     [Area(SD.Center_AREA)]
-    // [Authorize(Roles = "CenterManager,SuperAdmin")]
+     [Authorize(Roles = "CenterManager,SuperAdmin")]
     public class ParentController : Controller
     {
         private const int PageSize = 10;

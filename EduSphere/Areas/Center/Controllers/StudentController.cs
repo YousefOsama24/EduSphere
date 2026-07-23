@@ -2,15 +2,18 @@
 using EduSphere.Repositories.Interfaces;
 using EduSphere.Utility;
 using EduSphere.ViewModel;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 
 namespace EduSphere.Areas.Center.Controllers
 {
     [Area(SD.Center_AREA)]
-    //[Authorize(Roles = "CenterManager,SuperAdmin")]
+    [Authorize(Roles = "CenterManager,SuperAdmin")]
     public class StudentController : Controller
     {
         private const int PageSize = 10;
@@ -19,17 +22,24 @@ namespace EduSphere.Areas.Center.Controllers
         private readonly ILogger<StudentController> _logger;
         private readonly IRepository<ApplicationUser> _userRepository;
         private readonly IRepository<Parent> _parentRepository;
+        private readonly IRepository<EduSphere.Models.Center> _CenterRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
+
 
         public StudentController(
             IRepository<Student> studentRepository,
             IRepository<ApplicationUser> userRepository,
             IRepository<Parent> parentRepository,
-            ILogger<StudentController> logger)
+            IRepository<EduSphere.Models.Center> CenterRepository,
+            ILogger<StudentController> logger,
+            UserManager<ApplicationUser> userManager)
         {
             _studentRepository = studentRepository;
             _userRepository = userRepository;
             _parentRepository = parentRepository;
             _logger = logger;
+            _userManager = userManager;
+            _CenterRepository = CenterRepository;
         }
 
         #region Index
@@ -73,26 +83,23 @@ namespace EduSphere.Areas.Center.Controllers
 
         #endregion
 
-        #region Create
-
         [HttpGet]
-        public async Task<IActionResult> Create(CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Create(
+    CancellationToken cancellationToken = default)
         {
             await PopulateDropdownsAsync(cancellationToken);
             return View(new Student());
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            Student student,
-            CancellationToken cancellationToken = default)
+     Student model,
+     CancellationToken cancellationToken = default)
         {
-            // 💡 إزالة العلاقات وكائنات الموديل الضخمة لمنع إيقاف الـ Validation
-            ModelState.Remove(nameof(Student.User));
             ModelState.Remove(nameof(Student.Parent));
 
-            // في حال وجود مشكلة في الـ Validation، استخرج الخطأ واعرضه فوراً
             if (!ModelState.IsValid)
             {
                 var validationErrors = ModelState.Values
@@ -101,53 +108,98 @@ namespace EduSphere.Areas.Center.Controllers
                     .ToList();
 
                 string combinedErrors = string.Join(" | ", validationErrors);
-                _logger.LogWarning("Create Student Validation Failed: {Errors}", combinedErrors);
-                
-                // إظهار الخطأ المباشر لك في رسالة إشعار بالأعلى
+
+                _logger.LogWarning("Assign Student Validation Failed: {Errors}", combinedErrors);
+
                 TempData["Error"] = $"Validation Failed: {combinedErrors}";
 
-                await PopulateDropdownsAsync(cancellationToken, student.UserId, student.ParentId);
-                return View(student);
-            }
-
-            // التأكد من عدم تسجيل نفس المستخدم كطالب مسبقاً
-            bool exists = (await _studentRepository.GetAsync(
-                x => x.UserId == student.UserId,
-                cancellationToken: cancellationToken)).Any();
-
-            if (exists)
-            {
-                ModelState.AddModelError("", "This user is already registered as a student.");
-                await PopulateDropdownsAsync(cancellationToken, student.UserId, student.ParentId);
-                return View(student);
+                await PopulateDropdownsAsync(cancellationToken, model.UserId, model.ParentId);
+                return View(model);
             }
 
             try
             {
-                // تفريغ كائنات الملاحة لضمان عدم محاولة EF Core لإضافتهم كمُدخلات جديدة
-                student.User = null!;
+                // هات الطالب الموجود بالفعل
+                var student = (await _studentRepository.GetAsync(
+                    x => x.UserId == model.UserId,
+                    cancellationToken: cancellationToken))
+                    .FirstOrDefault();
+
+                if (student == null)
+                {
+                    ModelState.AddModelError("", "Student not found.");
+
+                    await PopulateDropdownsAsync(cancellationToken, model.UserId, model.ParentId);
+                    return View(model);
+                }
+
+                // لو الطالب متضاف بالفعل لسنتر
+                if (student.CenterId != 0)
+                {
+                    ModelState.AddModelError("", "Student is already assigned to a center.");
+
+                    await PopulateDropdownsAsync(cancellationToken, model.UserId, model.ParentId);
+                    return View(model);
+                }
+
+               
+
+                student.CenterId = 1; student.ParentId = 1;
+                student.ParentId = model.ParentId;
+                student.AcademicLevel = model.AcademicLevel;
+                student.DateOfBirth = model.DateOfBirth;
+                student.Gender = model.Gender;
+
                 student.Parent = null!;
 
-                await _studentRepository.CreateAsync(student, cancellationToken);
+                _studentRepository.Update(student);
+
+                await _studentRepository.CommitAsync(cancellationToken);
                 await _studentRepository.CommitAsync(cancellationToken);
 
-                TempData["Success"] = "Student created successfully.";
-                _logger.LogInformation("Student created successfully. Id: {Id}", student.StudentId);
+                TempData["Success"] = "Student assigned to center successfully.";
+
+                _logger.LogInformation(
+                    "Student {StudentId} assigned to center {CenterId}.",
+                    student.StudentId,
+                    student.CenterId);
 
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error while creating student.");
-                TempData["Error"] = $"Error while creating student: {ex.Message}";
+                _logger.LogError(ex, "Error while assigning student.");
 
-                await PopulateDropdownsAsync(cancellationToken, student.UserId, student.ParentId);
-                return View(student);
+                TempData["Error"] = $"Error while assigning student: {ex.Message}";
+
+                await PopulateDropdownsAsync(cancellationToken, model.UserId, model.ParentId);
+                return View(model);
             }
         }
 
-        #endregion
+        [HttpGet]
+        public async Task<IActionResult> SearchStudents(
+    string term,
+    CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrWhiteSpace(term))
+                return Json(Array.Empty<object>());
 
+            var users = await _userManager.Users
+                .Where(x =>
+                    x.UserType == UserType.Student &&
+                    x.FullName.Contains(term))
+                .OrderBy(x => x.FullName)
+                .Take(20)
+                .Select(x => new
+                {
+                    id = x.Id,
+                    text = x.FullName
+                })
+                .ToListAsync(cancellationToken);
+
+            return Json(users);
+        }
         #region Edit
 
         [HttpGet]

@@ -1,14 +1,17 @@
-﻿using EduSphere.Repositories.Interfaces;
+﻿using EduSphere.Models;
+using EduSphere.Repositories.Interfaces;
 using EduSphere.Utility;
+using EduSphere.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 using QuestionModel = EduSphere.Models.Question;
-using EduSphere.ViewModel;
-using EduSphere.Models;
 
 namespace EduSphere.Areas.Teacher.Controllers
 {
     [Area(SD.TEACHER_AREA)]
+    [Authorize(Roles = "Teacher")]
+
     public class QuestionController : Controller
     {
 

@@ -1,0 +1,211 @@
+﻿@model EduSphere.ViewModel.StudentDashboardVM
+@{
+    ViewData["Title"] = "Student Dashboard";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-0">@Model.Student?.User?.FullName</h2>
+        <p class="text-muted mb-0">@Model.Student?.Center?.Name</p>
+    </div>
+    
+</div>
+
+@* ===================== Student Information ===================== *@
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Student Information</h5>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="text-muted small">Full Name</div>
+                <div class="fw-semibold">@Model.Student?.User?.FullName</div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-muted small">Email</div>
+                <div class="fw-semibold">@Model.Student?.User?.Email</div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-muted small">Phone Number</div>
+                <div class="fw-semibold">@Model.Student?.User?.PhoneNumber</div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-muted small">Gender</div>
+                <div class="fw-semibold">@Model.Student?.Gender</div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-muted small">Date Of Birth</div>
+                <div class="fw-semibold">@Model.Student?.DateOfBirth.ToString("dd MMM yyyy")</div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-muted small">Current Group</div>
+                <div class="fw-semibold">@(string.IsNullOrEmpty(Model.CurrentGroupName) ? "Not assigned" : Model.CurrentGroupName)</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* ===================== Statistics Cards ===================== *@
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <div class="text-muted small">Enrolled Courses</div>
+                <div class="fs-3 fw-bold">@Model.EnrolledCoursesCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <div class="text-muted small">Completed Courses</div>
+                <div class="fs-3 fw-bold">@Model.CompletedCoursesCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <div class="text-muted small">Active Courses</div>
+                <div class="fs-3 fw-bold">@Model.ActiveCoursesCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <div class="text-muted small">Upcoming Exams</div>
+                <div class="fs-3 fw-bold">@Model.UpcomingExamsCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <div class="text-muted small">Attendance</div>
+                <div class="fs-3 fw-bold">@Model.AttendancePercentage.ToString("0.##")%</div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<div class="row g-4 mb-4">
+   
+
+    @* ===================== Attendance Section ===================== *@
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Attendance</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless mb-0">
+                    <tbody>
+                        <tr>
+                            <td class="text-muted">Present</td>
+                            <td class="text-end fw-semibold text-success">@Model.PresentCount</td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Absent</td>
+                            <td class="text-end fw-semibold text-danger">@Model.AbsentCount</td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Late</td>
+                            <td class="text-end fw-semibold text-warning">@Model.LateCount</td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Attendance Percentage</td>
+                            <td class="text-end fw-semibold">@Model.AttendancePercentage.ToString("0.##")%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* ===================== Courses Section ===================== *@
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Enrolled Courses</h5>
+    </div>
+    <div class="card-body p-0">
+        @if (Model.Courses.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Teacher</th>
+                            <th>Enrollment Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var course in Model.Courses)
+                        {
+                            <tr>
+                                <td>@course.CourseTitle</td>
+                                <td>@course.TeacherName</td>
+                                <td>@course.EnrollmentDate.ToString("dd MMM yyyy")</td>
+                                <td>
+                                    <span class="badge @GetEnrollmentBadgeClass(course.Status.ToString())">
+                                        @course.Status
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted p-3 mb-0">This student is not enrolled in any courses yet.</p>
+        }
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    @* ===================== Teachers Section ===================== *@
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Teachers</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Teachers.Any())
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var teacher in Model.Teachers)
+                        {
+                            <li class="list-group-item px-0">@teacher.FullName</li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted mb-0">No teachers found for this student's courses.</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+@functions {
+   
+
+    private string GetEnrollmentBadgeClass(string status) => status switch
+    {
+        "Active" => "text-bg-success",
+        "Completed" => "text-bg-primary",
+        "Pending" => "text-bg-warning",
+        "Cancelled" => "text-bg-secondary",
+        _ => "text-bg-light text-dark"
+    };
+}

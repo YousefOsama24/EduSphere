@@ -1,14 +1,17 @@
 ﻿using EduSphere.Repositories.Interfaces;
 using EduSphere.Utility;
+using EduSphere.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
-using EduSphere.ViewModel;
 // استخدام الـ Alias بوضوح
 using GroupModel = EduSphere.Models.Group;
 
 namespace EduSphere.Areas.Teacher.Controllers
 {
     [Area(SD.TEACHER_AREA)]
+    [Authorize(Roles = "Teacher")]
+
     public class GroupController : Controller
     {
         private readonly IRepository<GroupModel> _context;

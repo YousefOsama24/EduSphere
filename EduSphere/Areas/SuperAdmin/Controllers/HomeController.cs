@@ -1,14 +1,17 @@
 ﻿using EduSphere.Models;
-using EduSphere.Repositories.Interfaces;
 using EduSphere.Repositories;
+using EduSphere.Repositories.Interfaces;
 using EduSphere.Utility;
 using EduSphere.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TeacherModel = EduSphere.Models.Teacher;
 using CenterModel = EduSphere.Models.Center;
+using TeacherModel = EduSphere.Models.Teacher;
 namespace EduSphere.Areas.SuperAdmin.Controllers
 {
     [Area(SD.SuperAdmin_AREA)]
+    [Authorize(Roles = "SuperAdmin")]
+
     public class HomeController : Controller
     {
         private readonly IRepository<TeacherModel> _teacherRepo;

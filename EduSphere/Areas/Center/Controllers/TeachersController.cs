@@ -2,6 +2,7 @@
 using EduSphere.Repositories.Interfaces;
 using EduSphere.Utility;
 using EduSphere.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 using TeacherModel = EduSphere.Models.Teacher;
@@ -9,6 +10,8 @@ using TeacherModel = EduSphere.Models.Teacher;
 namespace EduSphere.Areas.Admin.Controllers
 {
     [Area(SD.Center_AREA)]
+    [Authorize(Roles = "CenterManager,SuperAdmin")]
+
     public class TeachersController : Controller
     {
 
