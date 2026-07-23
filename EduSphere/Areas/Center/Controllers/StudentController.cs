@@ -42,7 +42,9 @@ namespace EduSphere.Areas.Center.Controllers
             var students = await _studentRepository.GetAsync(
                 includes: new Expression<Func<Student, object>>[]
                 {
-                    x => x.User
+                   x => x.User,
+                   x => x.Parent,
+                   x => x.Parent.User
                 },
                 cancellationToken: cancellationToken);
 
@@ -79,8 +81,7 @@ namespace EduSphere.Areas.Center.Controllers
         public async Task<IActionResult> Create(
     CancellationToken cancellationToken = default)
         {
-            var users = await _userRepository.GetAsync(
-                cancellationToken: cancellationToken);
+           
 
             var parents = await _parentRepository.GetAsync(
                 includes: new Expression<Func<Parent, object>>[]
@@ -89,10 +90,8 @@ namespace EduSphere.Areas.Center.Controllers
                 },
                 cancellationToken: cancellationToken);
 
-            var user = await _userRepository.GetAsync(
-    x => x.UserType == UserType.Student,
-    cancellationToken: cancellationToken);
-
+            
+           
             ViewBag.Parents = parents
      .Select(x => new SelectListItem
      {
@@ -112,8 +111,7 @@ namespace EduSphere.Areas.Center.Controllers
      Student student,
      CancellationToken cancellationToken = default)
         {
-            var users = await _userRepository.GetAsync(
-                cancellationToken: cancellationToken);
+            
 
             var parents = await _parentRepository.GetAsync(
                 includes: new Expression<Func<Parent, object>>[]
@@ -124,11 +122,7 @@ namespace EduSphere.Areas.Center.Controllers
 
             if (!ModelState.IsValid)
             {
-                ViewBag.Users = new SelectList(
-                    users,
-                    "Id",
-                    "FullName",
-                    student.UserId);
+               
 
                 ViewBag.Parents = parents
     .Select(x => new SelectListItem
@@ -148,7 +142,26 @@ namespace EduSphere.Areas.Center.Controllers
                     x => x.UserId == student.UserId,
                     cancellationToken: cancellationToken))
                 .Any();
+            var user = await _userRepository.GetOneAsync(
+    x => x.Id == student.UserId,
+    cancellationToken: cancellationToken);
 
+            if (user == null)
+            {
+                ModelState.AddModelError("UserId", "Invalid Student ID.");
+
+                ViewBag.Parents = parents
+                    .Select(x => new SelectListItem
+                    {
+                        Value = x.ParentId.ToString(),
+                        Text = x.User != null
+                            ? x.User.FullName
+                            : $"Parent #{x.ParentId}"
+                    })
+                    .ToList();
+
+                return View(student);
+            }
             if (exists)
             {
                 ModelState.AddModelError(
@@ -156,7 +169,7 @@ namespace EduSphere.Areas.Center.Controllers
                     "This user is already registered as a student.");
 
                 ViewBag.Users = new SelectList(
-                    users,
+                    
                     "Id",
                     "FullName",
                     student.UserId);
@@ -202,7 +215,7 @@ namespace EduSphere.Areas.Center.Controllers
                     "Something went wrong while creating the student.";
 
                 ViewBag.Users = new SelectList(
-                    users,
+                    
                     "Id",
                     "FullName",
                     student.UserId);

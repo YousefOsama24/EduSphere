@@ -85,22 +85,34 @@ namespace EduSphere.Areas.Center.Controllers
                     .Take(5),
 
                 LatestEnrollments =
-                    (await _enrollmentRepository.GetAsync())
-                    .OrderByDescending(x => x.EnrollmentDate)
-                    .Take(5),
+    (await _enrollmentRepository.GetAsync(
+        includes: new Expression<Func<Enrollment, object>>[]
+        {
+            x => x.Student,
+            x => x.Course
+        }))
+    .OrderByDescending(x => x.EnrollmentDate)
+    .Take(5),
 
                 TodaySessions =
-                    (await _attendanceSessionRepository.GetAsync())
-                    .Where(x => x.SessionDate.Date == DateTime.Today)
-                    .OrderBy(x => x.SessionDate)
-                    .Take(10),
+    (await _attendanceSessionRepository.GetAsync(
+        includes: new Expression<Func<AttendanceSession, object>>[]
+        {
+            x => x.Group
+        }))
+    .Where(x => x.SessionDate.Date == DateTime.Today)
+    .OrderBy(x => x.SessionDate)
+    .Take(10),
 
                 ExpiringSubscriptions =
-                    (await _subscriptionRepository.GetAsync())
-                    .Where(x =>
-                        x.EndDate <= DateTime.Today.AddDays(7))
-                    .OrderBy(x => x.EndDate)
-                    .Take(5)
+    (await _subscriptionRepository.GetAsync(
+        includes: new Expression<Func<Subscription, object>>[]
+        {
+            x => x.SubscriptionPlan
+        }))
+    .Where(x => x.EndDate <= DateTime.Today.AddDays(7))
+    .OrderBy(x => x.EndDate)
+    .Take(5),
             };
 
             return View(dashboard);

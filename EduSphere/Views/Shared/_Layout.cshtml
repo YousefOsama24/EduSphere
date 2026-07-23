@@ -1,7 +1,28 @@
-﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
 @using EduSphere.Models
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+
+@{
+    // Single source of truth for "which area is the current user's home area".
+    // Student/Parent don't have their own Areas yet - their dashboards live
+    // under Center (see Areas/Center/Controllers/HomeController: StudentDashboard/ParentDashboard).
+    // Update this if/when dedicated Student/Parent Areas are added.
+    var currentArea = "Center";
+
+    if (User.IsInRole("Teacher"))
+    {
+        currentArea = "Teacher";
+    }
+    else if (User.IsInRole("SuperAdmin"))
+    {
+        currentArea = "SuperAdmin";
+    }
+    else if (User.IsInRole("Student") || User.IsInRole("Parent"))
+    {
+        currentArea = "Center";
+    }
+}
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -31,198 +52,414 @@
           href="~/css/site-layout.css"
           asp-append-version="true" />
 
+    <link rel="stylesheet"
+          href="~/css/sidebar.css"
+          asp-append-version="true" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     @await RenderSectionAsync("Styles", required: false)
+
+
 </head>
 
-<body>
+<body class="bg-light">
 
-    <!-- =========================
-         TOP NAVBAR
-    ========================== -->
+    <div class="content-wrapper">
 
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
-            <div class="container-fluid px-4">
+        <div class="app-wrapper d-flex flex-column min-vh-100">
+            <div class="layout">
 
-                <!-- Brand -->
-                <a class="navbar-brand fw-bold"
-                       asp-area=""
-                       asp-controller="Home"
-                       asp-action="Index">
-                    EduSphere
-                </a>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    if (User.IsInRole("CenterManager"))
+                    {
+                        <partial name="~/Areas/Center/Views/Shared/_Sidebar.cshtml" />
+                    }
+                    else if (User.IsInRole("Teacher"))
+                    {
+                        <partial name="~/Areas/Teacher/Views/Shared/_Sidebar.cshtml" />
+                    }
+                    else if (User.IsInRole("Student") || User.IsInRole("Parent"))
+                    {
+                        @* Student/Parent have no dedicated Area yet - reuse the Center sidebar
+                           until a real Student/Parent sidebar partial exists. *@
+                        <partial name="~/Areas/Center/Views/Shared/_Sidebar.cshtml" />
+                    }
+                    else if (User.IsInRole("SuperAdmin"))
+                    {
+                        <partial name="~/Areas/SuperAdmin/Views/Shared/_Sidebar.cshtml" />
+                    }
+                }
+                <div class="main-wrapper">
 
-                <!-- Mobile Toggle -->
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#mainNavbar"
-                        aria-controls="mainNavbar"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                    <button id="sidebarToggle"
+                            class="btn btn-light border">
 
-                <div class="collapse navbar-collapse"
-                     id="mainNavbar">
+                        <i class="bi bi-list"></i>
 
-                    <!-- Left Navigation -->
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    </button>
+                    <!-- ===========================
+                            TOPBAR
+                    ============================ -->
 
-                        <li class="nav-item">
-                            <a class="nav-link"
-                                   asp-area=""
-                                   asp-controller="Home"
-                                   asp-action="Index">
-                                Home
-                            </a>
-                        </li>
+                    <header class="topbar shadow-sm">
 
-                        @if (User.Identity?.IsAuthenticated == true)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                       asp-area="Center"
-                                       asp-controller="Home"
-                                       asp-action="RedirectToDashboard">
-                                    Dashboard
-                                </a>
-                            </li>
-                        }
+                        <div class="container-fluid">
 
-                    </ul>
+                            <div class="d-flex justify-content-between align-items-center">
 
-                    <!-- Right Navigation -->
-                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                                <!-- Left -->
 
-                        @if (User.Identity?.IsAuthenticated == true)
-                        {
-                            <li class="nav-item dropdown">
+                                <div class="d-flex align-items-center gap-3">
 
-                                <a class="nav-link dropdown-toggle"
-                                       href="#"
-                                       id="userDropdown"
-                                       role="button"
-                                       data-bs-toggle="dropdown"
-                                       aria-expanded="false">
+                                    <!--  Sidebar Toggle -->
 
-                                    <span class="me-1">
-                                        My Account
-                                    </span>
+                                    <button id="sidebarToggleMobile"
+                                            class="btn btn-light border d-lg-none">
 
-                                </a>
+                                        <i class="bi bi-list fs-5"></i>
 
-                                <ul class="dropdown-menu dropdown-menu-end"
-                                    aria-labelledby="userDropdown">
+                                    </button>
 
-                                    <li>
-                                        <a class="dropdown-item"
-                                               asp-area="Center"
-                                               asp-controller="Profile"
-                                               asp-action="Index">
-                                            Profile
-                                        </a>
-                                    </li>
+                                    <!-- Search -->
 
-                                    <li>
-                                        <a class="dropdown-item"
-                                               asp-area="Center"
-                                               asp-controller="Home"
-                                               asp-action="RedirectToDashboard">
-                                            Dashboard
-                                        </a>
-                                    </li>
+                                    <div class="search-box d-none d-md-block">
 
-                                    <li>
-                                        <hr class="dropdown-divider" />
-                                    </li>
+                                        <div class="input-group">
 
-                                    <li>
-                                        <form asp-area=""
-                                              asp-controller="Account"
-                                              asp-action="Logout"
-                                              method="post">
+                                            <span class="input-group-text bg-white border-end-0">
 
-                                            @Html.AntiForgeryToken()
+                                                <i class="bi bi-search text-secondary"></i>
 
-                                            <button type="submit"
-                                                    class="dropdown-item text-danger">
-                                                Logout
+                                            </span>
+
+                                            <input
+                                                type="text"
+                                                class="form-control border-start-0"
+                                                   placeholder="Search students, teachers..." />
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- Right -->
+
+                                <div class="d-flex align-items-center gap-3">
+
+                                    <!-- Language -->
+
+                                    <button class="btn btn-light position-relative">
+
+                                        <span class="fw-semibold small">EN</span>
+
+                                    </button>
+
+                                    <!-- Notification -->
+
+                                    <button class="btn btn-light position-relative">
+
+                                        <i class="bi bi-bell"></i>
+
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+                                            3
+
+                                        </span>
+
+                                    </button>
+
+                                    <!-- User -->
+
+                                    @if(User.Identity!.IsAuthenticated)
+                                    {
+
+                                        <div class="dropdown">
+
+                                            <button class="btn btn-light dropdown-toggle d-flex align-items-center gap-2"
+                                                    data-bs-toggle="dropdown">
+
+                                                <img src="https://ui-avatars.com/api/?name=EduSphere"
+                                                     width="36"
+                                                     height="36"
+                                                     class="rounded-circle" />
+
+                                                <span class="fw-semibold">
+
+                                                    @(User.Identity?.Name)
+
+                                                </span>
+
                                             </button>
 
-                                        </form>
-                                    </li>
+                                            <ul class="dropdown-menu dropdown-menu-end">
 
-                                </ul>
+                                                <li>
 
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                       asp-area=""
-                                       asp-controller="Account"
-                                       asp-action="Login">
-                                    Login
-                                </a>
-                            </li>
-                        }
+                                                    <a class="dropdown-item"
+                                                       asp-area="Identity"
+                                                       asp-controller="Account"
+                                                       asp-action="Profile">
 
-                    </ul>
+                                                        <i class="bi bi-person me-2"></i>
+
+                                                        Profile
+
+                                                    </a>
+
+                                                </li>
+
+                                                <li>
+
+                                                    <hr class="dropdown-divider"/>
+
+                                                </li>
+
+                                                <li>
+
+                                                    <form asp-area="Identity"
+                                                          asp-controller="Account"
+                                                          asp-action="Logout"
+                                                          method="post">
+
+                                                        @Html.AntiForgeryToken()
+
+                                                        <button class="dropdown-item text-danger">
+
+                                                            <i class="bi bi-box-arrow-right me-2"></i>
+
+                                                            Logout
+
+                                                        </button>
+
+                                                    </form>
+
+                                                </li>
+
+                                            </ul>
+
+                                        </div>
+
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </header>
+
+                    <!-- ===========================
+                            BODY
+                    ============================ -->
+
+                    <div class="container-fluid">
+
+                        <div class="row">
+
+                            <!-- ====================================
+                                    Sidebar 
+                            ===================================== -->
+                                       
+                            <!-- Main Content -->
+
+                            <main class="flex-grow-1 px-4 py-4">
+
+                                <!-- ======================
+                                       Breadcrumb
+                                ======================= -->
+
+                                <div class="mb-4">
+
+                                    <nav aria-label="breadcrumb">
+
+                                        <ol class="breadcrumb">
+
+                                            <li class="breadcrumb-item">
+
+                                                <a asp-area="@currentArea"
+                                                   asp-controller="Home"
+                                                   asp-action="Index">
+
+                                                    Dashboard
+
+                                                </a>
+
+                                            </li>
+
+                                            @if(ViewData["Title"] != null &&
+                                                ViewData["Title"]!.ToString() != "Dashboard")
+                                            {
+                                                <li class="breadcrumb-item active">
+
+                                                    @ViewData["Title"]
+
+                                                </li>
+                                            }
+
+                                        </ol>
+
+                                    </nav>
+
+                                </div>
+
+                                <!-- ======================
+                                       PAGE TITLE
+                                ======================= -->
+
+                                @if(ViewData["Title"] != null)
+                                {
+
+                                    <div class="mb-4">
+
+                                        <h2 class="fw-bold text-dark">
+
+                                            @ViewData["Title"]
+
+                                        </h2>
+
+                                    </div>
+
+                                }
+
+                                <!-- ======================
+                                       CONTENT
+                                ======================= -->
+
+                                <div class="page-content">
+
+                                    @if (TempData["Success"] != null)
+                                    {
+                                        <div class="alert alert-success alert-dismissible fade show">
+
+                                            @TempData["Success"]
+
+                                            <button class="btn-close"
+                                                    data-bs-dismiss="alert">
+                                            </button>
+
+                                        </div>
+                                    }
+
+                                    @if (TempData["Error"] != null)
+                                    {
+                                        <div class="alert alert-danger alert-dismissible fade show">
+
+                                            @TempData["Error"]
+
+                                            <button class="btn-close"
+                                                    data-bs-dismiss="alert">
+                                            </button>
+
+                                        </div>
+                                    }
+
+                                    @if (TempData["Warning"] != null)
+                                    {
+                                        <div class="alert alert-warning alert-dismissible fade show">
+
+                                            @TempData["Warning"]
+
+                                            <button class="btn-close"
+                                                    data-bs-dismiss="alert">
+                                            </button>
+
+                                        </div>
+                                    }
+
+                                    @RenderBody()
+
+                                </div>
+
+                            </main>
+                                        
+                        </div>
+
+                    </div>
+                    <!-- ===========================
+                                FOOTER
+                    ============================ -->
+
+                    <footer class="border-top bg-white mt-auto">
+
+                        <div class="container-fluid">
+
+                            <div class="row align-items-center py-3">
+
+                                <div class="col-md-6 text-center text-md-start">
+
+                                    <span class="text-muted">
+
+                                        © @DateTime.Now.Year
+                                        <strong>EduSphere</strong>
+                                        All Rights Reserved.
+
+                                    </span>
+
+                                </div>
+
+                                <div class="col-md-6 text-center text-md-end">
+
+                                    <span class="text-muted">
+
+                                        Educational Management Platform
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </footer>
 
                 </div>
+                <!-- /main-wrapper -->
             </div>
-        </nav>
-    </header>
-
-
-    <!-- =========================
-         PAGE CONTENT
-    ========================== -->
-
-    <main role="main">
-        @RenderBody()
-    </main>
-
-
-    <!-- =========================
-         FOOTER
-    ========================== -->
-
-    <footer class="border-top bg-white mt-auto py-3">
-        <div class="container-fluid px-4">
-
-            <div class="d-flex flex-column flex-md-row
-                justify-content-between
-                align-items-center gap-2">
-
-                <span>
-                    &copy; @DateTime.Now.Year EduSphere.
-                    All rights reserved.
-                </span>
-
-                <span>
-                    Educational Management Platform
-                </span>
-
-            </div>
-
+            <!-- /layout -->
         </div>
-    </footer>
+        <!-- /app-wrapper -->
+    </div>
+    <!-- /content-wrapper -->
 
-
-    <!-- =========================
-         SCRIPTS
-    ========================== -->
+    <!-- ===========================
+        SCRIPTS
+=========================== -->
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
+    <script>
+        (function () {
+            const sidebar = document.querySelector(".sidebar");
+            const content = document.querySelector(".content-wrapper");
+            const toggles = [
+                document.getElementById("sidebarToggle"),
+                document.getElementById("sidebarToggleMobile")
+            ];
+
+            function toggleSidebar() {
+                if (!sidebar || !content) {
+                    console.warn("Sidebar toggle skipped: .sidebar or .content-wrapper not found in DOM.");
+                    return;
+                }
+                sidebar.classList.toggle("collapsed");
+                content.classList.toggle("expanded");
+            }
+
+            toggles.forEach(function (btn) {
+                if (btn) {
+                    btn.addEventListener("click", toggleSidebar);
+                }
+            });
+        })();
+    </script>
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="~/js/site.js"
-            asp-append-version="true">
-    </script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 

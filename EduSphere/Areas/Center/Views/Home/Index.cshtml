@@ -1,578 +1,678 @@
-﻿@model EduSphere.ViewModel.DashboardVM
+@model EduSphere.ViewModel.DashboardVM
 
 @{
     ViewData["Title"] = "Dashboard";
 }
 
-<div class="container-fluid">
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-    <!-- Header -->
+<div class="hero-card">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
 
-        <div>
+        <h2>
+            Welcome Back 👋
+        </h2>
 
-            <h2 class="fw-bold">
+        <p>
+            Manage your educational center efficiently with EduSphere.
+        </p>
 
-                Center Dashboard
+        <p>
+            Here is what's happening today.
+        </p>
 
-            </h2>
+    </div>
 
-            <p class="text-muted mb-0">
+    <div class="hero-date">
 
-                Welcome back 👋
+        <h5>@DateTime.Now.ToString("dddd")</h5>
+
+        <span>@DateTime.Now.ToString("dd MMMM yyyy")</span>
+
+    </div>
+
+</div>
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            <i class="bi bi-mortarboard-fill"></i>
+        </div>
+
+        <div class="stat-info">
+
+            <h3>@Model.TotalStudents</h3>
+
+            <span>Total Students</span>
+
+        </div>
+
+    </div>
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            <i class="bi bi-person-workspace"></i>
+        </div>
+
+        <div class="stat-info">
+
+            <h3>@Model.TotalTeachers</h3>
+
+            <span>Total Teachers</span>
+
+        </div>
+
+    </div>
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            <i class="bi bi-journal-bookmark-fill"></i>
+        </div>
+
+        <div class="stat-info">
+
+            <h3>@Model.TotalCourses</h3>
+
+            <span>Total Courses</span>
+
+        </div>
+
+    </div>
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            <i class="bi bi-collection-fill"></i>
+        </div>
+
+        <div class="stat-info">
+
+            <h3>@Model.TotalGroups</h3>
+
+            <span>Total Groups</span>
+
+        </div>
+
+    </div>
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            <i class="bi bi-people-fill"></i>
+        </div>
+
+        <div class="stat-info">
+
+            <h3>@Model.TotalParents</h3>
+
+            <span>Total Parents</span>
+
+        </div>
+
+    </div>
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            <i class="bi bi-credit-card-fill"></i>
+        </div>
+
+        <div class="stat-info">
+
+            <h3>@Model.ActiveSubscriptions</h3>
+
+            <span>Active Subscriptions</span>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="dashboard-row">
+
+    <div class="dashboard-card">
+
+        <h4>Today's Schedule</h4>
+
+        @if (Model.TodaySessions != null && Model.TodaySessions.Any())
+        {
+            foreach (var session in Model.TodaySessions)
+            {
+                <div class="schedule-item">
+
+                    <div>
+
+                        <strong>
+                            @(session.Group?.Name ?? "Unknown Group")
+                        </strong>
+
+                        <div class="text-muted">
+
+                            @session.SessionDate.ToString("dddd")
+
+                        </div>
+
+                    </div>
+
+                    <span class="schedule-time">
+
+                        @session.SessionDate.ToString("hh:mm tt")
+
+                    </span>
+
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-muted">
+
+                No sessions scheduled today.
 
             </p>
-
-        </div>
-
-        <div>
-
-            <span class="badge bg-success fs-6">
-
-                @DateTime.Now.ToString("dddd, dd MMM yyyy")
-
-            </span>
-
-        </div>
+        }
 
     </div>
 
-    <!-- Statistics -->
+    <div class="dashboard-card">
 
-    <div class="row g-4">
+        <h4>Expiring Subscriptions</h4>
 
-        <div class="col-xl-3 col-lg-4 col-md-6">
+        @if (Model.ExpiringSubscriptions != null && Model.ExpiringSubscriptions.Any())
+        {
+            foreach (var subscription in Model.ExpiringSubscriptions)
+            {
+                <div class="notification-item">
 
-            <div class="card shadow border-0">
+                    <div class="notification-title">
 
-                <div class="card-body">
+                        @(subscription.SubscriptionPlan?.Name ?? "Subscription")
 
-                    <h6 class="text-muted">
+                    </div>
 
-                        Students
+                    <div class="notification-date">
 
-                    </h6>
+                        Ends @subscription.EndDate.ToString("dd MMM yyyy")
 
-                    <h2 class="fw-bold">
-
-                        @Model.TotalStudents
-
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6">
-
-            <div class="card shadow border-0">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-
-                        Teachers
-
-                    </h6>
-
-                    <h2 class="fw-bold">
-
-                        @Model.TotalTeachers
-
-                    </h2>
+                    </div>
 
                 </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6">
-
-            <div class="card shadow border-0">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-
-                        Courses
-
-                    </h6>
-
-                    <h2 class="fw-bold">
-
-                        @Model.TotalCourses
-
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6">
-
-            <div class="card shadow border-0">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-
-                        Groups
-
-                    </h6>
-
-                    <h2 class="fw-bold">
-
-                        @Model.TotalGroups
-
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6">
-
-            <div class="card shadow border-0">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-
-                        Parents
-
-                    </h6>
-
-                    <h2 class="fw-bold">
-
-                        @Model.TotalParents
-
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6">
-
-            <div class="card shadow border-0">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-
-                        Attendance Sessions
-
-                    </h6>
-
-                    <h2 class="fw-bold">
-
-                        @Model.TotalAttendanceSessions
-
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6">
-
-            <div class="card shadow border-0">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-
-                        Today's Attendance
-
-                    </h6>
-
-                    <h2 class="fw-bold">
-
-                        @Model.TodayAttendance
-
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-xl-3 col-lg-4 col-md-6">
-
-            <div class="card shadow border-0">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-
-                        Active Subscriptions
-
-                    </h6>
-
-                    <h2 class="fw-bold">
-
-                        @Model.ActiveSubscriptions
-
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Quick Actions -->
-
-    <div class="card shadow border-0 mt-5">
-
-        <div class="card-header bg-white">
-
-            <h4 class="mb-0">
-
-                Quick Actions
-
-            </h4>
-
-        </div>
-
-        <div class="card-body">
-
-            <div class="row g-3">
-
-                <div class="col-lg-3">
-
-                    <a asp-controller="Student"
-                           asp-action="Create"
-                           class="btn btn-primary w-100">
-
-                        Add Student
-
-                    </a>
-
-                </div>
-
-                <div class="col-lg-3">
-
-                    <a asp-controller="Teacher"
-                           asp-action="Create"
-                           class="btn btn-success w-100">
-
-                        Add Teacher
-
-                    </a>
-
-                </div>
-
-                <div class="col-lg-3">
-
-                    <a asp-controller="Enrollment"
-                           asp-action="Create"
-                           class="btn btn-warning w-100">
-
-                        New Enrollment
-
-                    </a>
-
-                </div>
-
-                <div class="col-lg-3">
-
-                    <a asp-controller="AttendanceRecord"
-                           asp-action="Create"
-                           class="btn btn-danger w-100">
-
-                        Attendance
-
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
+            }
+        }
+        else
+        {
+            <p class="text-muted">
+
+                No expiring subscriptions.
+
+            </p>
+        }
 
     </div>
 
 </div>
-<!-- Latest Students & Teachers -->
 
-<div class="row mt-4">
+<div class="table-card">
 
-    <!-- Latest Students -->
+    <h4 class="mb-4">
 
-    <div class="col-lg-6">
+        Recent Enrollments
 
-        <div class="card shadow border-0 h-100">
+    </h4>
 
-            <div class="card-header bg-white">
+    <table class="table table-hover align-middle">
 
-                <h5 class="mb-0">
+        <thead>
 
-                    Latest Students
+            <tr>
 
-                </h5>
+                <th>Student</th>
 
-            </div>
+                <th>Course</th>
 
-            <div class="card-body p-0">
+                <th>Date</th>
 
-                <table class="table table-hover mb-0">
+            </tr>
 
-                    <thead class="table-light">
+        </thead>
 
-                        <tr>
+        <tbody>
 
-                            <th>Name</th>
-
-                            <th>Parent</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        @foreach (var student in Model.LatestStudents)
-                        {
-                            <tr>
-
-                                <td>
-
-                                    @student.User?.FullName
-
-                                </td>
-
-                                <td>
-
-                                    @(student.Parent?.User?.FullName ?? "-")
-
-                                </td>
-
-                            </tr>
-                        }
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Latest Teachers -->
-
-    <div class="col-lg-6">
-
-        <div class="card shadow border-0 h-100">
-
-            <div class="card-header bg-white">
-
-                <h5 class="mb-0">
-
-                    Latest Teachers
-
-                </h5>
-
-            </div>
-
-            <div class="card-body p-0">
-
-                <table class="table table-hover mb-0">
-
-                    <thead class="table-light">
-
-                        <tr>
-
-                            <th>Name</th>
-
-                            <th>Specialization</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        @foreach (var teacher in Model.LatestTeachers)
-                        {
-                            <tr>
-
-                                <td>
-
-                                    @teacher.User?.FullName
-
-                                </td>
-
-                                <td>
-
-                                    @teacher.Specialization
-
-                                </td>
-
-                            </tr>
-                        }
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-<div class="card shadow border-0 mt-4">
-
-    <div class="card-header bg-white">
-
-        <h5 class="mb-0">
-
-            Latest Enrollments
-
-        </h5>
-
-    </div>
-
-    <div class="card-body p-0">
-
-        <table class="table table-striped table-hover mb-0">
-
-            <thead class="table-light">
-
+        @if(Model.LatestEnrollments != null && Model.LatestEnrollments.Any())
+        {
+            foreach(var enrollment in Model.LatestEnrollments)
+            {
                 <tr>
 
-                    <th>Student</th>
+                    <td>
 
-                    <th>Course</th>
+                        @(enrollment.Student?.User?.FullName ?? "-")
 
-                    <th>Date</th>
+                    </td>
+
+                    <td>
+
+                        @(enrollment.Course?.Title?? "-")
+
+                    </td>
+
+                    <td>
+
+                        @enrollment.EnrollmentDate.ToString("dd MMM yyyy")
+
+                    </td>
 
                 </tr>
+            }
+        }
+        else
+        {
+            <tr>
 
-            </thead>
+                <td colspan="3" class="text-center text-muted">
 
-            <tbody>
+                    No enrollments found.
 
-                @foreach (var enrollment in Model.LatestEnrollments)
-                {
-                    <tr>
+                </td>
 
-                        <td>
+            </tr>
+        }
 
-                            @enrollment.Student?.User?.FullName
+        </tbody>
 
-                        </td>
+    </table>
 
-                        <td>
+</div>
 
-                            @enrollment.Course?.Title
+<div class="action-card mt-4">
 
-                        </td>
+    <h4 class="mt-4">
 
-                        <td>
+        Quick Actions
 
-                            @enrollment.EnrollmentDate.ToString("dd MMM yyyy")
+    </h4>
 
-                        </td>
+    <div class="quick-actions">
 
-                    </tr>
-                }
+        <a asp-area="Center"
+           asp-controller="Student"
+           asp-action="Create"
+           class="quick-card">
 
-            </tbody>
+            <i class="bi bi-person-plus-fill"></i>
 
-        </table>
+            Add Student
+
+        </a>
+
+        <a asp-area="Center"
+           asp-controller="Teachers"
+           asp-action="Create"
+           class="quick-card">
+
+            <i class="bi bi-person-workspace"></i>
+
+            Add Teacher
+
+        </a>
+
+        <a asp-area="Center"
+           asp-controller="Parent"
+           asp-action="Create"
+           class="quick-card">
+
+            <i class="bi bi-people-fill"></i>
+
+            Add Parent
+
+        </a>
+
+        <a asp-area="Center"
+           asp-controller="Student"
+           asp-action="Index"
+           class="quick-card">
+
+            <i class="bi bi-mortarboard-fill"></i>
+
+            Students
+
+        </a>
+
+        <a asp-area="Center"
+           asp-controller="Teachers"
+           asp-action="Index"
+           class="quick-card">
+
+            <i class="bi bi-person-lines-fill"></i>
+
+            Teachers
+
+        </a>
+
+        <a asp-area="Center"
+           asp-controller="Parent"
+           asp-action="Index"
+           class="quick-card">
+
+            <i class="bi bi-people"></i>
+
+            Parents
+
+        </a>
 
     </div>
 
 </div>
-<div class="card shadow border-0 mt-4">
 
-    <div class="card-header bg-white">
+@section Styles{
+<style>
+    .dashboard-page {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
 
-        <h5 class="mb-0">
+    .hero-card {
+        background: linear-gradient(135deg,#2563eb,#1d4ed8);
+        color: white;
+        border-radius: 22px;
+        padding: 35px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        box-shadow: 0 12px 30px rgba(37,99,235,.25);
+    }
 
-            Today's Sessions
+        .hero-card h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
 
-        </h5>
+        .hero-card p {
+            margin-bottom: 8px;
+            opacity: .95;
+        }
 
-    </div>
+    .hero-date {
+        text-align: right;
+    }
 
-    <div class="card-body p-0">
+        .hero-date h5 {
+            margin: 0;
+            font-weight: 700;
+        }
 
-        <table class="table table-hover mb-0">
+        .hero-date span {
+            font-size: .95rem;
+        }
 
-            <thead class="table-light">
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+        gap: 20px;
+    }
 
-                <tr>
+    .stat-card {
+        background: #fff;
+        border-radius: 18px;
+        padding: 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 5px 15px rgba(0,0,0,.05);
+        transition: .3s;
+    }
 
-                    <th>Title</th>
+        .stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 35px rgba(0,0,0,.08);
+        }
 
-                    <th>Teacher</th>
+    .stat-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 18px;
+        background: #eff6ff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #2563eb;
+        font-size: 30px;
+    }
 
-                    <th>Group</th>
+    .stat-info {
+        text-align: right;
+    }
 
-                    <th>Date</th>
+        .stat-info h3 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 700;
+        }
 
-                </tr>
+        .stat-info span {
+            color: #6b7280;
+        }
 
-            </thead>
+    .overview-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+        gap: 20px;
+    }
 
-            <tbody>
+    .overview-card {
+        background: #fff;
+        border-radius: 18px;
+        padding: 25px;
+        border: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,.05);
+    }
 
-                @foreach (var session in Model.TodaySessions)
-                {
-                    <tr>
+    .overview-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 24px;
+    }
 
-                        <td>
+    .bg-blue {
+        background: #2563eb;
+    }
 
-                            @session.Title
+    .bg-red {
+        background: #ef4444;
+    }
 
-                        </td>
+    .bg-green {
+        background: #10b981;
+    }
 
-                        <td>
+    .bg-orange {
+        background: #f59e0b;
+    }
 
-                            @session.Teacher?.User?.FullName
+    .overview-info h5 {
+        margin: 0;
+        color: #6b7280;
+        font-size: .95rem;
+    }
 
-                        </td>
+    .overview-info h2 {
+        margin-top: 8px;
+        font-weight: 700;
+    }
 
-                        <td>
+    .dashboard-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 25px;
+    }
 
-                            @session.Group?.Name
+    .dashboard-card {
+        background: #fff;
+        border-radius: 18px;
+        padding: 25px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 5px 15px rgba(0,0,0,.05);
+    }
 
-                        </td>
+    .dashboard-card h4 {
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
 
-                        <td>
+    .schedule-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #ececec;
+    }
 
-                            @session.SessionDate.ToString("dd MMM yyyy HH:mm")
+    .schedule-item:last-child {
+        border-bottom: none;
+    }
 
-                        </td>
+    .schedule-time {
+        color: #2563eb;
+        font-weight: 600;
+    }
 
-                    </tr>
-                }
+    .notification-item {
+        padding: 14px 0;
+        border-bottom: 1px solid #ececec;
+    }
 
-            </tbody>
+    .notification-item:last-child {
+        border-bottom: none;
+    }
 
-        </table>
+    .notification-title {
+        font-weight: 600;
+    }
 
-    </div>
+    .notification-date {
+        color: #6b7280;
+        font-size: .85rem;
+    }
 
-</div>
+    .table-card {
+        background: #fff;
+        border-radius: 18px;
+        padding: 25px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 5px 15px rgba(0,0,0,.05);
+        margin-top: 25px;
+    }
+
+    .table-card table {
+        margin-bottom: 0;
+    }
+
+    .table-card thead {
+        background: #f8fafc;
+    }
+
+    .table-card thead th {
+        font-weight: 600;
+        color: #374151;
+        border: none;
+    }
+
+    .table-card tbody td {
+        vertical-align: middle;
+    }
+
+    .badge-status {
+        padding: 8px 14px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .badge-active {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 20px;
+    }
+
+    .quick-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 18px;
+        padding: 25px;
+        text-align: center;
+        transition: .25s;
+        text-decoration: none;
+        color: #111827;
+        box-shadow: 0 5px 15px rgba(0,0,0,.05);
+    }
+
+    .quick-card:hover {
+        transform: translateY(-6px);
+        color: #2563eb;
+        box-shadow: 0 15px 35px rgba(0,0,0,.08);
+    }
+
+    .quick-card i {
+        font-size: 34px;
+        margin-bottom: 15px;
+        display: block;
+    }
+
+    @@media(max-width:992px) {
+        .dashboard-row {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media(max-width:768px) {
+        .hero-card {
+            text-align: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .hero-date {
+            text-align: center;
+        }
+
+        .stat-info {
+            text-align: left;
+        }
+
+        .quick-actions {
+            grid-template-columns: repeat(2,1fr);
+        }
+    }
+
+    @@media(max-width:576px) {
+        .quick-actions {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+}

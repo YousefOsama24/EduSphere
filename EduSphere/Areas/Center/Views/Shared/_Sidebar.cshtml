@@ -1,0 +1,235 @@
+﻿@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+
+<aside class="sidebar">
+
+    <div class="sidebar-header">
+
+        <a asp-area="Center"
+               asp-controller="Home"
+               asp-action="Index"
+               class="sidebar-brand">
+
+            <div class="sidebar-brand-icon">
+
+                <i class="bi bi-mortarboard-fill"></i>
+
+            </div>
+
+            <div class="sidebar-brand-content">
+
+                <h4>EduSphere</h4>
+
+                <span>Educational Platform</span>
+
+            </div>
+
+        </a>
+
+    </div>
+
+    <div class="sidebar-body">
+
+        <div class="sidebar-section">
+
+            <span class="sidebar-section-title">
+
+                MAIN
+
+            </span>
+
+            <a asp-area="Center"
+                   asp-controller="Home"
+                   asp-action="Index"
+                   class="sidebar-item @(controller == "Home" ? "active" : "")">
+
+                <i class="bi bi-grid-1x2-fill"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+        </div>
+
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-section">
+
+            <span class="sidebar-section-title">
+
+                ACADEMIC
+
+            </span>
+
+            <a asp-area="Center"
+                   asp-controller="Student"
+                   asp-action="Index"
+                   class="sidebar-item @(controller == "Student" ? "active" : "")">
+
+                <i class="bi bi-people-fill"></i>
+
+                <span>Students</span>
+
+            </a>
+
+            <a asp-area="Center"
+                   asp-controller="Teacher"
+                   asp-action="Index"
+                   class="sidebar-item @(controller == "Teacher" ? "active" : "")">
+
+                <i class="bi bi-person-workspace"></i>
+
+                <span>Teachers</span>
+
+            </a>
+
+            <a asp-area="Center"
+                   asp-controller="Parent"
+                   asp-action="Index"
+                   class="sidebar-item @(controller == "Parent" ? "active" : "")">
+
+                <i class="bi bi-person-hearts"></i>
+
+                <span>Parents</span>
+
+            </a>
+
+            <a asp-area="Center"
+                   asp-controller="Enrollment"
+                   asp-action="Index"
+                   class="sidebar-item @(controller == "Enrollment" ? "active" : "")">
+
+                <i class="bi bi-journal-check"></i>
+
+                <span>Enrollments</span>
+
+            </a>
+
+            <a asp-area="Center"
+                   asp-controller="Subscription"
+                   asp-action="Index"
+                   class="sidebar-item @(controller == "Subscription" ? "active" : "")">
+
+                <i class="bi bi-credit-card-2-front-fill"></i>
+
+                <span>Subscriptions</span>
+
+            </a>
+
+        </div>
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-section">
+
+            <span class="sidebar-section-title">
+
+                MANAGEMENT
+
+            </span>
+
+            <a asp-area="Center"
+                   asp-controller="Attendance"
+                   asp-action="Index"
+                   class="sidebar-item @(controller == "Attendance" ? "active" : "")">
+
+                <i class="bi bi-calendar-check-fill"></i>
+
+                <span>Attendance</span>
+
+            </a>
+
+            <a asp-area="Center"
+                   asp-controller="Schedule"
+                   asp-action="Index"
+                   class="sidebar-item @(controller == "Schedule" ? "active" : "")">
+
+                <i class="bi bi-calendar3"></i>
+
+                <span>Schedule</span>
+
+            </a>
+
+            <a asp-area="Center"
+                   asp-controller="Exam"
+                   asp-action="Index"
+                   class="sidebar-item @(controller == "Exam" ? "active" : "")">
+
+                <i class="bi bi-file-earmark-text-fill"></i>
+
+                <span>Exams</span>
+
+            </a>
+
+            <a asp-area="Center"
+                   asp-controller="Notification"
+                   asp-action="Index"
+                   class="sidebar-item @(controller == "Notification" ? "active" : "")">
+
+                <i class="bi bi-bell-fill"></i>
+
+                <span>Notifications</span>
+
+            </a>
+
+        </div>
+
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-section">
+
+            <span class="sidebar-section-title">
+
+                ACCOUNT
+
+            </span>
+
+            <a asp-area="Center"
+                   asp-controller="Profile"
+                   asp-action="Index"
+                   class="sidebar-item @(controller == "Profile" ? "active" : "")">
+
+                <i class="bi bi-person-circle"></i>
+
+                <span>Profile</span>
+
+            </a>
+
+            <a asp-area="Center"
+                   asp-controller="Settings"
+                   asp-action="Index"
+                   class="sidebar-item @(controller == "Settings" ? "active" : "")">
+
+                <i class="bi bi-gear-fill"></i>
+
+                <span>Settings</span>
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="sidebar-footer">
+
+        <form asp-area=""
+              asp-controller="Account"
+              asp-action="Logout"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <button type="submit"
+                    class="sidebar-item sidebar-button">
+
+                <i class="bi bi-box-arrow-right"></i>
+
+                <span>Logout</span>
+
+            </button>
+
+        </form>
+
+    </div>
+
+</aside>

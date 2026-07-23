@@ -1,58 +1,286 @@
-﻿@model Student
-<div class="container">
-    <div class="row mb-3 align-items-center my-3">
-        <div class="col-md-6">
-            <h2 class="display-6">Create new Student</h2>
+﻿@model EduSphere.Models.Student
+
+@{
+    ViewData["Title"] = "Add Student";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="form-page">
+
+    <div class="page-header">
+
+        <div>
+
+            <h2>Add Student</h2>
+
+            <p>Create a new student profile.</p>
+
         </div>
+
+        <a asp-action="Index"
+               class="btn btn-outline-secondary">
+
+            <i class="bi bi-arrow-left me-2"></i>
+
+            Back
+
+        </a>
+
     </div>
 
-    <div class="row my-3">
-        <div class="col-12">
-            <form method="post" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label for="Name" class="form-label">Name</label>
-                    <input class="form-control" placeholder="Name" asp-for="User.FullName">
-                    <span asp-validation-for="User.FullName" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Gender</label>
-                    <input class="form-control" placeholder="Gender" asp-for="Gender">
-                    <span asp-validation-for="Gender" class="text-danger"></span>
+    <div class="form-card">
+
+        <form asp-action="Create" method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger">
+            </div>
+
+            <div class="section-title">
+
+                Student Information
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="UserId"
+                           class="form-label">
+                    </label>
+
+                    <div class="col-md-6 mb-4">
+
+                        <label asp-for="UserId" class="form-label">
+                            Student ID
+                        </label>
+
+                        <input asp-for="UserId"
+                               class="form-control"
+                               placeholder="Enter Student ID" />
+
+                        <span asp-validation-for="UserId"
+                              class="text-danger">
+                        </span>
+
+                        <small class="text-muted">
+                            Enter the ID provided by the student after creating an account.
+                        </small>
+
+                    </div>
+
+                    <span asp-validation-for="UserId"
+                          class="text-danger">
+                    </span>
 
                 </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">Email</label>
-                    <input class="form-control" placeholder="Email" asp-for="User.Email">
-                    <span asp-validation-for="User.Email" class="text-danger"></span>
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="ParentId"
+                           class="form-label">
+                    </label>
+
+                    <select asp-for="ParentId"
+                            class="form-select">
+
+                        <option value="">
+                            Select Parent
+                        </option>
+
+                        @foreach (var item in (IEnumerable<SelectListItem>)ViewBag.Parents)
+                        {
+                            <option value="@item.Value">
+
+                                @item.Text
+
+                            </option>
+                        }
+
+                    </select>
+
+                    <span asp-validation-for="ParentId"
+                          class="text-danger">
+                    </span>
 
                 </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">DateOfBirth</label>
-                    <input class="form-control" placeholder="DateOfBirth" asp-for="DateOfBirth">
-                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">AcademicLevel</label>
-                    <input class="form-control" placeholder="AcademicLevel" asp-for="AcademicLevel">
-                    <span asp-validation-for="AcademicLevel" class="text-danger"></span>
+                <div class="col-md-6 mb-4">
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">CenterId</label>
-                    <input class="form-control" placeholder="CenterId" asp-for="CenterId">
-                    <span asp-validation-for="CenterId" class="text-danger"></span>
+                    <label asp-for="DateOfBirth"
+                           class="form-label">
+                    </label>
 
-                </div>
-                <div class="mb-3">
-                    <label for="Img" class="form-label">CreatedAt</label>
-                    <input class="form-control" placeholder="CreatedAt" asp-for="CreatedAt">
-                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                    <input asp-for="DateOfBirth"
+                           type="date"
+                           class="form-control" />
+
+                    <span asp-validation-for="DateOfBirth"
+                          class="text-danger">
+                    </span>
 
                 </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-        </div>
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="Gender"
+                           class="form-label">
+                    </label>
+
+                    <select asp-for="Gender"
+                            class="form-select">
+
+                        <option value="">
+                            Select Gender
+                        </option>
+
+                        <option value="Male">
+                            Male
+                        </option>
+
+                        <option value="Female">
+                            Female
+                        </option>
+
+                    </select>
+
+                    <span asp-validation-for="Gender"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <div class="col-12 mb-4">
+
+                    <label asp-for="AcademicLevel"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="AcademicLevel"
+                           class="form-control"
+                           placeholder="Example: Grade 10" />
+
+                    <span asp-validation-for="AcademicLevel"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="form-buttons">
+
+                <a asp-action="Index"
+                       class="btn btn-light">
+
+                    Cancel
+
+                </a>
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    <i class="bi bi-check-circle me-2"></i>
+
+                    Create Student
+
+                </button>
+
+            </div>
+
+        </form>
+
     </div>
+
 </div>
+
+@section Styles {
+
+    <style>
+
+        .form-page {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+            .page-header h2 {
+                font-size: 2rem;
+                font-weight: 700;
+                margin-bottom: 6px;
+            }
+
+            .page-header p {
+                color: #6b7280;
+                margin: 0;
+            }
+
+        .form-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 18px;
+            padding: 35px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.05);
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        .form-control,
+        .form-select {
+            height: 48px;
+            border-radius: 12px;
+        }
+
+        .form-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        @@media(max-width:768px) {
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .form-buttons {
+                justify-content: stretch;
+                flex-direction: column;
+            }
+
+                .form-buttons .btn {
+                    width: 100%;
+                }
+        }
+
+    </style>
+
+}
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}
