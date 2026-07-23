@@ -231,4 +231,79 @@
   <data name="Create a new secure password." xml:space="preserve">
     <value>Create a new secure password.</value>
   </data>
+  <data name="Please verify your email before logging in." xml:space="preserve">
+    <value>Please verify your email before logging in.</value>
+  </data>
+  <data name="Password reset link has been sent to your email." xml:space="preserve">
+    <value>Password reset link has been sent to your email.</value>
+  </data>
+  <data name="If the email exists, a password reset link has been sent." xml:space="preserve">
+    <value>If the email exists, a password reset link has been sent.</value>
+  </data>
+  <data name="Password has been reset successfully. Please login." xml:space="preserve">
+    <value>Password has been reset successfully. Please login.</value>
+  </data>
+  <data name="User not found." xml:space="preserve">
+    <value>User not found.</value>
+  </data>
+  <data name="Password changed successfully." xml:space="preserve">
+    <value>Password changed successfully.</value>
+  </data>
+  <data name="Profile updated successfully." xml:space="preserve">
+    <value>Profile updated successfully.</value>
+  </data>
+  <data name="Registration completed successfully. Please check your email to verify your account." xml:space="preserve">
+    <value>Registration completed successfully. Please check your email to verify your account.</value>
+  </data>
+  <data name="New user registered." xml:space="preserve">
+    <value>New user registered.</value>
+  </data>
+  <data name="UserType" xml:space="preserve">
+    <value>UserType</value>
+  </data>
+  <data name="Email already exists." xml:space="preserve">
+    <value>Email already exists.</value>
+  </data>
+  <data name="Invalid email or password." xml:space="preserve">
+    <value>Invalid email or password.</value>
+  </data>
+  <data name="This account has been disabled" xml:space="preserve">
+    <value>This account has been disabled</value>
+  </data>
+  <data name="Email verified successfully. You can login now." xml:space="preserve">
+    <value>Email verified successfully. You can login now.</value>
+  </data>
+  <data name="Register failed for {Email}" xml:space="preserve">
+    <value>Register failed for {Email}</value>
+  </data>
+  <data name="Email confirmed successfully for user {Email}" xml:space="preserve">
+    <value>Email confirmed successfully for user {Email}</value>
+  </data>
+  <data name="Failed login attempt for {Email}" xml:space="preserve">
+    <value>Failed login attempt for {Email}</value>
+  </data>
+  <data name="LOGIN | Email: {Email}" xml:space="preserve">
+    <value>LOGIN | Email: {Email}</value>
+  </data>
+  <data name="LOGOUT | Email: {Email} | User logged out." xml:space="preserve">
+    <value>LOGOUT | Email: {Email} | User logged out.</value>
+  </data>
+  <data name="Failed to assign role {Role} to {Email}" xml:space="preserve">
+    <value>Failed to assign role {Role} to {Email}</value>
+  </data>
+  <data name="New user registered. Email: {Email}, UserType: {UserType}" xml:space="preserve">
+    <value>New user registered. Email: {Email}, UserType: {UserType}</value>
+  </data>
+  <data name="PROFILE UPDATED | Email: {Email}" xml:space="preserve">
+    <value>PROFILE UPDATED | Email: {Email}</value>
+  </data>
+  <data name="CHANGE PASSWORD | Email: {Email}" xml:space="preserve">
+    <value>CHANGE PASSWORD | Email: {Email}</value>
+  </data>
+  <data name="RESET PASSWORD | Email: {Email}" xml:space="preserve">
+    <value>RESET PASSWORD | Email: {Email}</value>
+  </data>
+  <data name="FORGOT PASSWORD | Email: {Email}" xml:space="preserve">
+    <value>FORGOT PASSWORD | Email: {Email}</value>
+  </data>
 </root>

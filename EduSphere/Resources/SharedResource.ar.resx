@@ -231,4 +231,79 @@
   <data name="Create a new secure password." xml:space="preserve">
     <value>أنشئ كلمة مرور جديدة وآمنة.</value>
   </data>
+  <data name="Please verify your email before logging in." xml:space="preserve">
+    <value>يرجى التحقق من بريدك الإلكتروني قبل تسجيل الدخول.</value>
+  </data>
+  <data name="Password reset link has been sent to your email." xml:space="preserve">
+    <value>تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.</value>
+  </data>
+  <data name="If the email exists, a password reset link has been sent." xml:space="preserve">
+    <value>إذا كان البريد الإلكتروني موجوداً، فقد تم إرسال رابط لإعادة تعيين كلمة المرور.</value>
+  </data>
+  <data name="Password has been reset successfully. Please login." xml:space="preserve">
+    <value>تمت إعادة تعيين كلمة المرور بنجاح. يرجى تسجيل الدخول.</value>
+  </data>
+  <data name="User not found." xml:space="preserve">
+    <value>لم يتم العثور على المستخدم.</value>
+  </data>
+  <data name="Password changed successfully." xml:space="preserve">
+    <value>تم تغيير كلمة المرور بنجاح.</value>
+  </data>
+  <data name="Profile updated successfully." xml:space="preserve">
+    <value>تم تحديث الملف الشخصي بنجاح.</value>
+  </data>
+  <data name="Registration completed successfully. Please check your email to verify your account." xml:space="preserve">
+    <value>تم التسجيل بنجاح. يرجى التحقق من بريدك الإلكتروني لتفعيل حسابك.</value>
+  </data>
+  <data name="New user registered." xml:space="preserve">
+    <value>تم تسجيل مستخدم جديد.</value>
+  </data>
+  <data name="UserType" xml:space="preserve">
+    <value>نوع المستخدم</value>
+  </data>
+  <data name="Email already exists." xml:space="preserve">
+    <value>البريد الإلكتروني موجود بالفعل.</value>
+  </data>
+  <data name="Invalid email or password." xml:space="preserve">
+    <value>البريد الإلكتروني أو كلمة المرور غير صالحة.</value>
+  </data>
+  <data name="This account has been disabled" xml:space="preserve">
+    <value>تم تعطيل هذا الحساب</value>
+  </data>
+  <data name="Email verified successfully. You can login now." xml:space="preserve">
+    <value>تم التحقق من البريد الإلكتروني بنجاح. يمكنك تسجيل الدخول الآن.</value>
+  </data>
+  <data name="Register failed for {Email}" xml:space="preserve">
+    <value>فشل التسجيل لـ {Email}</value>
+  </data>
+  <data name="Email confirmed successfully for user {Email}" xml:space="preserve">
+    <value>تم تأكيد البريد الإلكتروني بنجاح للمستخدم {Email}</value>
+  </data>
+  <data name="Failed login attempt for {Email}" xml:space="preserve">
+    <value>محاولة تسجيل دخول فاشلة لـ {Email}</value>
+  </data>
+  <data name="LOGIN | Email: {Email}" xml:space="preserve">
+    <value>تسجيل الدخول | البريد الإلكتروني: {Email}</value>
+  </data>
+  <data name="LOGOUT | Email: {Email} | User logged out." xml:space="preserve">
+    <value>تسجيل الخروج | البريد الإلكتروني: {Email} | تم تسجيل خروج المستخدم.</value>
+  </data>
+  <data name="Failed to assign role {Role} to {Email}" xml:space="preserve">
+    <value>فشل تعيين الدور {Role} إلى {Email}</value>
+  </data>
+  <data name="New user registered. Email: {Email}, UserType: {UserType}" xml:space="preserve">
+    <value>تم تسجيل مستخدم جديد. البريد الإلكتروني: {Email}، نوع المستخدم: {UserType}</value>
+  </data>
+  <data name="PROFILE UPDATED | Email: {Email}" xml:space="preserve">
+    <value>تم تحديث الملف الشخصي | البريد الإلكتروني: {Email}</value>
+  </data>
+  <data name="CHANGE PASSWORD | Email: {Email}" xml:space="preserve">
+    <value>تغيير كلمة المرور | البريد الإلكتروني: {Email}</value>
+  </data>
+  <data name="RESET PASSWORD | Email: {Email}" xml:space="preserve">
+    <value>إعادة تعيين كلمة المرور | البريد الإلكتروني: {Email}</value>
+  </data>
+  <data name="FORGOT PASSWORD | Email: {Email}" xml:space="preserve">
+    <value>نسيت كلمة المرور | البريد الإلكتروني: {Email}</value>
+  </data>
 </root>

@@ -226,7 +226,7 @@ namespace EduSphere.Areas.Center.Controllers
 
         [HttpGet]
         [Authorize(Roles = "CenterManager,SuperAdmin")]
-        public async Task<IActionResult> Update( int id, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Update(int id, CancellationToken cancellationToken = default)
         {
             var student = await _studentRepository.GetOneAsync(
                 x => x.StudentId == id,
@@ -242,7 +242,7 @@ namespace EduSphere.Areas.Center.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "CenterManager,SuperAdmin")]
-        public async Task<IActionResult> Update( Student student, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Update(Student student, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return View(student);

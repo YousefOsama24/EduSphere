@@ -64,8 +64,8 @@ namespace EduSphere.Areas.Identity.Controllers
                     user,
                     token);
             _logger.LogInformation(
-    "Email confirmed successfully for user {Email}",
-    user.Email);
+              _localizer["Email confirmed successfully for user {Email}"],
+              user.Email);
             if (!result.Succeeded)
             {
                 return View("Error");
@@ -73,7 +73,7 @@ namespace EduSphere.Areas.Identity.Controllers
 
 
             TempData["Success"] =
-                "Email verified successfully. You can login now.";
+               _localizer["Email verified successfully. You can login now."].ToString();
 
             return RedirectToAction(nameof(Login));
         }
@@ -110,21 +110,21 @@ namespace EduSphere.Areas.Identity.Controllers
 
             if (user == null)
             {
-                ModelState.AddModelError("", "Invalid email or password.");
+                ModelState.AddModelError("", _localizer["Invalid email or password."]);
 
                 return View(model);
             }
 
             if (!user.IsActive)
             {
-                ModelState.AddModelError("", "This account has been disabled.");
+                ModelState.AddModelError("", _localizer["This account has been disabled."]);
 
                 return View(model);
             }
 
             if (!await _userManager.IsEmailConfirmedAsync(user))
             {
-                ModelState.AddModelError("", "Please verify your email before logging in.");
+                ModelState.AddModelError("", _localizer["Please verify your email before logging in."]);
 
                 return View(model);
             }
@@ -142,14 +142,14 @@ namespace EduSphere.Areas.Identity.Controllers
 
 
                 _logger.LogWarning(
-    "Failed login attempt for {Email}",
-    model.Email);
-                ModelState.AddModelError("", "Invalid email or password.");
+                    _localizer["Failed login attempt for {Email}"],
+                    model.Email);
+                ModelState.AddModelError("", _localizer["Invalid email or password."]);
                 return View(model);
             }
 
             _logger.LogInformation(
-   "LOGIN | Email: {Email}",
+   _localizer["LOGIN | Email: {Email}"],
    user.Email);
             return RedirectToAction(nameof(RedirectToDashboard));
         }
@@ -183,7 +183,7 @@ namespace EduSphere.Areas.Identity.Controllers
             await _signInManager.SignOutAsync();
 
             _logger.LogInformation(
-                "LOGOUT | Email: {Email} | User logged out.",
+                _localizer["LOGOUT | Email: {Email} | User logged out."],
                 user?.Email);
 
             return RedirectToAction(nameof(Login));
@@ -210,7 +210,7 @@ namespace EduSphere.Areas.Identity.Controllers
 
             if (user != null)
             {
-                ModelState.AddModelError("", "Email already exists.");
+                ModelState.AddModelError("", _localizer["Email already exists."]);
                 return View(model);
             }
 
@@ -232,7 +232,7 @@ namespace EduSphere.Areas.Identity.Controllers
             if (!result.Succeeded)
             {
                 _logger.LogWarning(
-                    "Register failed for {Email}",
+                   _localizer["Register failed for {Email}"],
                     model.Email);
 
                 foreach (var error in result.Errors)
@@ -250,7 +250,7 @@ namespace EduSphere.Areas.Identity.Controllers
             if (!roleResult.Succeeded)
             {
                 _logger.LogError(
-                    "Failed to assign role {Role} to {Email}",
+                    _localizer["Failed to assign role {Role} to {Email}"],
                     applicationUser.UserType,
                     applicationUser.Email);
 
@@ -265,7 +265,7 @@ namespace EduSphere.Areas.Identity.Controllers
             }
 
             _logger.LogInformation(
-                "New user registered. Email: {Email}, UserType: {UserType}",
+                _localizer["New user registered. Email: {Email}, UserType: {UserType}"],
                 applicationUser.Email,
                 applicationUser.UserType);
 
@@ -290,7 +290,7 @@ namespace EduSphere.Areas.Identity.Controllers
                 HtmlEncoder.Default.Encode(confirmationLink!));
 
             TempData["Success"] =
-                "Registration completed successfully. Please check your email to verify your account.";
+                _localizer["Registration completed successfully. Please check your email to verify your account."].ToString();
 
             return RedirectToAction(nameof(Login));
         }
@@ -415,7 +415,7 @@ namespace EduSphere.Areas.Identity.Controllers
 
                 var result = await _userManager.UpdateAsync(user);
                 _logger.LogInformation(
-        "PROFILE UPDATED | Email: {Email}",
+        _localizer["PROFILE UPDATED | Email: {Email}"],
         user.Email);
 
                 if (!result.Succeeded)
@@ -428,7 +428,7 @@ namespace EduSphere.Areas.Identity.Controllers
                     return View(model);
                 }
 
-                TempData["Success"] = "Profile updated successfully.";
+                TempData["Success"] = _localizer["Profile updated successfully."].ToString();
 
                 return RedirectToAction(nameof(Profile));
             }
@@ -474,10 +474,10 @@ namespace EduSphere.Areas.Identity.Controllers
                 await _signInManager.RefreshSignInAsync(user);
 
                 TempData["Success"] =
-                    "Password changed successfully.";
+                    _localizer["Password changed successfully."].ToString();
 
                 _logger.LogInformation(
-        "CHANGE PASSWORD | Email: {Email}",
+        _localizer["CHANGE PASSWORD | Email: {Email}"],
         user.Email);
 
                 return RedirectToAction(nameof(Profile));
@@ -528,7 +528,7 @@ namespace EduSphere.Areas.Identity.Controllers
 
                 if (user == null)
                 {
-                    ModelState.AddModelError("", "User not found.");
+                    ModelState.AddModelError("", _localizer["User not found."]);
 
                     return View(model);
                 }
@@ -549,9 +549,9 @@ namespace EduSphere.Areas.Identity.Controllers
                 }
 
                 TempData["Success"] =
-                    "Password has been reset successfully. Please login.";
+                    _localizer["Password has been reset successfully. Please login."].ToString();
                 _logger.LogInformation(
-        "RESET PASSWORD | Email: {Email}",
+        _localizer["RESET PASSWORD | Email: {Email}"],
         user.Email);
 
                 return RedirectToAction(nameof(Login));
@@ -579,7 +579,7 @@ namespace EduSphere.Areas.Identity.Controllers
                 if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
                 {
                     TempData["Success"] =
-                        "If the email exists, a password reset link has been sent.";
+                        _localizer["If the email exists, a password reset link has been sent."].ToString();
 
                     return RedirectToAction(nameof(Login));
                 }
@@ -603,10 +603,10 @@ namespace EduSphere.Areas.Identity.Controllers
                     resetLink!);
 
                 _logger.LogInformation(
-        "FORGOT PASSWORD | Email: {Email}",
+        _localizer["FORGOT PASSWORD | Email: {Email}"],
         user.Email);
                 TempData["Success"] =
-                    "Password reset link has been sent to your email.";
+                    _localizer["Password reset link has been sent to your email."].ToString();
 
                 return RedirectToAction(nameof(Login));
             }
