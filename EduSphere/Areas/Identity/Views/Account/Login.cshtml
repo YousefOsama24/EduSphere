@@ -1,9 +1,26 @@
 ﻿@model EduSphere.Areas.Identity.ViewModels.LoginViewModel
 
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EduSphere.SharedResource> Localizer
 @{
     ViewData["Title"] = "Login";
 }
+<div class="mb-3">
+    <a asp-controller="Language"
+           asp-action="SetLanguage"
+           asp-route-culture="en"
+           asp-route-returnUrl="@Context.Request.Path">
+        English
+    </a>
 
+    |
+
+    <a asp-controller="Language"
+           asp-action="SetLanguage"
+           asp-route-culture="ar"
+           asp-route-returnUrl="@Context.Request.Path">
+        العربية
+    </a>
+</div>
 <div class="row justify-content-center">
 
     <div class="col-lg-10">

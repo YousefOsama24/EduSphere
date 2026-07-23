@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Encodings.Web;
 using Microsoft.Extensions.Logging;
-using EduSphere.Utility;
+using Microsoft.Extensions.Localization;
 namespace EduSphere.Areas.Identity.Controllers
 {
-    [Area(SD.IDENTITY_AREA)]
+    [Area("Identity")]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -17,19 +17,22 @@ namespace EduSphere.Areas.Identity.Controllers
         private readonly IEmailService _emailService;
         private readonly IImageService _imageService;
         private readonly ILogger<AccountController> _logger;
+        private readonly IStringLocalizer<SharedResource> _localizer;
 
         public AccountController(
                      UserManager<ApplicationUser> userManager,
                      SignInManager<ApplicationUser> signInManager,
                      IEmailService emailService,
                      IImageService imageService,
-                     ILogger<AccountController> logger)
+                     ILogger<AccountController> logger,
+                     IStringLocalizer<SharedResource> localizer)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailService = emailService;
             _imageService = imageService;
             _logger = logger;
+            _localizer = localizer;
         }
 
 
@@ -61,8 +64,8 @@ namespace EduSphere.Areas.Identity.Controllers
                     user,
                     token);
             _logger.LogInformation(
-    "Email confirmed successfully for user {Email}",
-    user.Email);
+              _localizer["Email confirmed successfully for user {Email}"],
+              user.Email);
             if (!result.Succeeded)
             {
                 return View("Error");
@@ -70,7 +73,7 @@ namespace EduSphere.Areas.Identity.Controllers
 
 
             TempData["Success"] =
-                "Email verified successfully. You can login now.";
+               _localizer["Email verified successfully. You can login now."].ToString();
 
             return RedirectToAction(nameof(Login));
         }
@@ -84,6 +87,7 @@ namespace EduSphere.Areas.Identity.Controllers
         #region Login
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login()
         {
             if (User.Identity!.IsAuthenticated)
@@ -96,6 +100,7 @@ namespace EduSphere.Areas.Identity.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
@@ -105,21 +110,21 @@ namespace EduSphere.Areas.Identity.Controllers
 
             if (user == null)
             {
-                ModelState.AddModelError("", "Invalid email or password.");
+                ModelState.AddModelError("", _localizer["Invalid email or password."]);
 
                 return View(model);
             }
 
             if (!user.IsActive)
             {
-                ModelState.AddModelError("", "This account has been disabled.");
+                ModelState.AddModelError("", _localizer["This account has been disabled."]);
 
                 return View(model);
             }
 
             if (!await _userManager.IsEmailConfirmedAsync(user))
             {
-                ModelState.AddModelError("", "Please verify your email before logging in.");
+                ModelState.AddModelError("", _localizer["Please verify your email before logging in."]);
 
                 return View(model);
             }
@@ -137,38 +142,43 @@ namespace EduSphere.Areas.Identity.Controllers
 
 
                 _logger.LogWarning(
-    "Failed login attempt for {Email}",
-    model.Email);
-                ModelState.AddModelError("", "Invalid email or password.");
+                    _localizer["Failed login attempt for {Email}"],
+                    model.Email);
+                ModelState.AddModelError("", _localizer["Invalid email or password."]);
                 return View(model);
             }
 
             _logger.LogInformation(
-   "LOGIN | Email: {Email}",
+   _localizer["LOGIN | Email: {Email}"],
    user.Email);
             return RedirectToAction(nameof(RedirectToDashboard));
         }
 
         #endregion
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> LogoutNow()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(Login));
         }
+
         #region Logout
 
+        
+
         [HttpPost]
+        [ActionName("Logout")]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> LogoutPost()
         {
             var user = await _userManager.GetUserAsync(User);
 
             await _signInManager.SignOutAsync();
 
             _logger.LogInformation(
-                "LOGOUT | Email: {Email} | User logged out.",
+                _localizer["LOGOUT | Email: {Email} | User logged out."],
                 user?.Email);
 
             return RedirectToAction(nameof(Login));
@@ -195,7 +205,7 @@ namespace EduSphere.Areas.Identity.Controllers
 
             if (user != null)
             {
-                ModelState.AddModelError("", "Email already exists.");
+                ModelState.AddModelError("", _localizer["Email already exists."]);
                 return View(model);
             }
 
@@ -217,7 +227,7 @@ namespace EduSphere.Areas.Identity.Controllers
             if (!result.Succeeded)
             {
                 _logger.LogWarning(
-                    "Register failed for {Email}",
+                   _localizer["Register failed for {Email}"],
                     model.Email);
 
                 foreach (var error in result.Errors)
@@ -235,7 +245,7 @@ namespace EduSphere.Areas.Identity.Controllers
             if (!roleResult.Succeeded)
             {
                 _logger.LogError(
-                    "Failed to assign role {Role} to {Email}",
+                    _localizer["Failed to assign role {Role} to {Email}"],
                     applicationUser.UserType,
                     applicationUser.Email);
 
@@ -250,7 +260,7 @@ namespace EduSphere.Areas.Identity.Controllers
             }
 
             _logger.LogInformation(
-                "New user registered. Email: {Email}, UserType: {UserType}",
+                _localizer["New user registered. Email: {Email}, UserType: {UserType}"],
                 applicationUser.Email,
                 applicationUser.UserType);
 
@@ -275,7 +285,7 @@ namespace EduSphere.Areas.Identity.Controllers
                 HtmlEncoder.Default.Encode(confirmationLink!));
 
             TempData["Success"] =
-                "Registration completed successfully. Please check your email to verify your account.";
+                _localizer["Registration completed successfully. Please check your email to verify your account."].ToString();
 
             return RedirectToAction(nameof(Login));
         }
@@ -286,6 +296,12 @@ namespace EduSphere.Areas.Identity.Controllers
 
 
         #region Helpers
+
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return Content("Access denied.");
+        }
 
         #region Redirect
 
@@ -298,26 +314,38 @@ namespace EduSphere.Areas.Identity.Controllers
             if (user == null)
                 return RedirectToAction(nameof(Login));
 
-            switch (user.UserType)
+            return user.UserType switch
             {
-                case UserType.SuperAdmin:
-                    return RedirectToAction("Index", "Home", new { area = "SuperAdmin" });
+                UserType.SuperAdmin => RedirectToAction(
+                    "Index",
+                    "Home",
+                    new { area = "SuperAdmin" }),
 
-                case UserType.CenterManager:
-                    return RedirectToAction("Index", "Home", new { area = "Center" });
+                UserType.CenterManager => RedirectToAction(
+                    "Index",
+                    "Home",
+                    new { area = "Center" }),
 
-                case UserType.Teacher:
-                    return RedirectToAction("Index", "Home", new { area = "Teacher" });
+                UserType.Teacher => RedirectToAction(
+                    "TeacherDashboard",
+                    "Home",
+                    new { area = "Center" }),
 
-                case UserType.Student:
-                    return RedirectToAction("StudentDB", "StudentDB", new { area = "Center" });
+                UserType.Student => RedirectToAction(
+                    "StudentDashboard",
+                    "Home",
+                    new { area = "Center" }),
 
-                case UserType.Parent:
-                    return RedirectToAction("ParentDB", "ParentDBController1", new { area = "Center" });
+                UserType.Parent => RedirectToAction(
+                    "ParentDashboard",
+                    "Home",
+                    new { area = "Center" }),
 
-                default:
-                    return RedirectToAction("Index", "Home");
-            }
+                _ => RedirectToAction(
+                    "Index",
+                    "Home",
+                    new { area = "" })
+            };
         }
 
         #endregion
@@ -327,262 +355,262 @@ namespace EduSphere.Areas.Identity.Controllers
         #region Profile
 
         [HttpGet]
-            [Authorize]
-            public async Task<IActionResult> Profile()
-            {
-                var user = await _userManager.GetUserAsync(User);
+        [Authorize]
+        public async Task<IActionResult> Profile()
+        {
+            var user = await _userManager.GetUserAsync(User);
 
-                if (user == null)
-                    return RedirectToAction(nameof(Login));
-
-                ProfileViewModel model = new()
-                {
-                    UserId = user.Id,
-                    FullName = user.FullName,
-                    Email = user.Email!,
-                    PhoneNumber = user.PhoneNumber!,
-                    UserType = user.UserType,
-                    CurrentProfileImage = user.ProfileImage,
-                    CreatedAt = user.CreatedAt
-                };
-
-                return View(model);
-            }
-
-            [HttpPost]
-            [ValidateAntiForgeryToken]
-            [Authorize]
-            public async Task<IActionResult> Profile(ProfileViewModel model)
-            {
-                if (!ModelState.IsValid)
-                    return View(model);
-
-                var user = await _userManager.GetUserAsync(User);
-
-                if (user == null)
-                    return RedirectToAction(nameof(Login));
-
-                user.FullName = model.FullName;
-                user.PhoneNumber = model.PhoneNumber;
-
-                if (model.ProfileImage != null)
-                {
-                    if (!string.IsNullOrEmpty(user.ProfileImage))
-                    {
-                        _imageService.DeleteImage(
-                            user.ProfileImage,
-                            "profiles");
-                    }
-
-                    user.ProfileImage =
-                        await _imageService.UploadImageAsync(
-                            model.ProfileImage,
-                            "profiles");
-                }
-
-                var result = await _userManager.UpdateAsync(user);
-                _logger.LogInformation(
-        "PROFILE UPDATED | Email: {Email}",
-        user.Email);
-
-                if (!result.Succeeded)
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
-
-                    return View(model);
-                }
-
-                TempData["Success"] = "Profile updated successfully.";
-
-                return RedirectToAction(nameof(Profile));
-            }
-
-            #endregion
-
-            #region Change Password
-
-            [HttpGet]
-            [Authorize]
-            public IActionResult ChangePassword()
-            {
-                return View();
-            }
-
-            [HttpPost]
-            [ValidateAntiForgeryToken]
-            public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
-            {
-                if (!ModelState.IsValid)
-                    return View(model);
-
-                var user = await _userManager.GetUserAsync(User);
-
-                if (user == null)
-                    return RedirectToAction(nameof(Login));
-
-                var result = await _userManager.ChangePasswordAsync(
-                    user,
-                    model.CurrentPassword,
-                    model.NewPassword);
-
-                if (!result.Succeeded)
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
-
-                    return View(model);
-                }
-
-                await _signInManager.RefreshSignInAsync(user);
-
-                TempData["Success"] =
-                    "Password changed successfully.";
-
-                _logger.LogInformation(
-        "CHANGE PASSWORD | Email: {Email}",
-        user.Email);
-
-                return RedirectToAction(nameof(Profile));
-            }
-
-            #endregion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            #region Reset Password
-
-            [HttpGet]
-            public IActionResult ResetPassword(string token, string email)
-            {
-                if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
-                    return BadRequest();
-
-                ResetPasswordViewModel model = new()
-                {
-                    Token = token,
-                    Email = email
-                };
-
-                return View(model);
-            }
-
-            [HttpPost]
-            [ValidateAntiForgeryToken]
-            public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
-            {
-                if (!ModelState.IsValid)
-                    return View(model);
-
-                var user = await _userManager.FindByEmailAsync(model.Email);
-
-                if (user == null)
-                {
-                    ModelState.AddModelError("", "User not found.");
-
-                    return View(model);
-                }
-
-                var result = await _userManager.ResetPasswordAsync(
-                    user,
-                    model.Token,
-                    model.Password);
-
-                if (!result.Succeeded)
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
-
-                    return View(model);
-                }
-
-                TempData["Success"] =
-                    "Password has been reset successfully. Please login.";
-                _logger.LogInformation(
-        "RESET PASSWORD | Email: {Email}",
-        user.Email);
-
+            if (user == null)
                 return RedirectToAction(nameof(Login));
-            }
 
-            #endregion
-
-            #region Forgot Password
-
-            [HttpGet]
-            public IActionResult ForgotPassword()
+            ProfileViewModel model = new()
             {
-                return View();
-            }
+                UserId = user.Id,
+                FullName = user.FullName,
+                Email = user.Email!,
+                PhoneNumber = user.PhoneNumber!,
+                UserType = user.UserType,
+                CurrentProfileImage = user.ProfileImage,
+                CreatedAt = user.CreatedAt
+            };
 
-            [HttpPost]
-            [ValidateAntiForgeryToken]
-            public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
-            {
-                if (!ModelState.IsValid)
-                    return View(model);
-
-                var user = await _userManager.FindByEmailAsync(model.Email);
-
-                if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
-                {
-                    TempData["Success"] =
-                        "If the email exists, a password reset link has been sent.";
-
-                    return RedirectToAction(nameof(Login));
-                }
-
-                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-                var resetLink = Url.Action(
-                    nameof(ResetPassword),
-                    "Account",
-                    new
-                    {
-                        area = "Identity",
-                        token,
-                        email = user.Email
-                    },
-                    Request.Scheme);
-
-                await _emailService.SendResetPasswordEmailAsync(
-                    user.Email!,
-                    user.FullName,
-                    resetLink!);
-
-                _logger.LogInformation(
-        "FORGOT PASSWORD | Email: {Email}",
-        user.Email);
-                TempData["Success"] =
-                    "Password reset link has been sent to your email.";
-
-                return RedirectToAction(nameof(Login));
-            }
-
-            #endregion
-
-
-
-
+            return View(model);
         }
 
-    } 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Profile(ProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+                return RedirectToAction(nameof(Login));
+
+            user.FullName = model.FullName;
+            user.PhoneNumber = model.PhoneNumber;
+
+            if (model.ProfileImage != null)
+            {
+                if (!string.IsNullOrEmpty(user.ProfileImage))
+                {
+                    _imageService.DeleteImage(
+                        user.ProfileImage,
+                        "profiles");
+                }
+
+                user.ProfileImage =
+                    await _imageService.UploadImageAsync(
+                        model.ProfileImage,
+                        "profiles");
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+            _logger.LogInformation(
+    _localizer["PROFILE UPDATED | Email: {Email}"],
+    user.Email);
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                return View(model);
+            }
+
+            TempData["Success"] = _localizer["Profile updated successfully."].ToString();
+
+            return RedirectToAction(nameof(Profile));
+        }
+
+        #endregion
+
+        #region Change Password
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+                return RedirectToAction(nameof(Login));
+
+            var result = await _userManager.ChangePasswordAsync(
+                user,
+                model.CurrentPassword,
+                model.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                return View(model);
+            }
+
+            await _signInManager.RefreshSignInAsync(user);
+
+            TempData["Success"] =
+                _localizer["Password changed successfully."].ToString();
+
+            _logger.LogInformation(
+    _localizer["CHANGE PASSWORD | Email: {Email}"],
+    user.Email);
+
+            return RedirectToAction(nameof(Profile));
+        }
+
+        #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        #region Reset Password
+
+        [HttpGet]
+        public IActionResult ResetPassword(string token, string email)
+        {
+            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
+                return BadRequest();
+
+            ResetPasswordViewModel model = new()
+            {
+                Token = token,
+                Email = email
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+            {
+                ModelState.AddModelError("", _localizer["User not found."]);
+
+                return View(model);
+            }
+
+            var result = await _userManager.ResetPasswordAsync(
+                user,
+                model.Token,
+                model.Password);
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                return View(model);
+            }
+
+            TempData["Success"] =
+                _localizer["Password has been reset successfully. Please login."].ToString();
+            _logger.LogInformation(
+    _localizer["RESET PASSWORD | Email: {Email}"],
+    user.Email);
+
+            return RedirectToAction(nameof(Login));
+        }
+
+        #endregion
+
+        #region Forgot Password
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
+            {
+                TempData["Success"] =
+                    _localizer["If the email exists, a password reset link has been sent."].ToString();
+
+                return RedirectToAction(nameof(Login));
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var resetLink = Url.Action(
+                nameof(ResetPassword),
+                "Account",
+                new
+                {
+                    area = "Identity",
+                    token,
+                    email = user.Email
+                },
+                Request.Scheme);
+
+            await _emailService.SendResetPasswordEmailAsync(
+                user.Email!,
+                user.FullName,
+                resetLink!);
+
+            _logger.LogInformation(
+    _localizer["FORGOT PASSWORD | Email: {Email}"],
+    user.Email);
+            TempData["Success"] =
+                _localizer["Password reset link has been sent to your email."].ToString();
+
+            return RedirectToAction(nameof(Login));
+        }
+
+        #endregion
+
+
+
+
+    }
+
+}

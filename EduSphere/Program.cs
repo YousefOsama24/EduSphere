@@ -8,7 +8,8 @@ using EduSphere.Services.Interfaces;
 using EduSphere.Services.Implementations;
 using Serilog;
 using Serilog.Events;
-
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 
 
@@ -129,11 +130,38 @@ builder.Services.AddScoped(typeof(Repository<>),
 #endregion
 
 
+
+#region Localization
+
+builder.Services.AddLocalization(options =>
+{
+    options.ResourcesPath = "Resources";
+});
+
+var supportedCultures = new[]
+{
+    new CultureInfo("en"),
+    new CultureInfo("ar")
+};
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture("en");
+
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
+
+#endregion
+
+
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 #region MVC
 
-builder.Services.AddControllersWithViews();
-
+builder.Services
+    .AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
 #endregion
 
 var app = builder.Build();
@@ -151,6 +179,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+var localizationOptions =
+    app.Services.GetRequiredService<
+        Microsoft.Extensions.Options.IOptions<RequestLocalizationOptions>>();
+
+app.UseRequestLocalization(localizationOptions.Value);
 
 app.UseAuthentication();
 

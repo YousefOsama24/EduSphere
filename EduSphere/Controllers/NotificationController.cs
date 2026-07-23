@@ -4,7 +4,7 @@ namespace EduSphere.Controllers
 {
     public class NotificationController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index()    
         {
             return View();
         }
