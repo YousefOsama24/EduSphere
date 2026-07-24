@@ -1,5 +1,5 @@
 ﻿@model EduSphere.Areas.Identity.ViewModels.ProfileViewModel
-
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EduSphere.SharedResource> Localizer
 @{
     ViewData["Title"] = "My Profile";
 }
@@ -16,10 +16,18 @@
 
                     <i class="bi bi-person-circle me-2"></i>
 
-                    My Profile
+                    @Localizer["My Profile"]
 
                 </h3>
+                <form asp-area="Identity"
+                      asp-page="/Account/Logout"
+                      method="post">
 
+                    <button class="btn btn-danger">
+                        @Localizer["Logout"]
+                    </button>
+
+                </form>
                 <form asp-action="Profile"
                       method="post"
                       enctype="multipart/form-data">
@@ -55,9 +63,11 @@
 
                     </div>
 
+                   
+
                     <div class="mb-4">
 
-                        <label asp-for="ProfileImage"
+                        <label asp-for="@Localizer["ProfileImage"]"
                                class="form-label fw-bold"></label>
 
                         <input asp-for="ProfileImage"
@@ -69,7 +79,7 @@
 
                         <div class="col-md-6 mb-3">
 
-                            <label asp-for="FullName"></label>
+                            <label asp-for="@Localizer["FullName"]"></label>
 
                             <input asp-for="FullName"
                                    class="form-control" />
@@ -81,7 +91,7 @@
 
                         <div class="col-md-6 mb-3">
 
-                            <label asp-for="Email"></label>
+                            <label asp-for="@Localizer["Email Address"]"></label>
 
                             <input asp-for="Email"
                                    class="form-control"
@@ -91,7 +101,7 @@
 
                         <div class="col-md-6 mb-3">
 
-                            <label asp-for="PhoneNumber"></label>
+                            <label asp-for="@Localizer["PhoneNumber"]"></label>
 
                             <input asp-for="PhoneNumber"
                                    class="form-control" />
@@ -113,7 +123,7 @@
 
                         <div class="col-md-6">
 
-                            <label>Account Created</label>
+                            <label>@Localizer["Account Created"]</label>
 
                             <input class="form-control"
                                    value="@Model.CreatedAt.ToString("dd MMM yyyy")"
@@ -129,7 +139,7 @@
 
                             <i class="bi bi-floppy-fill me-2"></i>
 
-                            Save Changes
+                            @Localizer["Save Changes"]
 
                         </button>
 

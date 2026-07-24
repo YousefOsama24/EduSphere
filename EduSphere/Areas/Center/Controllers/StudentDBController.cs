@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 namespace EduSphere.Areas.Center.Controllers
 {
     [Area("Center")]
-    [Authorize(Roles = "Student,SuperAdmin")]
+  //  [Authorize(Roles = "Student,SuperAdmin")]
 
     public class StudentDBController : Controller
     {

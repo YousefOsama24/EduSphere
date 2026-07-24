@@ -1,5 +1,6 @@
-﻿@{
-    ViewData["Title"] = "Logout";
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<EduSphere.SharedResource> Localizer
+@{
+    ViewData["Title"] ="Logout";
 }
 
 <div class="container mt-5">
@@ -9,16 +10,16 @@
         <div class="card-body text-center">
 
             <h2 class="text-danger mb-4">
-                Logout
+                @Localizer["Logout"]
             </h2>
 
             <p class="lead">
-                Are you sure you want to log out?
+                @Localizer["Are you sure you want to log out?"] 
             </p>
 
             <form asp-area="Identity"
                   asp-controller="Account"
-                  asp-action="LogoutConfirmed"
+                  asp-action="Logout"
                   method="post">
 
                 @Html.AntiForgeryToken()
@@ -28,14 +29,14 @@
 
                     <i class="bi bi-box-arrow-right"></i>
 
-                    Logout
+                    @Localizer["Logout"]
 
                 </button>
 
                 <a asp-action="RedirectToDashboard"
                        class="btn btn-secondary">
 
-                    Cancel
+                    @Localizer["Cancel"]
 
                 </a>
 

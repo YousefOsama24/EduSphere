@@ -12,7 +12,7 @@ using System.Security.Claims;
 namespace EduSphere.Areas.Center.Controllers
 {
     [Area(SD.Center_AREA)]
-    [Authorize(Roles = "Parent,SuperAdmin")]
+    //[Authorize(Roles = "Parent,SuperAdmin")]
     public class ParentDBController1 : Controller
     {
         #region Fields

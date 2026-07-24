@@ -1,28 +1,28 @@
 ﻿@model EduSphere.Areas.Identity.ViewModels.LoginViewModel
-
 @inject Microsoft.Extensions.Localization.IStringLocalizer<EduSphere.SharedResource> Localizer
+ 
 @{
     ViewData["Title"] = "Login";
 }
 <div class="mb-3">
     <a asp-controller="Language"
-           asp-action="SetLanguage"
-           asp-route-culture="en"
-           asp-route-returnUrl="@Context.Request.Path">
+       asp-action="SetLanguage"
+       asp-route-culture="en"
+       asp-route-returnUrl="@Context.Request.Path">
         English
     </a>
 
     |
 
     <a asp-controller="Language"
-           asp-action="SetLanguage"
-           asp-route-culture="ar"
-           asp-route-returnUrl="@Context.Request.Path">
+       asp-action="SetLanguage"
+       asp-route-culture="ar"
+       asp-route-returnUrl="@Context.Request.Path">
         العربية
     </a>
 </div>
 <div class="row justify-content-center">
-
+   
     <div class="col-lg-10">
 
         <div class="text-center mb-5">
@@ -35,13 +35,13 @@
 
             <h2 class="page-title">
 
-                Welcome Back
+                @Localizer["Welcome Back"]
 
             </h2>
 
             <p class="page-subtitle">
 
-                Sign in to continue to EduSphere
+                @Localizer["Sign in to continue to EduSphere"]
 
             </p>
 
@@ -69,7 +69,7 @@
 
                 <input asp-for="Email"
                        class="form-control"
-                       placeholder="Email Address" />
+                       placeholder="@Localizer["Email Address"]" />
 
                 <span asp-validation-for="Email"
                       class="text-danger small">
@@ -90,7 +90,7 @@
                 <input asp-for="Password"
                        id="Password"
                        class="form-control"
-                       placeholder="Password" />
+                       placeholder="@Localizer["Password"]" />
 
                 <i class="bi bi-eye toggle-password password-toggle"
                        data-target="Password">
@@ -109,10 +109,10 @@
 
                     <input asp-for="RememberMe"
                            class="form-check-input" />
-
-                    <label asp-for="RememberMe"
+                    <a>@Localizer["RememberMe"]</a> 
+                    @* <label asp-for="@Localizer["RememberMe"]
                            class="form-check-label">
-                    </label>
+                    </label> *@ 
 
                 </div>
 
@@ -121,7 +121,7 @@
                        asp-action="ForgotPassword"
                        class="auth-link">
 
-                    Forgot Password?
+                    @Localizer["Forgot Password"]?
 
                 </a>
 
@@ -136,7 +136,7 @@
 
                     <i class="bi bi-box-arrow-in-right me-2"></i>
 
-                    Login
+                    @Localizer["Login"]
 
                 </button>
 
@@ -150,7 +150,7 @@
 
                 <span class="text-muted">
 
-                    Don't have an account?
+                    @Localizer["Don't have an account?"]
 
                 </span>
 
@@ -159,7 +159,7 @@
                        asp-action="Register"
                        class="auth-link ms-1">
 
-                    Create Account
+                    @Localizer["Create Account"]
 
                 </a>
 

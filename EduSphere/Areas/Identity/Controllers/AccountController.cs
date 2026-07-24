@@ -40,6 +40,16 @@ namespace EduSphere.Areas.Identity.Controllers
 
         #region Confirm Email
 
+/*
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ConfirmEmail(string userId, string token)
+        {
+            return Content("ConfirmEmail Works");
+        }
+        */
+
+        
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail(
             string userId,
@@ -70,18 +80,22 @@ namespace EduSphere.Areas.Identity.Controllers
             {
                 return View("Error");
             }
+            
 
-
-            TempData["Success"] =
+        TempData["Success"] =
                _localizer["Email verified successfully. You can login now."].ToString();
 
-            return RedirectToAction(nameof(Login));
+            return View();
         }
-
+        
         #endregion
 
         #endregion
-
+        [HttpGet]
+        public IActionResult Test()
+        {
+            return Content("Working");
+        }
 
         #region Authentication
         #region Login
@@ -165,6 +179,8 @@ namespace EduSphere.Areas.Identity.Controllers
 
         #region Logout
 
+        [HttpGet]
+        [Authorize]
         
 
         [HttpPost]
@@ -327,18 +343,18 @@ namespace EduSphere.Areas.Identity.Controllers
                     new { area = "Center" }),
 
                 UserType.Teacher => RedirectToAction(
-                    "TeacherDashboard",
+                    "Index",
                     "Home",
-                    new { area = "Center" }),
+                    new { area = "Teacher" }),
 
                 UserType.Student => RedirectToAction(
-                    "StudentDashboard",
-                    "Home",
+                    "StudentDB",
+                    "StudentDB",
                     new { area = "Center" }),
 
                 UserType.Parent => RedirectToAction(
-                    "ParentDashboard",
-                    "Home",
+                    "ParentDB",
+                    "ParentDBController1",
                     new { area = "Center" }),
 
                 _ => RedirectToAction(
